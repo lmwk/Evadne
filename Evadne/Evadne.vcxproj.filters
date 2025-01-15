@@ -1,36 +1,93 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Evadne">
+      <UniqueIdentifier>{582C61B1-44CE-8B87-2D89-9FDB19CA12D8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    <Filter Include="Evadne\Events">
+      <UniqueIdentifier>{3C85EE8C-A845-6AC3-7180-B340DDFFAE9F}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Evadne\ImGui">
+      <UniqueIdentifier>{82839F61-6EE6-2E06-176C-67BC03AEFA88}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Evadne\Platforms">
+      <UniqueIdentifier>{9F411C77-8B3A-3BC9-B46C-204EA0C41AD5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Evadne\Platforms\OpenGL">
+      <UniqueIdentifier>{F301E935-5F39-31CD-6843-95F0D4F957C6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Evadne\Platforms\Windows">
+      <UniqueIdentifier>{D91A254B-C53F-74CB-EE8A-595BDA0E73E9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Evadne\Core.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClInclude Include="src\Evadne.h" />
     <ClInclude Include="src\Evadne\Application.h">
-      <Filter>Header Files</Filter>
+      <Filter>Evadne</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evadne.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="src\Evadne\Core.h">
+      <Filter>Evadne</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\EntryPoint.h">
-      <Filter>Header Files</Filter>
+      <Filter>Evadne</Filter>
     </ClInclude>
+    <ClInclude Include="src\Evadne\Events\ApplicationEvent.h">
+      <Filter>Evadne\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Events\Event.h">
+      <Filter>Evadne\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Events\KeyEvent.h">
+      <Filter>Evadne\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Events\MouseEvent.h">
+      <Filter>Evadne\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\ImGui\ImGuiLayer.h">
+      <Filter>Evadne\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Layer.h">
+      <Filter>Evadne</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\LayerStack.h">
+      <Filter>Evadne</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Log.h">
+      <Filter>Evadne</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Platforms\OpenGL\ImGuiOpenGLRenderer.h">
+      <Filter>Evadne\Platforms\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Platforms\Windows\WindowsWindow.h">
+      <Filter>Evadne\Platforms\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Window.h">
+      <Filter>Evadne</Filter>
+    </ClInclude>
+    <ClInclude Include="src\evpch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Evadne\Application.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Evadne</Filter>
     </ClCompile>
+    <ClCompile Include="src\Evadne\ImGui\ImGuiLayer.cpp">
+      <Filter>Evadne\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Evadne\Layer.cpp">
+      <Filter>Evadne</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Evadne\LayerStack.cpp">
+      <Filter>Evadne</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Evadne\Log.cpp">
+      <Filter>Evadne</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Evadne\Platforms\OpenGL\ImGuiOpenGLRenderer.cpp">
+      <Filter>Evadne\Platforms\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Evadne\Platforms\Windows\WindowsWindow.cpp">
+      <Filter>Evadne\Platforms\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\evpch.cpp" />
   </ItemGroup>
 </Project>

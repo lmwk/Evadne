@@ -1,0 +1,9 @@
+[submodule "Evadne/vendor/spdlog"]
+	path = Evadne/vendor/spdlog
+	url = https://github.com/gabime/spdlog
+[submodule "Evadne/vendor/GLFW"]
+	path = Evadne/vendor/GLFW
+	url = https://github.com/glfw/glfw
+[submodule "Evadne/vendor/imgui"]
+	path = Evadne/vendor/imgui
+	url = https://github.com/ocornut/imgui
