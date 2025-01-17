@@ -1,9 +1,9 @@
 #pragma once
 
-#include "RenderCommand.h"
+#include "Evadne/Rendering/RenderCommand.h"
 
 #include "Evadne/Camera/OrthographicCamera.h"
-#include "Shader.h"
+#include "Evadne/Rendering/Shader.h"
 
 namespace Evadne {
 
@@ -12,6 +12,7 @@ namespace Evadne {
     {
     public:
         static void Init();
+        static void Shutdown();
         static void OnWindowResize(uint32_t width, uint32_t height);
 
         static void BeginScene(OrthographicCamera& camera);

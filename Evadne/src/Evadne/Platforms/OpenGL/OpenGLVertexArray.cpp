@@ -1,5 +1,5 @@
 #include "evpch.h"
-#include "OpenGLVertexArray.h"
+#include "Evadne/Platforms/OpenGL/OpenGLVertexArray.h"
 
 #include <glad/glad.h>
 
@@ -9,17 +9,17 @@ namespace Evadne {
     {
         switch (type)
         {
-        case Evadne::ShaderDataType::Float:    return GL_FLOAT;
-        case Evadne::ShaderDataType::Float2:   return GL_FLOAT;
-        case Evadne::ShaderDataType::Float3:   return GL_FLOAT;
-        case Evadne::ShaderDataType::Float4:   return GL_FLOAT;
-        case Evadne::ShaderDataType::Mat3:     return GL_FLOAT;
-        case Evadne::ShaderDataType::Mat4:     return GL_FLOAT;
-        case Evadne::ShaderDataType::Int:      return GL_INT;
-        case Evadne::ShaderDataType::Int2:     return GL_INT;
-        case Evadne::ShaderDataType::Int3:     return GL_INT;
-        case Evadne::ShaderDataType::Int4:     return GL_INT;
-        case Evadne::ShaderDataType::Bool:     return GL_BOOL;
+        case ShaderDataType::Float:    return GL_FLOAT;
+        case ShaderDataType::Float2:   return GL_FLOAT;
+        case ShaderDataType::Float3:   return GL_FLOAT;
+        case ShaderDataType::Float4:   return GL_FLOAT;
+        case ShaderDataType::Mat3:     return GL_FLOAT;
+        case ShaderDataType::Mat4:     return GL_FLOAT;
+        case ShaderDataType::Int:      return GL_INT;
+        case ShaderDataType::Int2:     return GL_INT;
+        case ShaderDataType::Int3:     return GL_INT;
+        case ShaderDataType::Int4:     return GL_INT;
+        case ShaderDataType::Bool:     return GL_BOOL;
         }
 
         EV_CORE_ASSERT(false, "Unknown ShaderDataType");
@@ -62,7 +62,7 @@ namespace Evadne {
                 ShaderDataTypeToOpenGLBaseType(element.Type),
                 element.Normalized ? GL_TRUE : GL_FALSE,
                 layout.GetStride(),
-                (const void*)(intptr_t)element.Offset);
+                (const void*)element.Offset);
             m_VertexBufferIndex++;
         }
         m_VertexBuffers.push_back(vertexBuffer);

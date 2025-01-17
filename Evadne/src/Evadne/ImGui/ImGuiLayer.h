@@ -8,7 +8,7 @@
 
 namespace Evadne {
 
-    class   ImGuiLayer : public Layer
+    class ImGuiLayer : public Layer
     {
     public:
 

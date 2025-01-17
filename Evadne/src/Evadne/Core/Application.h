@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Core.h"
+#include "Evadne/Core/Core.h"
 
-#include "Window.h"
+#include "Evadne/Core/Window.h"
 #include "Evadne/Core/LayerStack.h"
 #include "Evadne/Events/Event.h"
 #include "Evadne/Events/ApplicationEvent.h"
@@ -17,7 +17,7 @@ namespace Evadne {
     {
     public:
         Application();
-        virtual ~Application() = default;
+        virtual ~Application();
 
         void Run();
 

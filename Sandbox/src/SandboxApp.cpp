@@ -1,4 +1,5 @@
 #include <Evadne.h>
+#include <Evadne/Core/EntryPoint.h>
 
 #include "Evadne/Platforms/OpenGL/OpenGLShader.h"
 
@@ -7,20 +8,21 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Sandbox2D.h"
+
 class ExampleLayer : public Evadne::Layer 
 {
 public:
     ExampleLayer()
         : Layer("Example"), m_CameraController(1280.0f / 720.0f)
     {
-		m_VertexArray.reset(Evadne::VertexArray::Create());
+		m_VertexArray = Evadne::VertexArray::Create();
 		float vertices[3 * 7] = {
 			-0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
 			 0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
 			 0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
 		};
-		Evadne::Ref<Evadne::VertexBuffer> vertexBuffer;
-		vertexBuffer.reset(Evadne::VertexBuffer::Create(vertices, sizeof(vertices)));
+		Evadne::Ref<Evadne::VertexBuffer> vertexBuffer = Evadne::VertexBuffer::Create(vertices, sizeof(vertices));
 		Evadne::BufferLayout layout = {
 			{ Evadne::ShaderDataType::Float3, "a_Position" },
 			{ Evadne::ShaderDataType::Float4, "a_Color" }
@@ -28,18 +30,16 @@ public:
 		vertexBuffer->SetLayout(layout);
 		m_VertexArray->AddVertexBuffer(vertexBuffer);
 		uint32_t indices[3] = { 0, 1, 2 };
-		Evadne::Ref<Evadne::IndexBuffer> indexBuffer;
-		indexBuffer.reset(Evadne::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		Evadne::Ref<Evadne::IndexBuffer> indexBuffer = Evadne::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 		m_VertexArray->SetIndexBuffer(indexBuffer);
-		m_SquareVA.reset(Evadne::VertexArray::Create());
+		m_SquareVA = Evadne::VertexArray::Create();
 		float squareVertices[5 * 4] = {
 			-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
 			 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
 			 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
 			-0.5f,  0.5f, 0.0f, 0.0f, 1.0f
 		};
-		Evadne::Ref<Evadne::VertexBuffer> squareVB;
-		squareVB.reset(Evadne::VertexBuffer::Create(squareVertices, sizeof(squareVertices)));
+		Evadne::Ref<Evadne::VertexBuffer> squareVB = Evadne::VertexBuffer::Create(squareVertices, sizeof(squareVertices));
 		squareVB->SetLayout({
 			{
 				{Evadne::ShaderDataType::Float3, "a_Position" },
@@ -48,8 +48,7 @@ public:
 			});
 		m_SquareVA->AddVertexBuffer(squareVB);
 		uint32_t squareIndices[6] = { 0, 1, 2, 2, 3, 0 };
-		Evadne::Ref<Evadne::IndexBuffer> squareIB;
-		squareIB.reset(Evadne::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t)));
+		Evadne::Ref<Evadne::IndexBuffer> squareIB = Evadne::IndexBuffer::Create(squareIndices, sizeof(squareIndices) / sizeof(uint32_t));
 		m_SquareVA->SetIndexBuffer(squareIB);
 		std::string vertexSrc = R"(
 			#version 330 core
@@ -111,8 +110,8 @@ public:
 		auto textureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 		m_Texture = Evadne::Texture2D::Create("assets/textures/IMG_0467.jpg");
 		m_MinecraftSkinTexture = Evadne::Texture2D::Create("assets/textures/2024_12_25_ekko-22954856.png");
-		std::dynamic_pointer_cast<Evadne::OpenGLShader>(textureShader)->Bind();
-		std::dynamic_pointer_cast<Evadne::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
+		textureShader->Bind();
+		textureShader->SetInt("u_Texture", 0);
     }
 
     void OnUpdate(Evadne::Timestep ts) override 
@@ -127,8 +126,8 @@ public:
 		
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
-		std::dynamic_pointer_cast<Evadne::OpenGLShader>(m_FlatColorShader)->Bind();
-		std::dynamic_pointer_cast<Evadne::OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_Color", m_SquareColor);
+		m_FlatColorShader->Bind();
+		m_FlatColorShader->SetFloat3("u_Color", m_SquareColor);
 
 		for(int y = 0; y < 20; y++) 
 		{
@@ -182,7 +181,7 @@ class Sandbox : public Evadne::Application
 public: 
     Sandbox()
     {
-        PushLayer(new ExampleLayer());
+        PushLayer(new Sandbox2D());
     }
 
     ~Sandbox() 

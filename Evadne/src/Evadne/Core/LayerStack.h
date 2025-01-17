@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Evadne/Core/Core.h"
-#include "Layer.h"
+#include "Evadne/Core/Layer.h"
 
 #include <vector>
 
@@ -10,7 +10,7 @@ namespace Evadne {
     class   LayerStack
     {
     public:
-        LayerStack();
+        LayerStack() = default;
         ~LayerStack();
 
         void PushLayer(Layer* layer);

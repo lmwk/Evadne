@@ -1,11 +1,7 @@
 #include "evpch.h"
-#include "LayerStack.h"
+#include "Evadne/Core/LayerStack.h"
 
 namespace Evadne {
-
-    LayerStack::LayerStack() 
-    {
-    }
 
     LayerStack::~LayerStack() 
     {

@@ -1,4 +1,5 @@
 #pragma once
+#include "Evadne/Core/Core.h"
 
 #ifdef EV_PLATFORM_WINDOWS
 

@@ -1,6 +1,7 @@
 #include "evpch.h"
-#include "Log.h"
-#include "spdlog/sinks/stdout_color_sinks.h"
+#include "Evadne/Core/Log.h"
+
+#include <spdlog/sinks/stdout_color_sinks.h>
 
 namespace Evadne {
 

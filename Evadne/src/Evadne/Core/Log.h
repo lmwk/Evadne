@@ -1,13 +1,14 @@
 #pragma once
 
 
-#include "Core.h"
-#include "spdlog/spdlog.h"
-#include "spdlog/fmt/ostr.h"
+#include "Evadne/Core/Core.h"
+
+#include <spdlog/spdlog.h>
+#include <spdlog/fmt/ostr.h>
 
 
 namespace Evadne {
-    class   Log
+    class Log
     {
     public:
         static void Init();

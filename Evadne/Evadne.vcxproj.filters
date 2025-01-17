@@ -93,9 +93,6 @@
     <ClInclude Include="src\Evadne\Core\Window.h">
       <Filter>src\Evadne\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evadne\EntryPoint.h">
-      <Filter>src\Evadne</Filter>
-    </ClInclude>
     <ClInclude Include="src\Evadne\Events\ApplicationEvent.h">
       <Filter>src\Evadne\Events</Filter>
     </ClInclude>
@@ -1422,6 +1419,8 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\Evadne\Rendering\2D\Renderer2D.h" />
+    <ClInclude Include="src\Evadne\Core\EntryPoint.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Evadne\Camera\Controllers\OrthographicCameraController.cpp">
@@ -1499,5 +1498,7 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\Evadne\Rendering\2D\Renderer2D.cpp" />
+    <ClCompile Include="src\Evadne\Rendering\GraphicsContext.cpp" />
   </ItemGroup>
 </Project>

@@ -150,6 +150,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Evadne\Rendering\2D\Renderer2D.h" />
     <ClInclude Include="src\Evadne.h" />
     <ClInclude Include="src\Evadne\Camera\Controllers\OrthographicCameraController.h" />
     <ClInclude Include="src\Evadne\Camera\OrthographicCamera.h" />
@@ -160,7 +161,7 @@
     <ClInclude Include="src\Evadne\Core\Log.h" />
     <ClInclude Include="src\Evadne\Core\Timestep.h" />
     <ClInclude Include="src\Evadne\Core\Window.h" />
-    <ClInclude Include="src\Evadne\EntryPoint.h" />
+    <ClInclude Include="src\Evadne\Core\EntryPoint.h" />
     <ClInclude Include="src\Evadne\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Evadne\Events\Event.h" />
     <ClInclude Include="src\Evadne\Events\KeyEvent.h" />
@@ -605,6 +606,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Evadne\Rendering\2D\Renderer2D.cpp" />
     <ClCompile Include="src\Evadne\Camera\Controllers\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Evadne\Camera\OrthographicCamera.cpp" />
     <ClCompile Include="src\Evadne\Core\Application.cpp" />
@@ -622,6 +624,7 @@
     <ClCompile Include="src\Evadne\Platforms\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Evadne\Platforms\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\Evadne\Rendering\Buffer.cpp" />
+    <ClCompile Include="src\Evadne\Rendering\GraphicsContext.cpp" />
     <ClCompile Include="src\Evadne\Rendering\RenderCommand.cpp" />
     <ClCompile Include="src\Evadne\Rendering\Renderer.cpp" />
     <ClCompile Include="src\Evadne\Rendering\RendererAPI.cpp" />

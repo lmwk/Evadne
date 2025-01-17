@@ -1,12 +1,12 @@
 #include "evpch.h"
-#include "VertexArray.h"
+#include "Evadne/Rendering/VertexArray.h"
 
-#include "Renderer.h"
+#include "Evadne/Rendering/Renderer.h"
 #include "Evadne/Platforms/OpenGL/OpenGLVertexArray.h"
 
 namespace Evadne {
 
-    VertexArray* VertexArray::Create() 
+    Ref<VertexArray> VertexArray::Create() 
     {
         switch (Renderer::GetAPI()) 
         {
@@ -14,7 +14,7 @@ namespace Evadne {
             EV_CORE_ASSERT(false, "RendererAPI::None is currently not supported!");
             return nullptr;
         case RendererAPI::API::OpenGL:
-            return new OpenGLVertexArray();
+            return CreateRef<OpenGLVertexArray>();
         }
 
         EV_CORE_ASSERT(false, "Unknown RendererAPI!");

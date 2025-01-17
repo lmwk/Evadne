@@ -1,5 +1,5 @@
 #include "evpch.h"
-#include "WindowsWindow.h"
+#include "Evadne/Platforms/Windows/WindowsWindow.h"
 
 #include "Evadne/Events/KeyEvent.h"
 #include "Evadne/Events/ApplicationEvent.h"
@@ -9,16 +9,16 @@
 
 namespace Evadne {
 
-    static bool s_GLFWInitialized = false;
+    static uint8_t s_GLFWWindowCount = 0;
 
     static void GLFWErrorCallback(int error, const char* description) 
     {
         EV_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
     }   
 
-    Window* Window::Create(const WindowProps& props) 
+    Scope<Window> Window::Create(const WindowProps& props) 
     {
-        return new WindowsWindow(props);
+        return CreateScope<WindowsWindow>(props);
     }
 
     WindowsWindow::WindowsWindow(const WindowProps& props) 
@@ -39,14 +39,13 @@ namespace Evadne {
 
         EV_CORE_INFO("Creating window {0} ({1}, {2})", props.Title, props.Width, props.Height);
 
-        if(!s_GLFWInitialized) 
+        if(s_GLFWWindowCount == 0) 
         {
 
             int success = glfwInit();
             EV_CORE_ASSERT(success, "Could not initialize GLFW!");
             glfwSetErrorCallback(GLFWErrorCallback);
 
-            s_GLFWInitialized = true;
 
         }
 
@@ -150,6 +149,12 @@ namespace Evadne {
     void WindowsWindow::Shutdown() 
     {
         glfwDestroyWindow(m_Window);
+
+        if(--s_GLFWWindowCount == 0) 
+        {
+            EV_CORE_INFO("Terminating GLFW");
+            glfwTerminate();
+        }
     }
 
     void WindowsWindow::OnUpdate() 

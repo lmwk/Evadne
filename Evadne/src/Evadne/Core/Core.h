@@ -35,20 +35,6 @@
     #error "Unknown platform!"
 #endif 
 
-#ifdef EV_PLATFORM_WINDOWS
-    #if EV_DYNAMIC_LINK
-        #ifdef EV_BUILD_DLL
-            #define HAZEL_API __declspec(dllexport)
-        #else
-            #define HAZEL_API __declspec(dllimport)
-        #endif
-    #else
-        #define HAZEL_API
-    #endif
-#else
-    #error Hazel only supports Windows!
-#endif 
-
 #ifdef EV_DEBUG
 #define EV_ENABLE_ASSERTS
 #endif

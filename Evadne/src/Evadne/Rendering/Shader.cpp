@@ -1,10 +1,10 @@
 #include "evpch.h"
-#include "Shader.h"
+#include "Evadne/Rendering/Renderer.h"
 
 #include <glad/glad.h>
 
 #include <glm/gtc/type_ptr.hpp>
-#include "Renderer.h"
+#include "Evadne/Rendering/Renderer.h"
 #include "Evadne/Platforms/OpenGL/OpenGLShader.h"
 
 namespace Evadne {
@@ -19,7 +19,7 @@ namespace Evadne {
             EV_CORE_ASSERT(false, "RendererAPI::None is currently not supported!");
             return nullptr;
         case RendererAPI::API::OpenGL:
-            return std::make_shared<OpenGLShader>(filepath);
+            return CreateRef<OpenGLShader>(filepath);
         }
 
         EV_CORE_ASSERT(false, "Unknown RendererAPI");
@@ -34,7 +34,7 @@ namespace Evadne {
             EV_CORE_ASSERT(false, "RendererAPI::None is currently");
             return nullptr;
         case RendererAPI::API::OpenGL:
-            return std::make_shared<OpenGLShader>(name,vertexSrc, fragmentSrc);
+            return CreateRef<OpenGLShader>(name,vertexSrc, fragmentSrc);
         }
 
         EV_CORE_ASSERT(false, "Unknown RendererAPI");

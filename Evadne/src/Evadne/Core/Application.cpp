@@ -1,16 +1,15 @@
 #include "evpch.h"
-#include "Application.h"
+#include "Evadne/Core/Application.h"
 
 #include "Evadne/Core/Log.h"
 
 #include "Evadne/Rendering/Renderer.h"
 
 #include "Evadne/Input/Input.h"
+
 #include <GLFW/glfw3.h>
 
 namespace Evadne {
-
-#define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
     Application* Application::s_Instance = nullptr;
 
@@ -19,8 +18,8 @@ namespace Evadne {
         EV_CORE_ASSERT(!s_Instance, "Application already exists");
         s_Instance = this;
 
-        m_Window = Scope<Window>(Window::Create());
-        m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
+        m_Window = Window::Create();
+        m_Window->SetEventCallback(EV_BIND_EVENT_FN(Application::OnEvent));
 
         Renderer::Init();
 
@@ -29,11 +28,16 @@ namespace Evadne {
 
     }
 
+    Application::~Application() 
+    {
+        Renderer::Shutdown();
+    }
+
     void Application::OnEvent(Event& e) 
     {
         EventDispatcher dispatcher(e);
-        dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
-        dispatcher.Dispatch<WindowResizeEvent>(BIND_EVENT_FN(OnWindowResize));
+        dispatcher.Dispatch<WindowCloseEvent>(EV_BIND_EVENT_FN(Application::OnWindowClose));
+        dispatcher.Dispatch<WindowResizeEvent>(EV_BIND_EVENT_FN(Application::OnWindowResize));
 
         for(auto it = m_LayerStack.end(); it != m_LayerStack.begin(); ) 
         {

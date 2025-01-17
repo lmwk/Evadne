@@ -1,5 +1,5 @@
 #include "evpch.h"
-#include "WindowsInput.h"
+#include "Evadne/Platforms/Windows/WindowsInput.h"
 
 #include "Evadne/Core/Application.h"
 #include <GLFW/glfw3.h>
