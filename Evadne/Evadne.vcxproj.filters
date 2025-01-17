@@ -7,6 +7,12 @@
     <Filter Include="src\Evadne">
       <UniqueIdentifier>{8F05C00E-7BBD-015C-E4C4-DAB7D09B9C4C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Evadne\Camera">
+      <UniqueIdentifier>{27E301FE-93F9-FF93-DC70-8BB548C6D01B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Evadne\Camera\Controllers">
+      <UniqueIdentifier>{0D547776-796C-5EA0-4219-EE39AEF0F239}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Evadne\Core">
       <UniqueIdentifier>{47FB9541-B386-0306-BC97-86FA28A25F06}</UniqueIdentifier>
     </Filter>
@@ -62,6 +68,12 @@
     </ClInclude>
     <ClInclude Include="src\Evadne\Application.h">
       <Filter>src\Evadne</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Camera\Controllers\OrthographicCameraController.h">
+      <Filter>src\Evadne\Camera\Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Camera\OrthographicCamera.h">
+      <Filter>src\Evadne\Camera</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Core.h">
       <Filter>src\Evadne</Filter>
@@ -133,9 +145,6 @@
       <Filter>src\Evadne\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Rendering\GraphicsContext.h">
-      <Filter>src\Evadne\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Evadne\Rendering\OrthographicCamera.h">
       <Filter>src\Evadne\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Rendering\RenderCommand.h">
@@ -1418,6 +1427,12 @@
     <ClCompile Include="src\Evadne\Application.cpp">
       <Filter>src\Evadne</Filter>
     </ClCompile>
+    <ClCompile Include="src\Evadne\Camera\Controllers\OrthographicCameraController.cpp">
+      <Filter>src\Evadne\Camera\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Evadne\Camera\OrthographicCamera.cpp">
+      <Filter>src\Evadne\Camera</Filter>
+    </ClCompile>
     <ClCompile Include="src\Evadne\ImGui\ImGuiBuild.cpp">
       <Filter>src\Evadne\ImGui</Filter>
     </ClCompile>
@@ -1458,9 +1473,6 @@
       <Filter>src\Evadne\Platforms\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\Rendering\Buffer.cpp">
-      <Filter>src\Evadne\Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Evadne\Rendering\OrthographicCamera.cpp">
       <Filter>src\Evadne\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\Rendering\RenderCommand.cpp">

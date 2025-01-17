@@ -8,6 +8,7 @@ workspace "Evadne"
 		"Dist"
 	}
 	
+	flags
 	{
 		"MultiProcessorCompile"
 	}

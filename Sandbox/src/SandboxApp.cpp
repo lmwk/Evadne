@@ -11,7 +11,7 @@ class ExampleLayer : public Evadne::Layer
 {
 public:
     ExampleLayer()
-        : Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f), m_CameraPosition(0.0f)
+        : Layer("Example"), m_CameraController(1280.0f / 720.0f)
     {
 		m_VertexArray.reset(Evadne::VertexArray::Create());
 		float vertices[3 * 7] = {
@@ -79,7 +79,7 @@ public:
 				color = v_Color;
 			}
 		)";
-		m_Shader.reset(Evadne::Shader::Create(vertexSrc, fragmentSrc));
+		m_Shader = Evadne::Shader::Create("VertexPosColor", vertexSrc, fragmentSrc);
 		std::string flatColorShaderVertexSrc = R"(
 			#version 330 core
 			
@@ -106,37 +106,24 @@ public:
 				color = vec4(u_Color, 1.0);
 			}
 		)";
-		m_FlatColorShader.reset(Evadne::Shader::Create(flatColorShaderVertexSrc, flatColorShaderFragmentSrc));
+		m_FlatColorShader = Evadne::Shader::Create("FlatColor", flatColorShaderVertexSrc, flatColorShaderFragmentSrc);
 
-		m_TextureShader.reset(Evadne::Shader::Create("assets/shaders/Texture.glsl"));
+		auto textureShader = m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 		m_Texture = Evadne::Texture2D::Create("assets/textures/IMG_0467.jpg");
 		m_MinecraftSkinTexture = Evadne::Texture2D::Create("assets/textures/2024_12_25_ekko-22954856.png");
-		std::dynamic_pointer_cast<Evadne::OpenGLShader>(m_TextureShader)->Bind();
-		std::dynamic_pointer_cast<Evadne::OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
+		std::dynamic_pointer_cast<Evadne::OpenGLShader>(textureShader)->Bind();
+		std::dynamic_pointer_cast<Evadne::OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
     }
 
     void OnUpdate(Evadne::Timestep ts) override 
     {
-		if (Evadne::Input::IsKeyPressed(EV_KEY_LEFT))
-			m_CameraPosition.x -= m_CameraMoveSpeed * ts;
-		else if (Evadne::Input::IsKeyPressed(EV_KEY_RIGHT))
-			m_CameraPosition.x += m_CameraMoveSpeed * ts;
-		if (Evadne::Input::IsKeyPressed(EV_KEY_UP))
-			m_CameraPosition.y += m_CameraMoveSpeed * ts;
-		else if (Evadne::Input::IsKeyPressed(EV_KEY_DOWN))
-			m_CameraPosition.y -= m_CameraMoveSpeed * ts;
-		if (Evadne::Input::IsKeyPressed(EV_KEY_A))
-			m_CameraRotation += m_CameraRotationSpeed * ts;
-		if (Evadne::Input::IsKeyPressed(EV_KEY_D))
-			m_CameraRotation -= m_CameraRotationSpeed * ts;
+		m_CameraController.OnUpdate(ts);
 
 		Evadne::RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1 });
 		Evadne::RenderCommand::Clear();
 
-		m_Camera.SetPosition(m_CameraPosition);
-		m_Camera.SetRotation(m_CameraRotation);
 
-		Evadne::Renderer::BeginScene(m_Camera);
+		Evadne::Renderer::BeginScene(m_CameraController.GetCamera());
 		
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
@@ -154,18 +141,20 @@ public:
 			}
 		}
 
+		auto textureShader = m_ShaderLibrary.Get("Texture");
+
 		m_Texture->Bind();
-		Evadne::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		Evadne::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 		m_MinecraftSkinTexture->Bind();
-		Evadne::Renderer::Submit(m_TextureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+		Evadne::Renderer::Submit(textureShader, m_SquareVA, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
 
 		Evadne::Renderer::EndScene();
     }
 
-    void OnEvent(Evadne::Event& event) override 
+    void OnEvent(Evadne::Event& e) override 
     {
-
+		m_CameraController.OnEvent(e);
     }
 
     virtual void OnImGuiRender() override 
@@ -175,19 +164,15 @@ public:
 		ImGui::End();
     }
 	private:
+		Evadne::ShaderLibrary m_ShaderLibrary;
 		Evadne::Ref<Evadne::Shader> m_Shader;
 		Evadne::Ref<Evadne::VertexArray> m_VertexArray;
-		Evadne::Ref<Evadne::Shader> m_FlatColorShader, m_TextureShader;
+		Evadne::Ref<Evadne::Shader> m_FlatColorShader;
 		Evadne::Ref<Evadne::VertexArray> m_SquareVA;
 
 		Evadne::Ref<Evadne::Texture2D> m_Texture, m_MinecraftSkinTexture;
 
-		Evadne::OrthographicCamera m_Camera;
-		glm::vec3 m_CameraPosition;
-		float m_CameraMoveSpeed = 5.0f;
-
-		float m_CameraRotation = 0.0f;
-		float m_CameraRotationSpeed = 180.0f;
+		Evadne::OrthographicCameraController m_CameraController;
 
 		glm::vec3 m_SquareColor = { 0.2f, 0.3f, 0.8f };
 };

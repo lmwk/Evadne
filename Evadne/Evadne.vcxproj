@@ -80,7 +80,9 @@
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
+      <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
@@ -106,6 +108,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
@@ -132,6 +135,7 @@
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
@@ -148,6 +152,8 @@
   <ItemGroup>
     <ClInclude Include="src\Evadne.h" />
     <ClInclude Include="src\Evadne\Application.h" />
+    <ClInclude Include="src\Evadne\Camera\Controllers\OrthographicCameraController.h" />
+    <ClInclude Include="src\Evadne\Camera\OrthographicCamera.h" />
     <ClInclude Include="src\Evadne\Core.h" />
     <ClInclude Include="src\Evadne\Core\Timestep.h" />
     <ClInclude Include="src\Evadne\EntryPoint.h" />
@@ -172,7 +178,6 @@
     <ClInclude Include="src\Evadne\Platforms\Windows\WindowsWindow.h" />
     <ClInclude Include="src\Evadne\Rendering\Buffer.h" />
     <ClInclude Include="src\Evadne\Rendering\GraphicsContext.h" />
-    <ClInclude Include="src\Evadne\Rendering\OrthographicCamera.h" />
     <ClInclude Include="src\Evadne\Rendering\RenderCommand.h" />
     <ClInclude Include="src\Evadne\Rendering\Renderer.h" />
     <ClInclude Include="src\Evadne\Rendering\RendererAPI.h" />
@@ -601,6 +606,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Evadne\Application.cpp" />
+    <ClCompile Include="src\Evadne\Camera\Controllers\OrthographicCameraController.cpp" />
+    <ClCompile Include="src\Evadne\Camera\OrthographicCamera.cpp" />
     <ClCompile Include="src\Evadne\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Evadne\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Evadne\Layer.cpp" />
@@ -615,7 +622,6 @@
     <ClCompile Include="src\Evadne\Platforms\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Evadne\Platforms\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\Evadne\Rendering\Buffer.cpp" />
-    <ClCompile Include="src\Evadne\Rendering\OrthographicCamera.cpp" />
     <ClCompile Include="src\Evadne\Rendering\RenderCommand.cpp" />
     <ClCompile Include="src\Evadne\Rendering\Renderer.cpp" />
     <ClCompile Include="src\Evadne\Rendering\RendererAPI.cpp" />

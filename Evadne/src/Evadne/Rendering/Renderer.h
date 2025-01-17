@@ -2,7 +2,7 @@
 
 #include "RenderCommand.h"
 
-#include "OrthographicCamera.h"
+#include "Evadne/Camera/OrthographicCamera.h"
 #include "Shader.h"
 
 namespace Evadne {
