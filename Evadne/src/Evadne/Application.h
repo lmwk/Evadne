@@ -7,13 +7,17 @@
 #include "Events/Event.h"
 #include "Evadne/Events/ApplicationEvent.h"
 
+#include "Evadne/Core/Timestep.h"
+#include "Evadne/ImGui/ImGuiLayer.h"
+
+
 
 namespace Evadne {
-    class EVADNE_API Application
+    class Application
     {
     public:
         Application();
-        virtual ~Application();
+        virtual ~Application() = default;
 
         void Run();
 
@@ -28,10 +32,13 @@ namespace Evadne {
         inline static Application& Get() { return *s_Instance; }
     private:
         bool OnWindowClose(WindowCloseEvent& e);
-
-        std::unique_ptr<Window> m_Window;
+    private:
+        Scope<Window> m_Window;
+        ImGuiLayer* m_ImGuiLayer;
         bool m_Running = true;
         LayerStack m_LayerStack;
+
+        float m_LastFrameTime = 0.0f;
     private:
         static Application* s_Instance;
     };

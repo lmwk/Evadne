@@ -5,6 +5,22 @@
 #include "Evadne/Layer.h"
 #include "Evadne/Log.h"
 
+#include "Evadne/Core/Timestep.h"
+
+#include "Evadne/Input/Input.h"
+#include "Evadne/Input/KeyCodes.h"
+#include "Evadne/Input/MouseButtonCodes.h"
+
 #include "Evadne/ImGui/ImGuiLayer.h"
+
+#include "Evadne/Rendering/Renderer.h"
+#include "Evadne/Rendering/RenderCommand.h"
+
+#include "Evadne/Rendering/Buffer.h"
+#include "Evadne/Rendering/Shader.h"
+#include "Evadne/Rendering/Texture.h"
+#include "Evadne/Rendering/VertexArray.h"
+
+#include "Evadne/Rendering/OrthographicCamera.h"
 
 #include "Evadne/EntryPoint.h"

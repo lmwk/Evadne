@@ -7,7 +7,7 @@
 namespace Evadne
 {
 
-    class EVADNE_API MouseMovedEvent : public Event 
+    class  MouseMovedEvent : public Event 
     {
     public:
         MouseMovedEvent(float x, float y) 
@@ -29,7 +29,7 @@ namespace Evadne
         float m_MouseX, m_MouseY;
     };
 
-    class EVADNE_API MouseScrolledEvent : public Event
+    class  MouseScrolledEvent : public Event
     {
     public:
         MouseScrolledEvent(float xOffset, float yOffset)
@@ -52,7 +52,7 @@ namespace Evadne
         float m_XOffset, m_YOffset;
     };
 
-    class EVADNE_API MouseButtonEvent : public Event
+    class  MouseButtonEvent : public Event
     {
     public:
         inline int GetMouseButton() const { return m_Button; }
@@ -66,7 +66,7 @@ namespace Evadne
         int m_Button;
     };
 
-    class EVADNE_API MouseButtonPressedEvent : public MouseButtonEvent
+    class  MouseButtonPressedEvent : public MouseButtonEvent
     {
     public:
         MouseButtonPressedEvent(int button)
@@ -83,7 +83,7 @@ namespace Evadne
         EVENT_CLASS_TYPE(MouseButtonPressed)
     };
 
-    class EVADNE_API MouseButtonReleasedEvent : public MouseButtonEvent
+    class  MouseButtonReleasedEvent : public MouseButtonEvent
     {
     public:
         MouseButtonReleasedEvent(int button)

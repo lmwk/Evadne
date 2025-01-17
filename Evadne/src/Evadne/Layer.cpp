@@ -8,9 +8,5 @@ namespace Evadne {
     {
     }
 
-    Layer::~Layer() 
-    {
-
-    }
 
 }

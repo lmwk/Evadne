@@ -3,7 +3,10 @@
 
 #include "Evadne/Log.h"
 
-#include <glad/glad.h>
+#include "Evadne/Rendering/Renderer.h"
+
+#include "Evadne/Input/Input.h"
+#include <GLFW/glfw3.h>
 
 namespace Evadne {
 
@@ -16,22 +19,20 @@ namespace Evadne {
         EV_CORE_ASSERT(!s_Instance, "Application already exists");
         s_Instance = this;
 
-        m_Window = std::unique_ptr<Window>(Window::Create());
+        m_Window = Scope<Window>(Window::Create());
         m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
 
-        
-    }
+        Renderer::Init();
 
-    Application::~Application() 
-    {
+        m_ImGuiLayer = new ImGuiLayer();
+        PushOverlay(m_ImGuiLayer);
+
     }
 
     void Application::OnEvent(Event& e) 
     {
         EventDispatcher dispatcher(e);
         dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClose));
-
-        EV_CORE_TRACE("{0}", e.ToString());
 
         for(auto it = m_LayerStack.end(); it != m_LayerStack.begin(); ) 
         {
@@ -46,11 +47,18 @@ namespace Evadne {
 
         while (m_Running) 
         {
-            glClearColor(1, 0, 1, 1);
-            glClear(GL_COLOR_BUFFER_BIT);
+            float time = (float)glfwGetTime();
+            Timestep timestep = time - m_LastFrameTime;
+            m_LastFrameTime = time;
 
             for (Layer* layer : m_LayerStack)
-                layer -> OnUpdate();
+                layer -> OnUpdate(timestep);
+
+            m_ImGuiLayer->Begin();
+            for (Layer* layer : m_LayerStack)
+                layer->OnImGuiRender();
+
+            m_ImGuiLayer->End();
 
             m_Window->OnUpdate();
         }
@@ -59,13 +67,11 @@ namespace Evadne {
     void Application::PushLayer(Layer* layer)
     {
         m_LayerStack.PushLayer(layer);
-        layer->OnAttach();
     }
 
     void Application::PushOverlay(Layer* layer)
     {
         m_LayerStack.PushOverlay(layer);
-        layer->OnAttach();
     }
 
     bool Application::OnWindowClose(WindowCloseEvent& e)
