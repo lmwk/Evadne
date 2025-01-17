@@ -1,9 +1,9 @@
 #pragma once
 
 
-#include "Evadne/Application.h"
-#include "Evadne/Layer.h"
-#include "Evadne/Log.h"
+#include "Evadne/Core/Application.h"
+#include "Evadne/Core/Layer.h"
+#include "Evadne/Core/Log.h"
 
 #include "Evadne/Core/Timestep.h"
 

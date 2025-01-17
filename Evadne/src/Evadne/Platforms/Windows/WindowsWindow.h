@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Evadne/Window.h"
+#include "Evadne/Core/Window.h"
 #include "Evadne/Rendering/GraphicsContext.h"
 
 #include <GLFW/glfw3.h>
@@ -28,7 +28,7 @@ namespace Evadne {
         virtual void Shutdown();
     private:
         GLFWwindow* m_Window;
-        GraphicsContext* m_Context;
+        Scope<GraphicsContext> m_Context;
 
         struct WindowData 
         {

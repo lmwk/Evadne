@@ -76,7 +76,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>evpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EV_PLATFORM_WINDOWS;EV_BUILD_DLL;GLFW_INCLUDE_NONE;EV_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EV_BUILD_DLL;GLFW_INCLUDE_NONE;EV_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -100,7 +100,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>evpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EV_PLATFORM_WINDOWS;EV_BUILD_DLL;GLFW_INCLUDE_NONE;EV_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EV_BUILD_DLL;GLFW_INCLUDE_NONE;EV_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -127,7 +127,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>evpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EV_PLATFORM_WINDOWS;EV_BUILD_DLL;GLFW_INCLUDE_NONE;EV_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EV_BUILD_DLL;GLFW_INCLUDE_NONE;EV_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -151,11 +151,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Evadne.h" />
-    <ClInclude Include="src\Evadne\Application.h" />
     <ClInclude Include="src\Evadne\Camera\Controllers\OrthographicCameraController.h" />
     <ClInclude Include="src\Evadne\Camera\OrthographicCamera.h" />
-    <ClInclude Include="src\Evadne\Core.h" />
+    <ClInclude Include="src\Evadne\Core\Application.h" />
+    <ClInclude Include="src\Evadne\Core\Core.h" />
+    <ClInclude Include="src\Evadne\Core\Layer.h" />
+    <ClInclude Include="src\Evadne\Core\LayerStack.h" />
+    <ClInclude Include="src\Evadne\Core\Log.h" />
     <ClInclude Include="src\Evadne\Core\Timestep.h" />
+    <ClInclude Include="src\Evadne\Core\Window.h" />
     <ClInclude Include="src\Evadne\EntryPoint.h" />
     <ClInclude Include="src\Evadne\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Evadne\Events\Event.h" />
@@ -165,9 +169,6 @@
     <ClInclude Include="src\Evadne\Input\Input.h" />
     <ClInclude Include="src\Evadne\Input\KeyCodes.h" />
     <ClInclude Include="src\Evadne\Input\MouseButtonCodes.h" />
-    <ClInclude Include="src\Evadne\Layer.h" />
-    <ClInclude Include="src\Evadne\LayerStack.h" />
-    <ClInclude Include="src\Evadne\Log.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLRendererAPI.h" />
@@ -184,7 +185,6 @@
     <ClInclude Include="src\Evadne\Rendering\Shader.h" />
     <ClInclude Include="src\Evadne\Rendering\Texture.h" />
     <ClInclude Include="src\Evadne\Rendering\VertexArray.h" />
-    <ClInclude Include="src\Evadne\Window.h" />
     <ClInclude Include="src\evpch.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
@@ -605,14 +605,14 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Evadne\Application.cpp" />
     <ClCompile Include="src\Evadne\Camera\Controllers\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Evadne\Camera\OrthographicCamera.cpp" />
+    <ClCompile Include="src\Evadne\Core\Application.cpp" />
+    <ClCompile Include="src\Evadne\Core\Layer.cpp" />
+    <ClCompile Include="src\Evadne\Core\LayerStack.cpp" />
+    <ClCompile Include="src\Evadne\Core\Log.cpp" />
     <ClCompile Include="src\Evadne\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Evadne\ImGui\ImGuiLayer.cpp" />
-    <ClCompile Include="src\Evadne\Layer.cpp" />
-    <ClCompile Include="src\Evadne\LayerStack.cpp" />
-    <ClCompile Include="src\Evadne\Log.cpp" />
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLRendererAPI.cpp" />

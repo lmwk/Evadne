@@ -13,7 +13,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "Evadne/Log.h"
+#include "Evadne/Core/Log.h"
 
 #ifdef EV_PLATFORM_WINDOWS
     #include <Windows.h>

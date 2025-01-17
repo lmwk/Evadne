@@ -2,7 +2,7 @@
 
 #include "evpch.h"
 
-#include "Evadne/Core.h"
+#include "Evadne/Core/Core.h"
 #include "Evadne/Events/Event.h"
 
 namespace Evadne 

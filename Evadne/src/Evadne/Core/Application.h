@@ -3,8 +3,8 @@
 #include "Core.h"
 
 #include "Window.h"
-#include "Evadne/LayerStack.h"
-#include "Events/Event.h"
+#include "Evadne/Core/LayerStack.h"
+#include "Evadne/Events/Event.h"
 #include "Evadne/Events/ApplicationEvent.h"
 
 #include "Evadne/Core/Timestep.h"
@@ -32,10 +32,12 @@ namespace Evadne {
         inline static Application& Get() { return *s_Instance; }
     private:
         bool OnWindowClose(WindowCloseEvent& e);
+        bool OnWindowResize(WindowResizeEvent& e);
     private:
         Scope<Window> m_Window;
         ImGuiLayer* m_ImGuiLayer;
         bool m_Running = true;
+        bool m_Minimized = false;
         LayerStack m_LayerStack;
 
         float m_LastFrameTime = 0.0f;

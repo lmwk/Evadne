@@ -83,7 +83,6 @@ project "Evadne"
 		buildoptions {"/utf-8"}
 		defines 
 		{
-			"EV_PLATFORM_WINDOWS",
 			"EV_BUILD_DLL",
 			"GLFW_INCLUDE_NONE"
 		}
@@ -135,10 +134,6 @@ project "Sandbox"
 	filter "system:windows"
 		systemversion "latest"
 		buildoptions {"/utf-8"}
-		defines 
-		{
-			"EV_PLATFORM_WINDOWS"
-		}
 
 	filter "configurations:Debug"
 		defines "EV_DEBUG"

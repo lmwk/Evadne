@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Evadne/Core.h"
-#include "Core/Timestep.h"
+#include "Evadne/Core/Core.h"
+#include "Evadne/Core/Timestep.h"
 #include "Evadne/Events/Event.h"
 
 

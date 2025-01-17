@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Evadne/Core.h"
+#include "Evadne/Core/Core.h"
 #include "Layer.h"
 
 #include <vector>

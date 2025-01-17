@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "Evadne/Core.h"
+#include "Evadne/Core/Core.h"
 
 namespace Evadne {
 

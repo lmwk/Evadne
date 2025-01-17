@@ -66,19 +66,31 @@
     <ClInclude Include="src\Evadne.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evadne\Application.h">
-      <Filter>src\Evadne</Filter>
-    </ClInclude>
     <ClInclude Include="src\Evadne\Camera\Controllers\OrthographicCameraController.h">
       <Filter>src\Evadne\Camera\Controllers</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Camera\OrthographicCamera.h">
       <Filter>src\Evadne\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evadne\Core.h">
-      <Filter>src\Evadne</Filter>
+    <ClInclude Include="src\Evadne\Core\Application.h">
+      <Filter>src\Evadne\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Core\Core.h">
+      <Filter>src\Evadne\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Core\Layer.h">
+      <Filter>src\Evadne\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Core\LayerStack.h">
+      <Filter>src\Evadne\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Core\Log.h">
+      <Filter>src\Evadne\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Core\Timestep.h">
+      <Filter>src\Evadne\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Core\Window.h">
       <Filter>src\Evadne\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\EntryPoint.h">
@@ -107,15 +119,6 @@
     </ClInclude>
     <ClInclude Include="src\Evadne\Input\MouseButtonCodes.h">
       <Filter>src\Evadne\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Evadne\Layer.h">
-      <Filter>src\Evadne</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Evadne\LayerStack.h">
-      <Filter>src\Evadne</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Evadne\Log.h">
-      <Filter>src\Evadne</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLBuffer.h">
       <Filter>src\Evadne\Platforms\OpenGL</Filter>
@@ -164,9 +167,6 @@
     </ClInclude>
     <ClInclude Include="src\Evadne\Rendering\VertexArray.h">
       <Filter>src\Evadne\Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Evadne\Window.h">
-      <Filter>src\Evadne</Filter>
     </ClInclude>
     <ClInclude Include="src\evpch.h">
       <Filter>src</Filter>
@@ -1424,29 +1424,29 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Evadne\Application.cpp">
-      <Filter>src\Evadne</Filter>
-    </ClCompile>
     <ClCompile Include="src\Evadne\Camera\Controllers\OrthographicCameraController.cpp">
       <Filter>src\Evadne\Camera\Controllers</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\Camera\OrthographicCamera.cpp">
       <Filter>src\Evadne\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="src\Evadne\Core\Application.cpp">
+      <Filter>src\Evadne\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Evadne\Core\Layer.cpp">
+      <Filter>src\Evadne\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Evadne\Core\LayerStack.cpp">
+      <Filter>src\Evadne\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Evadne\Core\Log.cpp">
+      <Filter>src\Evadne\Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\Evadne\ImGui\ImGuiBuild.cpp">
       <Filter>src\Evadne\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\ImGui\ImGuiLayer.cpp">
       <Filter>src\Evadne\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Evadne\Layer.cpp">
-      <Filter>src\Evadne</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Evadne\LayerStack.cpp">
-      <Filter>src\Evadne</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Evadne\Log.cpp">
-      <Filter>src\Evadne</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLBuffer.cpp">
       <Filter>src\Evadne\Platforms\OpenGL</Filter>
