@@ -22,6 +22,8 @@ namespace Evadne {
 
     void ImGuiLayer::OnAttach()
     {
+        EV_PROFILE_FUNCTION();
+
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         
@@ -50,6 +52,8 @@ namespace Evadne {
 
     void ImGuiLayer::OnDetach()
     {
+        EV_PROFILE_FUNCTION();
+
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
@@ -57,6 +61,8 @@ namespace Evadne {
 
     void ImGuiLayer::Begin()
     {
+        EV_PROFILE_FUNCTION();
+
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -64,6 +70,8 @@ namespace Evadne {
 
     void ImGuiLayer::End() 
     {
+        EV_PROFILE_FUNCTION();
+
         ImGuiIO& io = ImGui::GetIO();
 
         Application& app = Application::Get();
@@ -79,12 +87,6 @@ namespace Evadne {
             ImGui::RenderPlatformWindowsDefault();
             glfwMakeContextCurrent(backup_current_context);
         }
-    }
-
-    void ImGuiLayer::OnImGuiRender() 
-    {
-        static bool show = true;
-        ImGui::ShowDemoWindow(&show);
     }
 
 }

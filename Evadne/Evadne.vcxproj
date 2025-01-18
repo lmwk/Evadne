@@ -150,6 +150,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Evadne\Debug\Intrumentor.h" />
     <ClInclude Include="src\Evadne\Rendering\2D\Renderer2D.h" />
     <ClInclude Include="src\Evadne.h" />
     <ClInclude Include="src\Evadne\Camera\Controllers\OrthographicCameraController.h" />

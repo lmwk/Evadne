@@ -15,6 +15,8 @@
 
 #include "Evadne/Core/Log.h"
 
+#include "Evadne/Debug/Intrumentor.h"
+
 #ifdef EV_PLATFORM_WINDOWS
     #include <Windows.h>
 #endif

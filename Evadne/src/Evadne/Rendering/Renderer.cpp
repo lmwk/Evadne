@@ -10,6 +10,8 @@ namespace Evadne {
 
     void Renderer::Init()
     {
+        EV_PROFILE_FUNCTION();
+
         RenderCommand::Init();
         Renderer2D::Init();
     }

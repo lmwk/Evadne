@@ -8,13 +8,18 @@ extern Evadne::Application* Evadne::CreateApplication();
 int main(int argc, char** argv) 
 {
     Evadne::Log::Init();
-    EV_CORE_WARN("Initialized Logging");
-    int a = 5;
-    EV_INFO("I see you {0}", a);
 
+    EV_PROFILE_BEGIN_SESSION("Startup", "EvadneProfile-Startup.json");
     auto app = Evadne::CreateApplication();
+    EV_PROFILE_END_SESSION();
+
+    EV_PROFILE_BEGIN_SESSION("Runtime", "EvadneProfile-Runtime.json");
     app->Run();
+    EV_PROFILE_END_SESSION();
+
+    EV_PROFILE_BEGIN_SESSION("Startup", "EvadneProfile-Shutdown.json");
     delete app;
+    EV_PROFILE_END_SESSION();
 }
 
 #endif

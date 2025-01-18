@@ -1421,6 +1421,7 @@
     </ClInclude>
     <ClInclude Include="src\Evadne\Rendering\2D\Renderer2D.h" />
     <ClInclude Include="src\Evadne\Core\EntryPoint.h" />
+    <ClInclude Include="src\Evadne\Debug\Intrumentor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Evadne\Camera\Controllers\OrthographicCameraController.cpp">
