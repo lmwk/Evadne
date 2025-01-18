@@ -151,6 +151,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Evadne\Debug\Intrumentor.h" />
+    <ClInclude Include="src\Evadne\Input\MouseCodes.h" />
     <ClInclude Include="src\Evadne\Rendering\2D\Renderer2D.h" />
     <ClInclude Include="src\Evadne.h" />
     <ClInclude Include="src\Evadne\Camera\Controllers\OrthographicCameraController.h" />
@@ -170,7 +171,6 @@
     <ClInclude Include="src\Evadne\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Evadne\Input\Input.h" />
     <ClInclude Include="src\Evadne\Input\KeyCodes.h" />
-    <ClInclude Include="src\Evadne\Input\MouseButtonCodes.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLRendererAPI.h" />
@@ -607,6 +607,8 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Evadne\Core\Window.cpp" />
+    <ClCompile Include="src\Evadne\Input\Input.cpp" />
     <ClCompile Include="src\Evadne\Rendering\2D\Renderer2D.cpp" />
     <ClCompile Include="src\Evadne\Camera\Controllers\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Evadne\Camera\OrthographicCamera.cpp" />

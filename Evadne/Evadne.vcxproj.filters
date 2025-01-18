@@ -114,9 +114,6 @@
     <ClInclude Include="src\Evadne\Input\KeyCodes.h">
       <Filter>src\Evadne\Input</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evadne\Input\MouseButtonCodes.h">
-      <Filter>src\Evadne\Input</Filter>
-    </ClInclude>
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLBuffer.h">
       <Filter>src\Evadne\Platforms\OpenGL</Filter>
     </ClInclude>
@@ -1422,6 +1419,7 @@
     <ClInclude Include="src\Evadne\Rendering\2D\Renderer2D.h" />
     <ClInclude Include="src\Evadne\Core\EntryPoint.h" />
     <ClInclude Include="src\Evadne\Debug\Intrumentor.h" />
+    <ClInclude Include="src\Evadne\Input\MouseCodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Evadne\Camera\Controllers\OrthographicCameraController.cpp">
@@ -1501,5 +1499,7 @@
     </ClCompile>
     <ClCompile Include="src\Evadne\Rendering\2D\Renderer2D.cpp" />
     <ClCompile Include="src\Evadne\Rendering\GraphicsContext.cpp" />
+    <ClCompile Include="src\Evadne\Input\Input.cpp" />
+    <ClCompile Include="src\Evadne\Core\Window.cpp" />
   </ItemGroup>
 </Project>

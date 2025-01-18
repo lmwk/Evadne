@@ -36,6 +36,11 @@
 bin/
 bin-int/
 
+*.log
+
 /CircularIgnore.json
 /.claudiaideconfig
 /Sandbox/assets/textures
+/Sandbox/EvadneProfile-Runtime.json
+/Sandbox/EvadneProfile-Shutdown.json
+/Sandbox/EvadneProfile-Startup.json

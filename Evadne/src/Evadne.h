@@ -9,7 +9,7 @@
 
 #include "Evadne/Input/Input.h"
 #include "Evadne/Input/KeyCodes.h"
-#include "Evadne/Input/MouseButtonCodes.h"
+#include "Evadne/Input/MouseCodes.h"
 #include "Evadne/Camera/Controllers/OrthographicCameraController.h"
 
 #include "Evadne/ImGui/ImGuiLayer.h"
