@@ -1,6 +1,8 @@
 workspace "Evadne" 
 	architecture "x86_64"
-
+	
+	startproject "Evadne-Editor"
+	
 	configurations 
 	{
 		"Debug",
@@ -93,6 +95,47 @@ project "Evadne"
 		runtime "Release"
 		optimize "on"
 
+	filter "configurations:Dist"
+		defines "EV_DIST"
+		runtime "Release"
+		optimize "on"
+
+project "Evadne-Editor"
+	location "Evadne-Editor"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
+	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+	files
+	{
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+	includedirs
+	{
+		"Evadne/vendor/spdlog/include",
+		"Evadne/src",
+		"Evadne/vendor",
+		"%{IncludeDir.glm}"
+	}
+	links
+	{
+		"Evadne"
+	}
+	filter "system:windows"
+		systemversion "latest"
+		buildoptions {"/utf-8"}
+		
+	filter "configurations:Debug"
+		defines "EV_DEBUG"
+		runtime "Debug"
+		symbols "on"
+	filter "configurations:Release"
+		defines "EV_RELEASE"
+		runtime "Release"
+		optimize "on"
 	filter "configurations:Dist"
 		defines "EV_DIST"
 		runtime "Release"

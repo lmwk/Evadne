@@ -17,7 +17,7 @@ int main(int argc, char** argv)
     app->Run();
     EV_PROFILE_END_SESSION();
 
-    EV_PROFILE_BEGIN_SESSION("Startup", "EvadneProfile-Shutdown.json");
+    EV_PROFILE_BEGIN_SESSION("Shutdown", "EvadneProfile-Shutdown.json");
     delete app;
     EV_PROFILE_END_SESSION();
 }

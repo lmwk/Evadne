@@ -135,6 +135,9 @@
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLContext.h">
       <Filter>src\Evadne\Platforms\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLFramebuffer.h">
+      <Filter>src\Evadne\Platforms\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLRendererAPI.h">
       <Filter>src\Evadne\Platforms\OpenGL</Filter>
     </ClInclude>
@@ -147,9 +150,6 @@
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLVertexArray.h">
       <Filter>src\Evadne\Platforms\OpenGL</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evadne\Platforms\Windows\WindowsInput.h">
-      <Filter>src\Evadne\Platforms\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="src\Evadne\Platforms\Windows\WindowsWindow.h">
       <Filter>src\Evadne\Platforms\Windows</Filter>
     </ClInclude>
@@ -157,6 +157,9 @@
       <Filter>src\Evadne\Rendering\2D</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Rendering\Buffer.h">
+      <Filter>src\Evadne\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Rendering\Framebuffer.h">
       <Filter>src\Evadne\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Rendering\GraphicsContext.h">
@@ -1463,13 +1466,13 @@
     <ClCompile Include="src\Evadne\ImGui\ImGuiLayer.cpp">
       <Filter>src\Evadne\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="src\Evadne\Input\Input.cpp">
-      <Filter>src\Evadne\Input</Filter>
-    </ClCompile>
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLBuffer.cpp">
       <Filter>src\Evadne\Platforms\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLContext.cpp">
+      <Filter>src\Evadne\Platforms\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLFramebuffer.cpp">
       <Filter>src\Evadne\Platforms\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLRendererAPI.cpp">
@@ -1494,6 +1497,9 @@
       <Filter>src\Evadne\Rendering\2D</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\Rendering\Buffer.cpp">
+      <Filter>src\Evadne\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Evadne\Rendering\Framebuffer.cpp">
       <Filter>src\Evadne\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\Rendering\GraphicsContext.cpp">

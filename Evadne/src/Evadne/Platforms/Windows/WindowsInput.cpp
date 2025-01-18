@@ -1,5 +1,5 @@
 #include "evpch.h"
-#include "Evadne/Platforms/Windows/WindowsInput.h"
+#include "Evadne/Input/Input.h"
 
 #include "Evadne/Core/Application.h"
 #include <GLFW/glfw3.h>
@@ -7,7 +7,7 @@
 namespace Evadne {
 
 
-    bool WindowsInput::IsKeyPressedImpl(KeyCode key) 
+    bool Input::IsKeyPressed(KeyCode key) 
     {
 
         auto window = static_cast<GLFWwindow*> (Application::Get().GetWindow().GetNativeWindow());
@@ -16,7 +16,7 @@ namespace Evadne {
 
     }
 
-    bool WindowsInput::IsMouseButtonPressedImpl(MouseCode button) 
+    bool Input::IsMouseButtonPressed(MouseCode button) 
     {
         
         auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
@@ -25,7 +25,7 @@ namespace Evadne {
 
     }
 
-    std::pair<float, float> WindowsInput::GetMousePositionImpl() 
+    std::pair<float, float> Input::GetMousePosition() 
     {
 
         auto window = static_cast<GLFWwindow*> (Application::Get().GetWindow().GetNativeWindow());
@@ -36,14 +36,14 @@ namespace Evadne {
 
     }
 
-    float WindowsInput::GetMouseXImpl() 
+    float Input::GetMouseX() 
     {
-        auto [x, y] = GetMousePositionImpl();
+        auto [x, y] = GetMousePosition();
         return x;
     }
-    float WindowsInput::GetMouseYImpl() 
+    float Input::GetMouseY() 
     {
-        auto [x, y] = GetMousePositionImpl();
+        auto [x, y] = GetMousePosition();
         return y;
     }
 

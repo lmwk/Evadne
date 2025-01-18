@@ -64,6 +64,7 @@ void Sandbox2D::OnImGuiRender()
 	EV_PROFILE_FUNCTION();
 
 	ImGui::Begin("Settings");
+
 	auto stats = Evadne::Renderer2D::GetStats();
 	ImGui::Text("Renderer2D Stats:");
 	ImGui::Text("Draw Calls: %d", stats.DrawCalls);

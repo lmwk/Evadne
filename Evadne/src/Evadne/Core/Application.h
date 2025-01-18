@@ -16,7 +16,7 @@ namespace Evadne {
     class Application
     {
     public:
-        Application();
+        Application(const std::string& name = "Evadne App");
         virtual ~Application();
 
         void OnEvent(Event& e);
@@ -26,6 +26,9 @@ namespace Evadne {
 
         inline Window& GetWindow() { return *m_Window; }
 
+        void Close();
+
+        ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
 
         inline static Application& Get() { return *s_Instance; }
     private:

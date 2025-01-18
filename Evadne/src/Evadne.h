@@ -20,6 +20,7 @@
 
 #include "Evadne/Rendering/Buffer.h"
 #include "Evadne/Rendering/Shader.h"
+#include "Evadne/Rendering/Framebuffer.h"
 #include "Evadne/Rendering/Texture.h"
 #include "Evadne/Rendering/VertexArray.h"
 

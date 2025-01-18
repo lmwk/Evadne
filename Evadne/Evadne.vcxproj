@@ -172,14 +172,15 @@
     <ClInclude Include="src\Evadne\Input\MouseCodes.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLFramebuffer.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLRendererAPI.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLShader.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLTexture.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLVertexArray.h" />
-    <ClInclude Include="src\Evadne\Platforms\Windows\WindowsInput.h" />
     <ClInclude Include="src\Evadne\Platforms\Windows\WindowsWindow.h" />
     <ClInclude Include="src\Evadne\Rendering\2D\Renderer2D.h" />
     <ClInclude Include="src\Evadne\Rendering\Buffer.h" />
+    <ClInclude Include="src\Evadne\Rendering\Framebuffer.h" />
     <ClInclude Include="src\Evadne\Rendering\GraphicsContext.h" />
     <ClInclude Include="src\Evadne\Rendering\RenderCommand.h" />
     <ClInclude Include="src\Evadne\Rendering\Renderer.h" />
@@ -616,9 +617,9 @@
     <ClCompile Include="src\Evadne\Core\Window.cpp" />
     <ClCompile Include="src\Evadne\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Evadne\ImGui\ImGuiLayer.cpp" />
-    <ClCompile Include="src\Evadne\Input\Input.cpp" />
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLFramebuffer.cpp" />
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLRendererAPI.cpp" />
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLTexture.cpp" />
@@ -627,6 +628,7 @@
     <ClCompile Include="src\Evadne\Platforms\Windows\WindowsWindow.cpp" />
     <ClCompile Include="src\Evadne\Rendering\2D\Renderer2D.cpp" />
     <ClCompile Include="src\Evadne\Rendering\Buffer.cpp" />
+    <ClCompile Include="src\Evadne\Rendering\Framebuffer.cpp" />
     <ClCompile Include="src\Evadne\Rendering\GraphicsContext.cpp" />
     <ClCompile Include="src\Evadne\Rendering\RenderCommand.cpp" />
     <ClCompile Include="src\Evadne\Rendering\Renderer.cpp" />

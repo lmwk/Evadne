@@ -13,14 +13,14 @@ namespace Evadne {
 
     Application* Application::s_Instance = nullptr;
 
-    Application::Application() 
+    Application::Application(const std::string& name) 
     {
         EV_PROFILE_FUNCTION();
 
         EV_CORE_ASSERT(!s_Instance, "Application already exists");
         s_Instance = this;
 
-        m_Window = Window::Create();
+        m_Window = Window::Create(WindowProps(name));
         m_Window->SetEventCallback(EV_BIND_EVENT_FN(Application::OnEvent));
 
         Renderer::Init();
@@ -103,6 +103,11 @@ namespace Evadne {
         EV_PROFILE_FUNCTION();
         m_LayerStack.PushOverlay(layer);
         layer->OnAttach();
+    }
+
+    void Application::Close()
+    {
+        m_Running = false;
     }
 
     bool Application::OnWindowClose(WindowCloseEvent& e)
