@@ -36,12 +36,22 @@
 #endif 
 
 #ifdef EV_DEBUG
-#define EV_ENABLE_ASSERTS
+    #if defined(EV_PLATFORM_WINDOWS)
+        #define EV_DEBUGBREAK() __debugbreak()
+    #elif defined(EV_PLATFORM_LINUX)
+        #include <signal.h>
+        #define EV_DEBUGBREAK() raise(SIGTRAP)
+    #else
+        #error "Platform doesn't support debugbreak yet!"
+    #endif
+    #define EV_ENABLE_ASSERTS
+#else
+    #define EV_DEBUGBREAK()
 #endif
 
 #ifdef EV_ENABLE_ASSERTS
-    #define EV_ASSERT(x, ...) {if(!(x)) {EV_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();}}
-    #define EV_CORE_ASSERT(x, ...) {if(!(x)) {EV_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak();}}
+    #define EV_ASSERT(x, ...) {if(!(x)) {EV_ERROR("Assertion Failed: {0}", __VA_ARGS__); EV_DEBUGBREAK();}}
+    #define EV_CORE_ASSERT(x, ...) {if(!(x)) {EV_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); EV_DEBUGBREAK();}}
 #else 
     #define EV_ASSERT(x, ...)
     #define EV_CORE_ASSERT(x, ...)

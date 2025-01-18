@@ -76,7 +76,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>evpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EV_BUILD_DLL;GLFW_INCLUDE_NONE;EV_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;EV_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -100,7 +100,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>evpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EV_BUILD_DLL;GLFW_INCLUDE_NONE;EV_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;EV_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -127,7 +127,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>evpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;EV_BUILD_DLL;GLFW_INCLUDE_NONE;EV_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;EV_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb_image;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -150,20 +150,18 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Evadne\Debug\Intrumentor.h" />
-    <ClInclude Include="src\Evadne\Input\MouseCodes.h" />
-    <ClInclude Include="src\Evadne\Rendering\2D\Renderer2D.h" />
     <ClInclude Include="src\Evadne.h" />
     <ClInclude Include="src\Evadne\Camera\Controllers\OrthographicCameraController.h" />
     <ClInclude Include="src\Evadne\Camera\OrthographicCamera.h" />
     <ClInclude Include="src\Evadne\Core\Application.h" />
     <ClInclude Include="src\Evadne\Core\Core.h" />
+    <ClInclude Include="src\Evadne\Core\EntryPoint.h" />
     <ClInclude Include="src\Evadne\Core\Layer.h" />
     <ClInclude Include="src\Evadne\Core\LayerStack.h" />
     <ClInclude Include="src\Evadne\Core\Log.h" />
     <ClInclude Include="src\Evadne\Core\Timestep.h" />
     <ClInclude Include="src\Evadne\Core\Window.h" />
-    <ClInclude Include="src\Evadne\Core\EntryPoint.h" />
+    <ClInclude Include="src\Evadne\Debug\Intrumentor.h" />
     <ClInclude Include="src\Evadne\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Evadne\Events\Event.h" />
     <ClInclude Include="src\Evadne\Events\KeyEvent.h" />
@@ -171,6 +169,7 @@
     <ClInclude Include="src\Evadne\ImGui\ImGuiLayer.h" />
     <ClInclude Include="src\Evadne\Input\Input.h" />
     <ClInclude Include="src\Evadne\Input\KeyCodes.h" />
+    <ClInclude Include="src\Evadne\Input\MouseCodes.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLRendererAPI.h" />
@@ -179,6 +178,7 @@
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\Evadne\Platforms\Windows\WindowsInput.h" />
     <ClInclude Include="src\Evadne\Platforms\Windows\WindowsWindow.h" />
+    <ClInclude Include="src\Evadne\Rendering\2D\Renderer2D.h" />
     <ClInclude Include="src\Evadne\Rendering\Buffer.h" />
     <ClInclude Include="src\Evadne\Rendering\GraphicsContext.h" />
     <ClInclude Include="src\Evadne\Rendering\RenderCommand.h" />
@@ -607,17 +607,16 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Evadne\Core\Window.cpp" />
-    <ClCompile Include="src\Evadne\Input\Input.cpp" />
-    <ClCompile Include="src\Evadne\Rendering\2D\Renderer2D.cpp" />
     <ClCompile Include="src\Evadne\Camera\Controllers\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Evadne\Camera\OrthographicCamera.cpp" />
     <ClCompile Include="src\Evadne\Core\Application.cpp" />
     <ClCompile Include="src\Evadne\Core\Layer.cpp" />
     <ClCompile Include="src\Evadne\Core\LayerStack.cpp" />
     <ClCompile Include="src\Evadne\Core\Log.cpp" />
+    <ClCompile Include="src\Evadne\Core\Window.cpp" />
     <ClCompile Include="src\Evadne\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Evadne\ImGui\ImGuiLayer.cpp" />
+    <ClCompile Include="src\Evadne\Input\Input.cpp" />
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLRendererAPI.cpp" />
@@ -626,6 +625,7 @@
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\Evadne\Platforms\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Evadne\Platforms\Windows\WindowsWindow.cpp" />
+    <ClCompile Include="src\Evadne\Rendering\2D\Renderer2D.cpp" />
     <ClCompile Include="src\Evadne\Rendering\Buffer.cpp" />
     <ClCompile Include="src\Evadne\Rendering\GraphicsContext.cpp" />
     <ClCompile Include="src\Evadne\Rendering\RenderCommand.cpp" />

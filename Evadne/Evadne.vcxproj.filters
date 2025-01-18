@@ -16,6 +16,9 @@
     <Filter Include="src\Evadne\Core">
       <UniqueIdentifier>{47FB9541-B386-0306-BC97-86FA28A25F06}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Evadne\Debug">
+      <UniqueIdentifier>{45BF6174-31B8-80C6-5AEA-654B464260D2}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Evadne\Events">
       <UniqueIdentifier>{93FA2304-FF10-229A-4888-ADBBB4DDF221}</UniqueIdentifier>
     </Filter>
@@ -36,6 +39,9 @@
     </Filter>
     <Filter Include="src\Evadne\Rendering">
       <UniqueIdentifier>{9C4D0715-88DC-90DE-31FB-A4D91D69A184}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Evadne\Rendering\2D">
+      <UniqueIdentifier>{C18636F6-2DBE-7E8D-36C8-E2B0A27EA586}</UniqueIdentifier>
     </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
@@ -78,6 +84,9 @@
     <ClInclude Include="src\Evadne\Core\Core.h">
       <Filter>src\Evadne\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Evadne\Core\EntryPoint.h">
+      <Filter>src\Evadne\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Evadne\Core\Layer.h">
       <Filter>src\Evadne\Core</Filter>
     </ClInclude>
@@ -92,6 +101,9 @@
     </ClInclude>
     <ClInclude Include="src\Evadne\Core\Window.h">
       <Filter>src\Evadne\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Debug\Intrumentor.h">
+      <Filter>src\Evadne\Debug</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Events\ApplicationEvent.h">
       <Filter>src\Evadne\Events</Filter>
@@ -112,6 +124,9 @@
       <Filter>src\Evadne\Input</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Input\KeyCodes.h">
+      <Filter>src\Evadne\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Input\MouseCodes.h">
       <Filter>src\Evadne\Input</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLBuffer.h">
@@ -137,6 +152,9 @@
     </ClInclude>
     <ClInclude Include="src\Evadne\Platforms\Windows\WindowsWindow.h">
       <Filter>src\Evadne\Platforms\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Rendering\2D\Renderer2D.h">
+      <Filter>src\Evadne\Rendering\2D</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Rendering\Buffer.h">
       <Filter>src\Evadne\Rendering</Filter>
@@ -1416,10 +1434,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evadne\Rendering\2D\Renderer2D.h" />
-    <ClInclude Include="src\Evadne\Core\EntryPoint.h" />
-    <ClInclude Include="src\Evadne\Debug\Intrumentor.h" />
-    <ClInclude Include="src\Evadne\Input\MouseCodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Evadne\Camera\Controllers\OrthographicCameraController.cpp">
@@ -1440,11 +1454,17 @@
     <ClCompile Include="src\Evadne\Core\Log.cpp">
       <Filter>src\Evadne\Core</Filter>
     </ClCompile>
+    <ClCompile Include="src\Evadne\Core\Window.cpp">
+      <Filter>src\Evadne\Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\Evadne\ImGui\ImGuiBuild.cpp">
       <Filter>src\Evadne\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\ImGui\ImGuiLayer.cpp">
       <Filter>src\Evadne\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Evadne\Input\Input.cpp">
+      <Filter>src\Evadne\Input</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLBuffer.cpp">
       <Filter>src\Evadne\Platforms\OpenGL</Filter>
@@ -1470,7 +1490,13 @@
     <ClCompile Include="src\Evadne\Platforms\Windows\WindowsWindow.cpp">
       <Filter>src\Evadne\Platforms\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="src\Evadne\Rendering\2D\Renderer2D.cpp">
+      <Filter>src\Evadne\Rendering\2D</Filter>
+    </ClCompile>
     <ClCompile Include="src\Evadne\Rendering\Buffer.cpp">
+      <Filter>src\Evadne\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Evadne\Rendering\GraphicsContext.cpp">
       <Filter>src\Evadne\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\Rendering\RenderCommand.cpp">
@@ -1497,9 +1523,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Evadne\Rendering\2D\Renderer2D.cpp" />
-    <ClCompile Include="src\Evadne\Rendering\GraphicsContext.cpp" />
-    <ClCompile Include="src\Evadne\Input\Input.cpp" />
-    <ClCompile Include="src\Evadne\Core\Window.cpp" />
   </ItemGroup>
 </Project>

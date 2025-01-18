@@ -56,7 +56,8 @@ project "Evadne"
 	
 	defines
 	{
-		"_CRT_SECURE_NO_WARNINGS"
+		"_CRT_SECURE_NO_WARNINGS",
+		"GLFW_INCLUDE_NONE"
 	}
 	
 	includedirs 
@@ -81,11 +82,6 @@ project "Evadne"
 	filter "system:windows"
 		systemversion "latest"
 		buildoptions {"/utf-8"}
-		defines 
-		{
-			"EV_BUILD_DLL",
-			"GLFW_INCLUDE_NONE"
-		}
 
 	filter "configurations:Debug"
 		defines "EV_DEBUG"
