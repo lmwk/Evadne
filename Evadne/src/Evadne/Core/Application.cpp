@@ -45,9 +45,9 @@ namespace Evadne {
         dispatcher.Dispatch<WindowCloseEvent>(EV_BIND_EVENT_FN(Application::OnWindowClose));
         dispatcher.Dispatch<WindowResizeEvent>(EV_BIND_EVENT_FN(Application::OnWindowResize));
 
-        for(auto it = m_LayerStack.end(); it != m_LayerStack.begin(); ) 
+        for(auto it = m_LayerStack.rbegin(); it != m_LayerStack.rend(); ++it) 
         {
-            (*--it)->OnEvent(e);
+            (*it)->OnEvent(e);
             if (e.m_Handled)
                 break;
         }
