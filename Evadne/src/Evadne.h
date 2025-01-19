@@ -14,6 +14,10 @@
 
 #include "Evadne/ImGui/ImGuiLayer.h"
 
+#include "Evadne/Scene/Scene.h"
+#include "Evadne/Scene/Entity.h"
+#include "Evadne/Scene/Components.h"
+
 #include "Evadne/Rendering/Renderer.h"
 #include "Evadne/Rendering/2D/Renderer2D.h"
 #include "Evadne/Rendering/RenderCommand.h"

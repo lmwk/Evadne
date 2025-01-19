@@ -20,7 +20,7 @@ namespace Evadne {
         }
     };
 
-    Evadne::Application* Evadne::CreateApplication()
+    Application* CreateApplication()
     {
         return new EvadneEditor();
     }

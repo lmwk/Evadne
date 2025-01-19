@@ -23,6 +23,7 @@ IncludeDir["Glad"] = "Evadne/vendor/Glad/include"
 IncludeDir["ImGui"] = "Evadne/vendor/imgui/"
 IncludeDir["glm"] = "Evadne/vendor/glm"
 IncludeDir["stb_image"] = "Evadne/vendor/stb_image"
+IncludeDir["entt"] = "Evadne/vendor/entt/include"
 
 
 group "Dependencies"
@@ -70,7 +71,8 @@ project "Evadne"
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}",
-		"%{IncludeDir.stb_image}"
+		"%{IncludeDir.stb_image}",
+		"%{IncludeDir.entt}"
 	}
 	
 	links 
@@ -118,7 +120,8 @@ project "Evadne-Editor"
 		"Evadne/vendor/spdlog/include",
 		"Evadne/src",
 		"Evadne/vendor",
-		"%{IncludeDir.glm}"
+		"%{IncludeDir.glm}",
+		"%{IncludeDir.entt}"
 	}
 	links
 	{

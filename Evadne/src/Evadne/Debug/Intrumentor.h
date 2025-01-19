@@ -23,15 +23,10 @@ namespace Evadne {
 	};
 	class Instrumentor
 	{
-	private:
-		std::mutex m_Mutex;
-		InstrumentationSession* m_CurrentSession;
-		std::ofstream m_OutputStream;
 	public:
-		Instrumentor()
-			: m_CurrentSession(nullptr)
-		{
-		}
+		Instrumentor(const Instrumentor&) = delete;
+		Instrumentor(Instrumentor&&) = delete;
+
 		void BeginSession(const std::string& name, const std::string& filepath = "results.json")
 		{
 			std::lock_guard lock(m_Mutex);
@@ -99,6 +94,16 @@ namespace Evadne {
 			return instance;
 		}
 	private:
+		Instrumentor()
+			:m_CurrentSession(nullptr) 
+		{
+		}
+
+		~Instrumentor()
+		{
+			EndSession();
+		}
+
 		void WriteHeader()
 		{
 			m_OutputStream << "{\"otherData\": {},\"traceEvents\":[{}";
@@ -120,6 +125,10 @@ namespace Evadne {
 				m_CurrentSession = nullptr;
 			}
 		}
+	private:
+		std::mutex m_Mutex;
+		InstrumentationSession* m_CurrentSession;
+		std::ofstream m_OutputStream;
 	};
 	class InstrumentationTimer
 	{
@@ -201,13 +210,15 @@ namespace Evadne {
 
 #define EV_PROFILE_BEGIN_SESSION(name, filepath) ::Evadne::Instrumentor::Get().BeginSession(name, filepath)
 #define EV_PROFILE_END_SESSION() ::Evadne::Instrumentor::Get().EndSession()
-#define EV_PROFILE_SCOPE(name) ::Evadne::InstrumentationTimer timer##__LINE__(name);
-#define EV_PROFILE_FUNCTION() EV_PROFILE_SCOPE(__FUNCSIG__)
+#define EV_PROFILE_SCOPE_LINE2(name, line) constexpr auto fixedName##line = ::Evadne::InstrumentorUtils::CleanupOutputString(name, "__cdecl ");\
+											   ::Evadne::InstrumentationTimer timer##line(fixedName##line.Data)
+#define EV_PROFILE_SCOPE_LINE(name, line) EV_PROFILE_SCOPE_LINE2(name, line)
+#define EV_PROFILE_SCOPE(name) EV_PROFILE_SCOPE_LINE(name, __LINE__)
+#define EV_PROFILE_FUNCTION() EV_PROFILE_SCOPE(EV_FUNC_SIG)
 #else
 #define EV_PROFILE_BEGIN_SESSION(name, filepath)
 #define EV_PROFILE_END_SESSION()
-#define EV_PROFILE_SCOPE(name)constexpr auto fixedName = ::Evadne::InstrumentorUtils::CleanupOutputString(name, "__cdecl ");\
-																::Evadne::InstrumentationTimer timer##__LINE__(fixedName.Data)
+#define EV_PROFILE_SCOPE(name)
 #define EV_PROFILE_FUNCTION()
 #endif
 

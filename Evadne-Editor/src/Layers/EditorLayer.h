@@ -13,17 +13,28 @@ namespace Evadne {
         virtual void OnAttach() override;
         virtual void OnDetach() override;
 
-        void OnUpdate(Evadne::Timestep ts) override;
+        void OnUpdate(
+            
+            
+            
+            Timestep ts) override;
         virtual void OnImGuiRender() override;
-        void OnEvent(Evadne::Event& e) override;
+        void OnEvent(Event& e) override;
     private:
-        Evadne::OrthographicCameraController m_CameraController;
+        OrthographicCameraController m_CameraController;
 
-        Evadne::Ref<Evadne::VertexArray> m_SquareVA;
-        Evadne::Ref<Evadne::Shader> m_FlatColorShader;
-        Evadne::Ref<Evadne::Framebuffer> m_Framebuffer;
+        Ref<VertexArray> m_SquareVA;
+        Ref<Shader> m_FlatColorShader;
+        Ref<Framebuffer> m_Framebuffer;
 
-        Evadne::Ref<Evadne::Texture2D> m_BackgroundTexture;
+        Ref<Scene> m_ActiveScene;
+        Entity m_SquareEntity;
+        Entity m_CameraEntity;
+        Entity m_SecondCamera;
+
+        bool m_PrimaryCamera = true;
+
+        Ref<Texture2D> m_BackgroundTexture;
 
         bool m_ViewportFocused = false, m_ViewportHovered = false;
         glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
