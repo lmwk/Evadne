@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Evadne.h"
+#include "../Panels/SceneHierarchyPanel.h"
 
 namespace Evadne {
 
@@ -13,13 +14,15 @@ namespace Evadne {
         virtual void OnAttach() override;
         virtual void OnDetach() override;
 
-        void OnUpdate(
-            
-            
-            
-            Timestep ts) override;
+        void OnUpdate(Timestep ts) override;
         virtual void OnImGuiRender() override;
         void OnEvent(Event& e) override;
+    private:
+        bool OnKeyPressed(KeyPressedEvent& e);
+
+        void NewScene();
+        void OpenScene();
+        void SaveSceneAs();
     private:
         OrthographicCameraController m_CameraController;
 
@@ -40,6 +43,8 @@ namespace Evadne {
         glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 
         glm::vec4 m_SquareColor = { 0.2f, 0.3f, 0.8f, 1.0f };
+
+        SceneHierarchyPanel m_SceneHierarchyPanel;
     };
 }
 

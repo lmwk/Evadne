@@ -1,6 +1,6 @@
 #pragma once
 
-#include "evpch.h"
+#include <sstream>
 
 #include "Evadne/Core/Core.h"
 #include "Evadne/Events/Event.h"
@@ -15,8 +15,8 @@ namespace Evadne
         uint32_t Height;
 
         WindowProps(const std::string& title = "Evadne Engine",
-            uint32_t width = 1280,
-            uint32_t height = 720)
+            uint32_t width = 1600,
+            uint32_t height = 900)
             : Title(title), Width(width), Height(height)
         {
         }

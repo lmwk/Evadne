@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Evadne/Events/Event.h"
-#include "Evadne/Input/Input.h"
+#include "Evadne/Input/MouseCodes.h"
 
 
 
@@ -11,7 +11,7 @@ namespace Evadne
     class MouseMovedEvent : public Event 
     {
     public:
-        MouseMovedEvent(float x, float y) 
+        MouseMovedEvent(const float x, const float y) 
             : m_MouseX(x), m_MouseY(y) { }
 
         inline float GetX() const{ return m_MouseX; }
@@ -33,7 +33,7 @@ namespace Evadne
     class MouseScrolledEvent : public Event
     {
     public:
-        MouseScrolledEvent(float xOffset, float yOffset)
+        MouseScrolledEvent(const float xOffset, const float yOffset)
             : m_XOffset(xOffset), m_YOffset(yOffset) {
         }
 
@@ -56,11 +56,11 @@ namespace Evadne
     class MouseButtonEvent : public Event
     {
     public:
-        inline MouseCode GetMouseButton() const { return m_Button; }
+        MouseCode GetMouseButton() const { return m_Button; }
 
-        EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
+        EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput | EventCategoryMouseButton)
     protected:
-        MouseButtonEvent(MouseCode button)
+        MouseButtonEvent(const MouseCode button)
             : m_Button(button) {
         }
 
@@ -70,7 +70,7 @@ namespace Evadne
     class MouseButtonPressedEvent : public MouseButtonEvent
     {
     public:
-        MouseButtonPressedEvent(MouseCode button)
+        MouseButtonPressedEvent(const MouseCode button)
             : MouseButtonEvent(button) {
         }
 
@@ -87,7 +87,7 @@ namespace Evadne
     class MouseButtonReleasedEvent : public MouseButtonEvent
     {
     public:
-        MouseButtonReleasedEvent(MouseCode button)
+        MouseButtonReleasedEvent(const MouseCode button)
             : MouseButtonEvent(button) {
         }
 

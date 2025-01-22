@@ -1,5 +1,13 @@
 #pragma once
 
+#include "Evadne/Core/PlatformDetection.h"
+
+#ifdef EV_PLATFORM_WINDOW
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#endif
+
 #include <iostream>
 #include <memory>
 #include <utility>
@@ -12,6 +20,8 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
+
+#include "Evadne/Core/Core.h"
 
 #include "Evadne/Core/Log.h"
 

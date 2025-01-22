@@ -1,5 +1,5 @@
 #include "evpch.h"
-#include "OpenGLFramebuffer.h"
+#include "Evadne/Platforms/OpenGL/OpenGLFramebuffer.h"
 
 #include <glad/glad.h>
 

@@ -1,6 +1,8 @@
 #pragma once
 
-#include "evpch.h"
+#include <functional>
+
+#include "Evadne/Debug/Intrumentor.h"
 #include "Evadne/Core/Core.h"
 
 
@@ -23,7 +25,7 @@ namespace Evadne {
         EventCategoryInput         = BIT(1),
         EventCategoryKeyboard      = BIT(2),
         EventCategoryMouse         = BIT(3),
-        EventCategoryMouseButotn   = BIT(4)
+        EventCategoryMouseButton   = BIT(4)
     };
 
 #define EVENT_CLASS_TYPE(type) static EventType GetStaticType() {return EventType::type;}\
@@ -64,7 +66,7 @@ namespace Evadne {
         {
             if(m_Event.GetEventType() == T::GetStaticType()) 
             {
-                m_Event.m_Handled = func(static_cast<T&>(m_Event));
+                m_Event.m_Handled |= func(static_cast<T&>(m_Event));
                 return true;
             }
             return false;

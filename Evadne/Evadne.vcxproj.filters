@@ -19,6 +19,9 @@
     <Filter Include="src\Evadne\Debug">
       <UniqueIdentifier>{45BF6174-31B8-80C6-5AEA-654B464260D2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Evadne\ECS">
+      <UniqueIdentifier>{592971D3-45F7-64D9-2E8B-D5FF1AF8403E}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Evadne\Events">
       <UniqueIdentifier>{93FA2304-FF10-229A-4888-ADBBB4DDF221}</UniqueIdentifier>
     </Filter>
@@ -42,6 +45,9 @@
     </Filter>
     <Filter Include="src\Evadne\Rendering\2D">
       <UniqueIdentifier>{C18636F6-2DBE-7E8D-36C8-E2B0A27EA586}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Evadne\Scene">
+      <UniqueIdentifier>{EC217075-D81A-8FC7-014D-744CEDA46ED3}</UniqueIdentifier>
     </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
@@ -72,13 +78,22 @@
     <ClInclude Include="src\Evadne.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\Evadne\Camera\Camera.h">
+      <Filter>src\Evadne\Camera</Filter>
+    </ClInclude>
     <ClInclude Include="src\Evadne\Camera\Controllers\OrthographicCameraController.h">
       <Filter>src\Evadne\Camera\Controllers</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Camera\OrthographicCamera.h">
       <Filter>src\Evadne\Camera</Filter>
     </ClInclude>
+    <ClInclude Include="src\Evadne\Camera\SceneCamera.h">
+      <Filter>src\Evadne\Camera</Filter>
+    </ClInclude>
     <ClInclude Include="src\Evadne\Core\Application.h">
+      <Filter>src\Evadne\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Core\Assert.h">
       <Filter>src\Evadne\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Core\Core.h">
@@ -96,6 +111,9 @@
     <ClInclude Include="src\Evadne\Core\Log.h">
       <Filter>src\Evadne\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Evadne\Core\PlatformDetection.h">
+      <Filter>src\Evadne\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Evadne\Core\Timestep.h">
       <Filter>src\Evadne\Core</Filter>
     </ClInclude>
@@ -104,6 +122,15 @@
     </ClInclude>
     <ClInclude Include="src\Evadne\Debug\Intrumentor.h">
       <Filter>src\Evadne\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\ECS\Components.h">
+      <Filter>src\Evadne\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\ECS\Entity.h">
+      <Filter>src\Evadne\ECS</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\ECS\ScriptableEntity.h">
+      <Filter>src\Evadne\ECS</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Events\ApplicationEvent.h">
       <Filter>src\Evadne\Events</Filter>
@@ -182,6 +209,12 @@
     </ClInclude>
     <ClInclude Include="src\Evadne\Rendering\VertexArray.h">
       <Filter>src\Evadne\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Scene\Scene.h">
+      <Filter>src\Evadne\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Scene\SceneSerializer.h">
+      <Filter>src\Evadne\Scene</Filter>
     </ClInclude>
     <ClInclude Include="src\evpch.h">
       <Filter>src</Filter>
@@ -1437,12 +1470,16 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\Evadne\Utils\PlatformUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Evadne\Camera\Controllers\OrthographicCameraController.cpp">
       <Filter>src\Evadne\Camera\Controllers</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\Camera\OrthographicCamera.cpp">
+      <Filter>src\Evadne\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Evadne\Camera\SceneCamera.cpp">
       <Filter>src\Evadne\Camera</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\Core\Application.cpp">
@@ -1459,6 +1496,9 @@
     </ClCompile>
     <ClCompile Include="src\Evadne\Core\Window.cpp">
       <Filter>src\Evadne\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Evadne\ECS\Entity.cpp">
+      <Filter>src\Evadne\ECS</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\ImGui\ImGuiBuild.cpp">
       <Filter>src\Evadne\ImGui</Filter>
@@ -1523,11 +1563,18 @@
     <ClCompile Include="src\Evadne\Rendering\VertexArray.cpp">
       <Filter>src\Evadne\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="src\Evadne\Scene\Scene.cpp">
+      <Filter>src\Evadne\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Evadne\Scene\SceneSerializer.cpp">
+      <Filter>src\Evadne\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\evpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\Evadne\Platforms\Windows\WindowsPlatformUtils.cpp" />
   </ItemGroup>
 </Project>

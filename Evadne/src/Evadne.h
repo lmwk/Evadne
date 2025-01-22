@@ -4,6 +4,7 @@
 #include "Evadne/Core/Application.h"
 #include "Evadne/Core/Layer.h"
 #include "Evadne/Core/Log.h"
+#include "Evadne/Core/Assert.h"
 
 #include "Evadne/Core/Timestep.h"
 
@@ -15,8 +16,9 @@
 #include "Evadne/ImGui/ImGuiLayer.h"
 
 #include "Evadne/Scene/Scene.h"
-#include "Evadne/Scene/Entity.h"
-#include "Evadne/Scene/Components.h"
+#include "Evadne/ECS/Entity.h"
+#include "Evadne/ECS/ScriptableEntity.h"
+#include "Evadne/ECS/Components.h"
 
 #include "Evadne/Rendering/Renderer.h"
 #include "Evadne/Rendering/2D/Renderer2D.h"

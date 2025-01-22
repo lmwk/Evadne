@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="..">
+      <UniqueIdentifier>{61705900-4DFC-870B-B6AA-880BA255880B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Evadne">
+      <UniqueIdentifier>{4368C01F-AFD2-7496-F810-263C64BA52EB}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Evadne\vendor">
+      <UniqueIdentifier>{40B509B8-2CAE-280A-55E0-0D8F41380816}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Evadne\vendor\GLFW">
+      <UniqueIdentifier>{7FB827F4-EB24-E3EE-B418-7B4C20440557}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Evadne\vendor\Glad">
+      <UniqueIdentifier>{274428F4-93B0-E3EE-5CA4-7B4CC8CF0557}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Evadne\vendor\imgui">
+      <UniqueIdentifier>{AAB2987B-96AC-C1CD-7F19-58DE6BB2273A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Evadne\vendor\yaml-cpp">
+      <UniqueIdentifier>{F203308C-5EC6-6316-A776-F2A213783CF4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Evadne-Editor">
+      <UniqueIdentifier>{97E2B3AB-83DB-D2FD-AC0D-B8829865B209}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Sandbox">
+      <UniqueIdentifier>{3F7B6B1D-2B33-AD6A-943A-86C68011485B}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Evadne-Editor\premake5.lua">
+      <Filter>..\Evadne-Editor</Filter>
+    </None>
+    <None Include="..\..\Evadne\premake5.lua">
+      <Filter>..\Evadne</Filter>
+    </None>
+    <None Include="..\..\Evadne\vendor\GLFW\premake5.lua">
+      <Filter>..\Evadne\vendor\GLFW</Filter>
+    </None>
+    <None Include="..\..\Evadne\vendor\Glad\premake5.lua">
+      <Filter>..\Evadne\vendor\Glad</Filter>
+    </None>
+    <None Include="..\..\Evadne\vendor\imgui\premake5.lua">
+      <Filter>..\Evadne\vendor\imgui</Filter>
+    </None>
+    <None Include="..\..\Evadne\vendor\yaml-cpp\premake5.lua">
+      <Filter>..\Evadne\vendor\yaml-cpp</Filter>
+    </None>
+    <None Include="..\..\Sandbox\premake5.lua">
+      <Filter>..\Sandbox</Filter>
+    </None>
+    <None Include="..\..\premake5.lua">
+      <Filter>..</Filter>
+    </None>
+    <None Include="premake5.lua" />
+  </ItemGroup>
+</Project>
