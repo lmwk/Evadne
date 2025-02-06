@@ -31,6 +31,9 @@
     <Filter Include="src\Evadne\Input">
       <UniqueIdentifier>{CE64C174-BA5D-E0C6-E38F-C54BCFE7BFD2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Evadne\Math">
+      <UniqueIdentifier>{C83B9B41-34C7-0806-3DD8-8BFAA9E26406}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Evadne\Platforms">
       <UniqueIdentifier>{964B89DE-82DA-12A8-2BF9-26A31767234E}</UniqueIdentifier>
     </Filter>
@@ -49,8 +52,14 @@
     <Filter Include="src\Evadne\Scene">
       <UniqueIdentifier>{EC217075-D81A-8FC7-014D-744CEDA46ED3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Evadne\Utils">
+      <UniqueIdentifier>{2FB69D75-1BAF-BCC7-44E1-A14C30399CD3}</UniqueIdentifier>
+    </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\ImGuizmo">
+      <UniqueIdentifier>{73BF7F4C-DF4A-ED10-E85B-700554664911}</UniqueIdentifier>
     </Filter>
     <Filter Include="vendor\glm">
       <UniqueIdentifier>{829FC5A8-6E57-07F6-D75E-E051C335A2E6}</UniqueIdentifier>
@@ -84,6 +93,9 @@
     <ClInclude Include="src\Evadne\Camera\Controllers\OrthographicCameraController.h">
       <Filter>src\Evadne\Camera\Controllers</Filter>
     </ClInclude>
+    <ClInclude Include="src\Evadne\Camera\EditorCamera.h">
+      <Filter>src\Evadne\Camera</Filter>
+    </ClInclude>
     <ClInclude Include="src\Evadne\Camera\OrthographicCamera.h">
       <Filter>src\Evadne\Camera</Filter>
     </ClInclude>
@@ -112,6 +124,9 @@
       <Filter>src\Evadne\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Core\PlatformDetection.h">
+      <Filter>src\Evadne\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Core\Timer.h">
       <Filter>src\Evadne\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Core\Timestep.h">
@@ -156,6 +171,9 @@
     <ClInclude Include="src\Evadne\Input\MouseCodes.h">
       <Filter>src\Evadne\Input</Filter>
     </ClInclude>
+    <ClInclude Include="src\Evadne\Math\Math.h">
+      <Filter>src\Evadne\Math</Filter>
+    </ClInclude>
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLBuffer.h">
       <Filter>src\Evadne\Platforms\OpenGL</Filter>
     </ClInclude>
@@ -172,6 +190,9 @@
       <Filter>src\Evadne\Platforms\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLTexture.h">
+      <Filter>src\Evadne\Platforms\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLUniformBuffer.h">
       <Filter>src\Evadne\Platforms\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLVertexArray.h">
@@ -207,6 +228,9 @@
     <ClInclude Include="src\Evadne\Rendering\Texture.h">
       <Filter>src\Evadne\Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="src\Evadne\Rendering\UniformBuffer.h">
+      <Filter>src\Evadne\Rendering</Filter>
+    </ClInclude>
     <ClInclude Include="src\Evadne\Rendering\VertexArray.h">
       <Filter>src\Evadne\Rendering</Filter>
     </ClInclude>
@@ -216,8 +240,14 @@
     <ClInclude Include="src\Evadne\Scene\SceneSerializer.h">
       <Filter>src\Evadne\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\Evadne\Utils\PlatformUtils.h">
+      <Filter>src\Evadne\Utils</Filter>
+    </ClInclude>
     <ClInclude Include="src\evpch.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGuizmo\ImGuizmo.h">
+      <Filter>vendor\ImGuizmo</Filter>
     </ClInclude>
     <ClInclude Include="vendor\glm\glm\common.hpp">
       <Filter>vendor\glm\glm</Filter>
@@ -1470,11 +1500,13 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evadne\Utils\PlatformUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Evadne\Camera\Controllers\OrthographicCameraController.cpp">
       <Filter>src\Evadne\Camera\Controllers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Evadne\Camera\EditorCamera.cpp">
+      <Filter>src\Evadne\Camera</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\Camera\OrthographicCamera.cpp">
       <Filter>src\Evadne\Camera</Filter>
@@ -1506,6 +1538,9 @@
     <ClCompile Include="src\Evadne\ImGui\ImGuiLayer.cpp">
       <Filter>src\Evadne\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="src\Evadne\Math\Math.cpp">
+      <Filter>src\Evadne\Math</Filter>
+    </ClCompile>
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLBuffer.cpp">
       <Filter>src\Evadne\Platforms\OpenGL</Filter>
     </ClCompile>
@@ -1524,10 +1559,16 @@
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLTexture.cpp">
       <Filter>src\Evadne\Platforms\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLUniformBuffer.cpp">
+      <Filter>src\Evadne\Platforms\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLVertexArray.cpp">
       <Filter>src\Evadne\Platforms\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\Platforms\Windows\WindowsInput.cpp">
+      <Filter>src\Evadne\Platforms\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Evadne\Platforms\Windows\WindowsPlatformUtils.cpp">
       <Filter>src\Evadne\Platforms\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\Platforms\Windows\WindowsWindow.cpp">
@@ -1560,6 +1601,9 @@
     <ClCompile Include="src\Evadne\Rendering\Texture.cpp">
       <Filter>src\Evadne\Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="src\Evadne\Rendering\UniformBuffer.cpp">
+      <Filter>src\Evadne\Rendering</Filter>
+    </ClCompile>
     <ClCompile Include="src\Evadne\Rendering\VertexArray.cpp">
       <Filter>src\Evadne\Rendering</Filter>
     </ClCompile>
@@ -1572,9 +1616,11 @@
     <ClCompile Include="src\evpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="vendor\ImGuizmo\ImGuizmo.cpp">
+      <Filter>vendor\ImGuizmo</Filter>
+    </ClCompile>
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Evadne\Platforms\Windows\WindowsPlatformUtils.cpp" />
   </ItemGroup>
 </Project>

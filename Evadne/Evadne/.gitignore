@@ -49,4 +49,3 @@ bin-int/
 Evadne/vendor/VulkanSDK
 Evadne-Editor/assets/cache
 scripts/__pycache__
-/scripts/.idea

@@ -77,11 +77,11 @@
       <PrecompiledHeaderFile>evpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;EV_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb_image;vendor\entt\include;vendor\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\ImGui;vendor\glm;vendor\stb_image;vendor\entt\include;vendor\yaml-cpp\include;vendor\ImGuizmo;vendor\VulkanSDK\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -92,7 +92,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;vendor\VulkanSDK\Lib\shaderc_sharedd.lib;vendor\VulkanSDK\Lib\spirv-cross-cored.lib;vendor\VulkanSDK\Lib\spirv-cross-glsld.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -101,13 +101,13 @@
       <PrecompiledHeaderFile>evpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;EV_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb_image;vendor\entt\include;vendor\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\ImGui;vendor\glm;vendor\stb_image;vendor\entt\include;vendor\yaml-cpp\include;vendor\ImGuizmo;vendor\VulkanSDK\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -119,7 +119,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;vendor\VulkanSDK\Lib\shaderc_shared.lib;vendor\VulkanSDK\Lib\spirv-cross-core.lib;vendor\VulkanSDK\Lib\spirv-cross-glsl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dist|x64'">
@@ -128,13 +128,13 @@
       <PrecompiledHeaderFile>evpch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;GLFW_INCLUDE_NONE;EV_DIST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\imgui;vendor\glm;vendor\stb_image;vendor\entt\include;vendor\yaml-cpp\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;vendor\ImGui;vendor\glm;vendor\stb_image;vendor\entt\include;vendor\yaml-cpp\include;vendor\ImGuizmo;vendor\VulkanSDK\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -146,13 +146,14 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;vendor\VulkanSDK\Lib\shaderc_shared.lib;vendor\VulkanSDK\Lib\spirv-cross-core.lib;vendor\VulkanSDK\Lib\spirv-cross-glsl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Evadne.h" />
     <ClInclude Include="src\Evadne\Camera\Camera.h" />
     <ClInclude Include="src\Evadne\Camera\Controllers\OrthographicCameraController.h" />
+    <ClInclude Include="src\Evadne\Camera\EditorCamera.h" />
     <ClInclude Include="src\Evadne\Camera\OrthographicCamera.h" />
     <ClInclude Include="src\Evadne\Camera\SceneCamera.h" />
     <ClInclude Include="src\Evadne\Core\Application.h" />
@@ -163,6 +164,7 @@
     <ClInclude Include="src\Evadne\Core\LayerStack.h" />
     <ClInclude Include="src\Evadne\Core\Log.h" />
     <ClInclude Include="src\Evadne\Core\PlatformDetection.h" />
+    <ClInclude Include="src\Evadne\Core\Timer.h" />
     <ClInclude Include="src\Evadne\Core\Timestep.h" />
     <ClInclude Include="src\Evadne\Core\Window.h" />
     <ClInclude Include="src\Evadne\Debug\Intrumentor.h" />
@@ -177,12 +179,14 @@
     <ClInclude Include="src\Evadne\Input\Input.h" />
     <ClInclude Include="src\Evadne\Input\KeyCodes.h" />
     <ClInclude Include="src\Evadne\Input\MouseCodes.h" />
+    <ClInclude Include="src\Evadne\Math\Math.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLFramebuffer.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLRendererAPI.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLShader.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLTexture.h" />
+    <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLUniformBuffer.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\Evadne\Platforms\Windows\WindowsWindow.h" />
     <ClInclude Include="src\Evadne\Rendering\2D\Renderer2D.h" />
@@ -194,11 +198,13 @@
     <ClInclude Include="src\Evadne\Rendering\RendererAPI.h" />
     <ClInclude Include="src\Evadne\Rendering\Shader.h" />
     <ClInclude Include="src\Evadne\Rendering\Texture.h" />
+    <ClInclude Include="src\Evadne\Rendering\UniformBuffer.h" />
     <ClInclude Include="src\Evadne\Rendering\VertexArray.h" />
     <ClInclude Include="src\Evadne\Scene\Scene.h" />
     <ClInclude Include="src\Evadne\Scene\SceneSerializer.h" />
     <ClInclude Include="src\Evadne\Utils\PlatformUtils.h" />
     <ClInclude Include="src\evpch.h" />
+    <ClInclude Include="vendor\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_fixes.hpp" />
@@ -619,6 +625,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Evadne\Camera\Controllers\OrthographicCameraController.cpp" />
+    <ClCompile Include="src\Evadne\Camera\EditorCamera.cpp" />
     <ClCompile Include="src\Evadne\Camera\OrthographicCamera.cpp" />
     <ClCompile Include="src\Evadne\Camera\SceneCamera.cpp" />
     <ClCompile Include="src\Evadne\Core\Application.cpp" />
@@ -629,12 +636,14 @@
     <ClCompile Include="src\Evadne\ECS\Entity.cpp" />
     <ClCompile Include="src\Evadne\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Evadne\ImGui\ImGuiLayer.cpp" />
+    <ClCompile Include="src\Evadne\Math\Math.cpp" />
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLFramebuffer.cpp" />
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLRendererAPI.cpp" />
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLShader.cpp" />
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLTexture.cpp" />
+    <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLUniformBuffer.cpp" />
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\Evadne\Platforms\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\Evadne\Platforms\Windows\WindowsPlatformUtils.cpp" />
@@ -648,11 +657,15 @@
     <ClCompile Include="src\Evadne\Rendering\RendererAPI.cpp" />
     <ClCompile Include="src\Evadne\Rendering\Shader.cpp" />
     <ClCompile Include="src\Evadne\Rendering\Texture.cpp" />
+    <ClCompile Include="src\Evadne\Rendering\UniformBuffer.cpp" />
     <ClCompile Include="src\Evadne\Rendering\VertexArray.cpp" />
     <ClCompile Include="src\Evadne\Scene\Scene.cpp" />
     <ClCompile Include="src\Evadne\Scene\SceneSerializer.cpp" />
     <ClCompile Include="src\evpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="vendor\ImGuizmo\ImGuizmo.cpp">
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>

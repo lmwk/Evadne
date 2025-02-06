@@ -8,8 +8,8 @@ namespace Evadne {
     class EvadneEditor : public Application
     {
     public:
-        EvadneEditor()
-            :Application("Evadne Editor")
+        EvadneEditor(ApplicationCommandLineArgs args)
+            :Application("Evadne Editor", args)
         {
             PushLayer(new EditorLayer());
         }
@@ -20,8 +20,8 @@ namespace Evadne {
         }
     };
 
-    Application* CreateApplication()
+    Application* CreateApplication(ApplicationCommandLineArgs args)
     {
-        return new EvadneEditor();
+        return new EvadneEditor(args);
     }
 }

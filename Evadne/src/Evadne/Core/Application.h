@@ -13,10 +13,23 @@
 int main(int argc, char** argv);
 
 namespace Evadne {
+
+    struct ApplicationCommandLineArgs 
+    {
+        int Count = 0;
+        char** Args = nullptr;
+
+        const char* operator[](int index) const 
+        {
+            EV_CORE_ASSERT(index < Count);
+            return Args[index];
+        }
+    };
+
     class Application
     {
     public:
-        Application(const std::string& name = "Evadne App");
+        Application(const std::string& name = "Evadne App", ApplicationCommandLineArgs args = ApplicationCommandLineArgs());
         virtual ~Application();
 
         void OnEvent(Event& e);
@@ -31,11 +44,15 @@ namespace Evadne {
         ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
 
         inline static Application& Get() { return *s_Instance; }
+
+        ApplicationCommandLineArgs GetCommandLineArgs() const { return m_CommandLineArgs; }
+
     private:
         bool OnWindowClose(WindowCloseEvent& e);
         bool OnWindowResize(WindowResizeEvent& e);
     private:
         void Run();
+        ApplicationCommandLineArgs m_CommandLineArgs;
         Scope<Window> m_Window;
         ImGuiLayer* m_ImGuiLayer;
         bool m_Running = true;
@@ -48,7 +65,7 @@ namespace Evadne {
         friend int ::main(int argc, char** argv);
     };
 
-    Application* CreateApplication();
+    Application* CreateApplication(ApplicationCommandLineArgs args);
 
 }
 
