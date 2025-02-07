@@ -4,6 +4,7 @@
 #include "../Panels/SceneHierarchyPanel.h"
 
 #include "Evadne/Camera/EditorCamera.h"
+#include "../Panels/ContentBrowserPanel.h"
 
 namespace Evadne {
 
@@ -55,6 +56,7 @@ namespace Evadne {
         int m_GizmoType = -1;
 
         SceneHierarchyPanel m_SceneHierarchyPanel;
+        ContentBrowserPanel m_ContentBrowserPanel;
     };
 }
 
