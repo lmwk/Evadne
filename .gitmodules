@@ -16,3 +16,6 @@
 [submodule "Evadne/vendor/ImGuizmo"]
 	path = Evadne/vendor/ImGuizmo
 	url = https://github.com/CedricGuillemet/ImGuizmo/
+[submodule "Evande/vendor/Bullet3"]
+	path = Evande/vendor/Bullet3
+	url = https://github.com/lmwk/bullet3-evadne/

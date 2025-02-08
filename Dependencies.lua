@@ -10,6 +10,7 @@ IncludeDir["glm"] = "%{wks.location}/Evadne/vendor/glm"
 IncludeDir["entt"] = "%{wks.location}/Evadne/vendor/entt/include"
 IncludeDir["shaderc"] = "%{wks.location}/Evadne/vendor/shaderc/include"
 IncludeDir["SPIRV_Cross"] = "%{wks.location}/Evadne/vendor/SPIRV-Cross"
+IncludeDir["Bullet3"] = "%{wks.location}/Evadne/vendor/Bullet3/src"
 IncludeDir["VulkanSDK"] = "%{VULKAN_SDK}/Include"
 
 LibraryDir = {}

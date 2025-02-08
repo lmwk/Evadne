@@ -7,9 +7,6 @@
     <Filter Include="..\Evadne">
       <UniqueIdentifier>{4368C01F-AFD2-7496-F810-263C64BA52EB}</UniqueIdentifier>
     </Filter>
-    <Filter Include="..\Evadne\Evadne">
-      <UniqueIdentifier>{E56DE946-D166-0899-FA98-ED1DE6F0E7A4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="..\Evadne\vendor">
       <UniqueIdentifier>{40B509B8-2CAE-280A-55E0-0D8F41380816}</UniqueIdentifier>
     </Filter>
@@ -35,9 +32,6 @@
   <ItemGroup>
     <None Include="..\..\Evadne-Editor\premake5.lua">
       <Filter>..\Evadne-Editor</Filter>
-    </None>
-    <None Include="..\..\Evadne\Evadne\premake5.lua">
-      <Filter>..\Evadne\Evadne</Filter>
     </None>
     <None Include="..\..\Evadne\premake5.lua">
       <Filter>..\Evadne</Filter>
