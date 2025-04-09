@@ -6,9 +6,11 @@
 #include "entt.hpp"
 
 
+
 namespace Evadne {
 
     class Entity;
+    class Physics;
 
     class Scene
     {
@@ -17,7 +19,11 @@ namespace Evadne {
         ~Scene();
 
         Entity CreateEntity(const std::string& name = std::string());
+        Entity CreateEntityWithUUID(UUID uuid,const std::string& name = std::string());
         void DestroyEntity(Entity entity);
+
+        void OnRuntimeStart();
+        void OnRuntimeStop();
 
         void OnUpdateRuntime(Timestep ts);
         void OnUpdateEditor(Timestep ts, EditorCamera& camera);
@@ -30,6 +36,8 @@ namespace Evadne {
     private:
         entt::registry m_Registry;
         uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
+
+        Physics* m_Physics;
 
         friend class Entity;
         friend class SceneSerializer;

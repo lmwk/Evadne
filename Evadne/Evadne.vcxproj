@@ -180,6 +180,7 @@
     <ClInclude Include="src\Evadne\Input\KeyCodes.h" />
     <ClInclude Include="src\Evadne\Input\MouseCodes.h" />
     <ClInclude Include="src\Evadne\Math\Math.h" />
+    <ClInclude Include="src\Evadne\Physics\Physics.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLFramebuffer.h" />
@@ -204,6 +205,7 @@
     <ClInclude Include="src\Evadne\Scene\SceneSerializer.h" />
     <ClInclude Include="src\Evadne\Utils\PlatformUtils.h" />
     <ClInclude Include="src\evpch.h" />
+    <ClInclude Include="src\Evadne\Core\UUID.h" />
     <ClInclude Include="vendor\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="vendor\glm\glm\common.hpp" />
     <ClInclude Include="vendor\glm\glm\detail\_features.hpp" />
@@ -637,6 +639,7 @@
     <ClCompile Include="src\Evadne\ImGui\ImGuiBuild.cpp" />
     <ClCompile Include="src\Evadne\ImGui\ImGuiLayer.cpp" />
     <ClCompile Include="src\Evadne\Math\Math.cpp" />
+    <ClCompile Include="src\Evadne\Physics\Physics.cpp" />
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLFramebuffer.cpp" />
@@ -664,6 +667,7 @@
     <ClCompile Include="src\evpch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\Evadne\Core\UUID.cpp" />
     <ClCompile Include="vendor\ImGuizmo\ImGuizmo.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
@@ -681,6 +685,9 @@
     </ProjectReference>
     <ProjectReference Include="vendor\yaml-cpp\yaml-cpp.vcxproj">
       <Project>{88F1A057-74BE-FB62-9DD7-E90A890331F1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\Bullet3\Bullet3.vcxproj">
+      <Project>{E0240EF5-4C04-8D90-551C-1867C17AF3F1}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

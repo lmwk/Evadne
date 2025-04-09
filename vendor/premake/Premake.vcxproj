@@ -79,6 +79,7 @@
   <ItemGroup>
     <None Include="..\..\Evadne-Editor\premake5.lua" />
     <None Include="..\..\Evadne\premake5.lua" />
+    <None Include="..\..\Evadne\vendor\Bullet3\premake5.lua" />
     <None Include="..\..\Evadne\vendor\GLFW\premake5.lua" />
     <None Include="..\..\Evadne\vendor\Glad\premake5.lua" />
     <None Include="..\..\Evadne\vendor\imgui\premake5.lua" />

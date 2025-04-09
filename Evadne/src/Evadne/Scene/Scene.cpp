@@ -2,11 +2,16 @@
 #include "Evadne/Scene/Scene.h"
 
 #include "Evadne/ECS/Components.h"
+#include "Evadne/ECS/ScriptableEntity.h"
 #include "Evadne/Rendering/2D/Renderer2D.h"
 
 #include <glm/glm.hpp>
 
 #include "Evadne/ECS/Entity.h"
+
+#include "Evadne/Physics/Physics.h"
+
+#include "BulletDynamics/Dynamics/btRigidBody.h"
 
 namespace Evadne {
 
@@ -21,7 +26,13 @@ namespace Evadne {
 
     Entity Scene::CreateEntity(const std::string& name)
     {
+        return CreateEntityWithUUID(UUID(), name);
+    }
+
+    Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& name)
+    {
         Entity entity = { m_Registry.create(), this };
+        entity.AddComponent<IDComponent>(uuid);
         entity.AddComponent<TransformComponent>();
         auto& tag = entity.AddComponent<TagComponent>();
         tag.Tag = name.empty() ? "Entity" : name;
@@ -31,6 +42,23 @@ namespace Evadne {
     void Scene::DestroyEntity(Entity entity)
     {
         m_Registry.destroy(entity);
+    }
+
+    void Scene::OnRuntimeStart()
+    {
+        m_Physics = new Physics();
+
+        auto view = m_Registry.view<Rigidbody2DComponent>();
+        for (auto e : view)
+        {
+            Entity entity = { e, this };
+            m_Physics->AddRigidBody(entity);
+        }
+    }
+
+    void Scene::OnRuntimeStop()
+    {
+        delete m_Physics;
     }
 
     void Scene::OnUpdateRuntime(Timestep ts)
@@ -50,6 +78,23 @@ namespace Evadne {
                 });
         }
 
+        {
+            m_Physics->UpdatePhysics(ts);
+
+            auto view = m_Registry.view<Rigidbody2DComponent>();
+            for(auto e : view) 
+            {
+                Entity entity = { e, this };
+                auto& transform = entity.GetComponent<TransformComponent>();
+                auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+
+                btRigidBody* body = (btRigidBody*)rb2d.RuntimeBody;
+                const auto& position = body->getWorldTransform();
+                transform.Translation.x = position.getOrigin().x();
+                transform.Translation.y = position.getOrigin().y();
+                transform.Rotation.z = position.getRotation().z();
+            }
+        }
 
         Camera* mainCamera = nullptr;
         glm::mat4 cameraTransform;
@@ -122,7 +167,11 @@ namespace Evadne {
     template<typename T>
     void Scene::OnComponentAdded(Entity entity, T& component)
     {
-        static_assert(false);
+        //static_assert(false);
+    }
+    template<>
+    void Scene::OnComponentAdded<IDComponent>(Entity entity, IDComponent& component) 
+    {
     }
     template<>
     void Scene::OnComponentAdded<TransformComponent>(Entity entity, TransformComponent& component)
@@ -144,6 +193,16 @@ namespace Evadne {
     }
     template<>
     void Scene::OnComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& component)
+    {
+    }
+
+    template<>
+    void Scene::OnComponentAdded<Rigidbody2DComponent>(Entity entity, Rigidbody2DComponent& component)
+    {
+    }
+
+    template<>
+    void Scene::OnComponentAdded<BoxCollider2DComponent>(Entity entity, BoxCollider2DComponent& component)
     {
     }
 }

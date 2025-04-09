@@ -51,7 +51,8 @@ project "Evadne"
 		"Glad",
 		"ImGui",
 		"yaml-cpp",
-		"opengl32.lib"
+		"opengl32.lib",
+		"Bullet3"
 	}
 	
 	filter "files:vendor/ImGuizmo/**.cpp"

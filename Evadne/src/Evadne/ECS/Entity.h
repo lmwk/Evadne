@@ -1,8 +1,9 @@
 #pragma once
 
-
+#include "Evadne/Core/UUID.h"
 #include "Evadne/Scene/Scene.h"
 #include "entt.hpp"
+#include "Components.h"
 
 
 namespace Evadne {
@@ -41,6 +42,8 @@ namespace Evadne {
 
 		operator bool() const { return m_EntityHandle != entt::null; }
 		operator uint32_t() const{ return (uint32_t)m_EntityHandle; }
+
+		UUID GetUUID() { return GetComponent<IDComponent>().ID; }
 
 		bool operator==(const Entity& other) const 
 		{

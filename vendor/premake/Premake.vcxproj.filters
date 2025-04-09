@@ -10,6 +10,9 @@
     <Filter Include="..\Evadne\vendor">
       <UniqueIdentifier>{40B509B8-2CAE-280A-55E0-0D8F41380816}</UniqueIdentifier>
     </Filter>
+    <Filter Include="..\Evadne\vendor\Bullet3">
+      <UniqueIdentifier>{0A926F1D-F6B6-BE9D-1F02-A42D0B86BDBB}</UniqueIdentifier>
+    </Filter>
     <Filter Include="..\Evadne\vendor\GLFW">
       <UniqueIdentifier>{7FB827F4-EB24-E3EE-B418-7B4C20440557}</UniqueIdentifier>
     </Filter>
@@ -35,6 +38,9 @@
     </None>
     <None Include="..\..\Evadne\premake5.lua">
       <Filter>..\Evadne</Filter>
+    </None>
+    <None Include="..\..\Evadne\vendor\Bullet3\premake5.lua">
+      <Filter>..\Evadne\vendor\Bullet3</Filter>
     </None>
     <None Include="..\..\Evadne\vendor\GLFW\premake5.lua">
       <Filter>..\Evadne\vendor\GLFW</Filter>

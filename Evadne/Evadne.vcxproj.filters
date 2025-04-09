@@ -34,6 +34,9 @@
     <Filter Include="src\Evadne\Math">
       <UniqueIdentifier>{C83B9B41-34C7-0806-3DD8-8BFAA9E26406}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Evadne\Physics">
+      <UniqueIdentifier>{012828B8-ED0B-E90D-566C-E360426FD38F}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Evadne\Platforms">
       <UniqueIdentifier>{964B89DE-82DA-12A8-2BF9-26A31767234E}</UniqueIdentifier>
     </Filter>
@@ -173,6 +176,9 @@
     </ClInclude>
     <ClInclude Include="src\Evadne\Math\Math.h">
       <Filter>src\Evadne\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Physics\Physics.h">
+      <Filter>src\Evadne\Physics</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLBuffer.h">
       <Filter>src\Evadne\Platforms\OpenGL</Filter>
@@ -1500,6 +1506,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\Evadne\Core\UUID.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Evadne\Camera\Controllers\OrthographicCameraController.cpp">
@@ -1540,6 +1547,9 @@
     </ClCompile>
     <ClCompile Include="src\Evadne\Math\Math.cpp">
       <Filter>src\Evadne\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Evadne\Physics\Physics.cpp">
+      <Filter>src\Evadne\Physics</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\Platforms\OpenGL\OpenGLBuffer.cpp">
       <Filter>src\Evadne\Platforms\OpenGL</Filter>
@@ -1622,5 +1632,6 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\Evadne\Core\UUID.cpp" />
   </ItemGroup>
 </Project>

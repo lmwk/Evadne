@@ -28,9 +28,9 @@ group "Dependencies"
 	include "Evadne/vendor/imgui"
 	include "vendor/premake"
 	include "Evadne/vendor/yaml-cpp"
+	include "Evadne/vendor/Bullet3"
 
 group ""
 
 include "Evadne"
-include "Sandbox"
 include "Evadne-Editor"
