@@ -22,6 +22,15 @@ namespace Evadne {
 			m_Scene->OnComponentAdded<T>(*this, component);
 			return component;
 		}
+
+		template<typename T, typename... Args>
+		T& AddOrReplaceComponent(Args&&... args) 
+		{
+			T& component = m_Scene->m_Registry.emplace_or_replace<T>(m_EntityHandle, std::forward<Args>(args)...);
+			m_Scene->OnComponentAdded<T>(*this, component);
+			return component;
+		}
+
 		template<typename T>
 		T& GetComponent()
 		{
@@ -44,6 +53,7 @@ namespace Evadne {
 		operator uint32_t() const{ return (uint32_t)m_EntityHandle; }
 
 		UUID GetUUID() { return GetComponent<IDComponent>().ID; }
+		const std::string& GetName() { return GetComponent<TagComponent>().Tag; }
 
 		bool operator==(const Entity& other) const 
 		{

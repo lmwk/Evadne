@@ -21,7 +21,61 @@ namespace Evadne {
 
     Scene::~Scene()
     {
+        //delete m_Physics;
+    }
 
+    template<typename Component>
+    static void CopyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap)
+    {
+        auto view = src.view<Component>();
+        for (auto e : view)
+        {
+            UUID uuid = src.get<IDComponent>(e).ID;
+            EV_CORE_ASSERT(enttMap.find(uuid) != enttMap.end());
+            entt::entity dstEnttID = enttMap.at(uuid);
+
+            auto& component = src.get<Component>(e);
+            dst.emplace_or_replace<Component>(dstEnttID, component);
+        }
+    }
+
+    template<typename Component>
+    static void CopyComponentIfExists(Entity dst, Entity src)
+    {
+        if (src.HasComponent<Component>())
+            dst.AddOrReplaceComponent<Component>(src.GetComponent<Component>());
+    }
+
+    Ref<Scene> Scene::Copy(Ref<Scene> other)
+    {
+        Ref<Scene> newScene = CreateRef<Scene>();
+
+        newScene->m_ViewportWidth = other->m_ViewportWidth;
+        newScene->m_ViewportHeight = other->m_ViewportHeight;
+
+        auto& srcSceneRegistry = other->m_Registry;
+        auto& dstSceneRegistry = newScene->m_Registry;
+        std::unordered_map<UUID, entt::entity> enttMap;
+
+        auto idView = srcSceneRegistry.view<IDComponent>();
+        for (auto e : idView)
+        {
+            UUID uuid = srcSceneRegistry.get<IDComponent>(e).ID;
+            const auto& name = srcSceneRegistry.get<TagComponent>(e).Tag;
+            Entity newEntity = newScene->CreateEntityWithUUID(uuid, name);
+            enttMap[uuid] = (entt::entity)newEntity;
+        }
+
+        CopyComponent<TransformComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+        CopyComponent<SpriteRendererComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+        CopyComponent<CircleRendererComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+        CopyComponent<CameraComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+        CopyComponent<NativeScriptComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+        CopyComponent<Rigidbody2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+        CopyComponent<BoxCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+        CopyComponent<CircleCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+
+        return newScene;
     }
 
     Entity Scene::CreateEntity(const std::string& name)
@@ -61,12 +115,20 @@ namespace Evadne {
         delete m_Physics;
     }
 
+    void Scene::OnSimulationStart()
+    {
+    }
+
+    void Scene::OnSimulationStop()
+    {
+    }
+
     void Scene::OnUpdateRuntime(Timestep ts)
     {
         {
-            m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc) 
+            m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
                 {
-                    if(!nsc.Instance) 
+                    if (!nsc.Instance)
                     {
                         nsc.Instance = nsc.InstantiateScript();
                         nsc.Instance->m_Entity = Entity{ entity, this };
@@ -82,7 +144,7 @@ namespace Evadne {
             m_Physics->UpdatePhysics(ts);
 
             auto view = m_Registry.view<Rigidbody2DComponent>();
-            for(auto e : view) 
+            for (auto e : view)
             {
                 Entity entity = { e, this };
                 auto& transform = entity.GetComponent<TransformComponent>();
@@ -100,11 +162,11 @@ namespace Evadne {
         glm::mat4 cameraTransform;
         {
             auto view = m_Registry.view<TransformComponent, CameraComponent>();
-            for(auto entity : view)
+            for (auto entity : view)
             {
                 auto [transform, camera] = view.get<TransformComponent, CameraComponent>(entity);
 
-                if(camera.Primary) 
+                if (camera.Primary)
                 {
                     mainCamera = &camera.Camera;
                     cameraTransform = transform.GetTransform();
@@ -116,26 +178,52 @@ namespace Evadne {
         if (mainCamera)
         {
             Renderer2D::BeginScene(*mainCamera, cameraTransform);
+            {
+                auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+                for (auto entity : group)
+                {
+                    auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+                    Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+                }
+            }
 
+            {
+                auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
+                for (auto entity : view)
+                {
+                    auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
+                    Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
+                }
+            }
+
+            Renderer2D::EndScene();
+        }
+    }
+    void Scene::OnUpdateSimulation(Timestep ts, EditorCamera& camera)
+    {
+    }
+    void Scene::OnUpdateEditor(Timestep ts, EditorCamera& camera)
+    {
+        Renderer2D::BeginScene(camera);
+
+        {
             auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
             for (auto entity : group)
             {
                 auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
                 Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
             }
+        }
 
-            Renderer2D::EndScene();
-        }
-    }
-    void Scene::OnUpdateEditor(Timestep ts, EditorCamera& camera)
-    {
-        Renderer2D::BeginScene(camera);
-        auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-        for (auto entity : group)
         {
-            auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-            Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+            auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
+            for (auto entity : view)
+            {
+                auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
+                Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
+            }
         }
+
         Renderer2D::EndScene();
     }
     void Scene::OnViewportResize(uint32_t width, uint32_t height)
@@ -144,7 +232,7 @@ namespace Evadne {
         m_ViewportHeight = height;
 
         auto view = m_Registry.view<CameraComponent>();
-        for(auto entity: view) 
+        for (auto entity : view)
         {
             auto& cameraComponent = view.get<CameraComponent>(entity);
             if (!cameraComponent.FixedAspectRatio)
@@ -152,10 +240,24 @@ namespace Evadne {
         }
     }
 
+    void Scene::DuplicateEntity(Entity entity)
+    {
+        std::string name = entity.GetName();
+        Entity newEntity = CreateEntity(name);
+
+        CopyComponentIfExists<TransformComponent>(newEntity, entity);
+        CopyComponentIfExists<SpriteRendererComponent>(newEntity, entity);
+        CopyComponentIfExists<CameraComponent>(newEntity, entity);
+        CopyComponentIfExists<NativeScriptComponent>(newEntity, entity);
+        CopyComponentIfExists<Rigidbody2DComponent>(newEntity, entity);
+        CopyComponentIfExists<BoxCollider2DComponent>(newEntity, entity);
+        CopyComponentIfExists<CircleCollider2DComponent>(newEntity, entity);
+    }
+
     Entity Scene::GerPrimaryCameraEntity()
     {
         auto view = m_Registry.view<CameraComponent>();
-        for (auto entity : view) 
+        for (auto entity : view)
         {
             const auto& camera = view.get<CameraComponent>(entity);
             if (camera.Primary)
@@ -164,13 +266,21 @@ namespace Evadne {
         return {};
     }
 
+    void Scene::OnPhysics2DStart()
+    {
+    }
+
+    void Scene::OnPhysics2DStop()
+    {
+    }
+
     template<typename T>
     void Scene::OnComponentAdded(Entity entity, T& component)
     {
         //static_assert(false);
     }
     template<>
-    void Scene::OnComponentAdded<IDComponent>(Entity entity, IDComponent& component) 
+    void Scene::OnComponentAdded<IDComponent>(Entity entity, IDComponent& component)
     {
     }
     template<>
@@ -203,6 +313,16 @@ namespace Evadne {
 
     template<>
     void Scene::OnComponentAdded<BoxCollider2DComponent>(Entity entity, BoxCollider2DComponent& component)
+    {
+    }    
+    
+    template<>
+    void Scene::OnComponentAdded<CircleRendererComponent>(Entity entity, CircleRendererComponent& component)
+    {
+    }
+
+    template<>
+    void Scene::OnComponentAdded<CircleCollider2DComponent>(Entity entity, CircleCollider2DComponent& component)
     {
     }
 }

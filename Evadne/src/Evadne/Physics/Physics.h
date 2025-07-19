@@ -15,10 +15,12 @@
 
 #include "BulletCollision/CollisionShapes/btBox2dShape.h"
 #include "BulletCollision/CollisionShapes/btConvex2dShape.h"
+#include "BulletCollision/CollisionShapes/btSphereShape.h"
 
 #include "BulletCollision/NarrowPhaseCollision/btMinkowskiPenetrationDepthSolver.h"
 
 #include "Evadne/ECS/Components.h"
+#include "Evadne/ECS/Entity.h"
 
 #include "BulletDynamics/Dynamics/btRigidBody.h"
 #include "BulletDynamics/Dynamics/btDynamicsWorld.h"
@@ -48,6 +50,7 @@ namespace Evadne {
         glm::vec3 gravity = glm::vec3(0, -9.81, 0);
         static inline const glm::vec3 DefaultGravity = glm::vec3(0, -9.81, 0);
     private:
+
         btConvex2dConvex2dAlgorithm::CreateFunc* m_convexAlgo2d;
         btVoronoiSimplexSolver* m_simplexSolver;
         btMinkowskiPenetrationDepthSolver* m_pdSolver;

@@ -33,7 +33,7 @@ namespace Evadne {
 
     void Physics::PhysicsInit(bool is3d)
     {
-        broadphase = new btDbvtBroadphase();
+        
         collisionConfiguration = new btDefaultCollisionConfiguration();
         dispatcher = new btCollisionDispatcher(collisionConfiguration);
         if(!is3d) 
@@ -49,6 +49,7 @@ namespace Evadne {
             dispatcher->registerCollisionCreateFunc(CONVEX_2D_SHAPE_PROXYTYPE, BOX_2D_SHAPE_PROXYTYPE, m_convexAlgo2d);
             dispatcher->registerCollisionCreateFunc(BOX_2D_SHAPE_PROXYTYPE, BOX_2D_SHAPE_PROXYTYPE, m_box2dbox2dAlgo);
         }
+        broadphase = new btDbvtBroadphase();
         solver = new btSequentialImpulseConstraintSolver;
         dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
         dynamicsWorld->setGravity(btVector3(gravity.x, gravity.y, gravity.z));
@@ -65,6 +66,7 @@ namespace Evadne {
         delete dispatcher;
         delete collisionConfiguration;
         delete broadphase;
+        instance = nullptr;
     }
 
     void Physics::SetGlobalGravity(const glm::vec3 gravity)
@@ -95,7 +97,27 @@ namespace Evadne {
             auto& bc2d = ent.GetComponent<BoxCollider2DComponent>();
 
             btCollisionShape* boxShape = new btBox2dShape(btVector3(bc2d.Size.x * transform.Scale.x, bc2d.Size.y * transform.Scale.y, 0));
-            rBody = new btRigidBody(1, myMotionState, boxShape);
+
+            if(rb2d.Type == Rigidbody2DComponent::BodyType::Dynamic)
+                boxShape->calculateLocalInertia(rb2d.Mass, btVector3(0, 0, 0));
+
+            rBody = new btRigidBody(rb2d.Mass, myMotionState, boxShape);
+            rBody->setFriction(bc2d.Friction);
+            rBody->setRestitution(bc2d.Restitution);
+            rBody->setCollisionFlags(Rigidbody2DToBox2DBody(rb2d.Type));
+            rb2d.RuntimeBody = rBody;
+            dynamicsWorld->addRigidBody(rBody);
+        }
+        else if (ent.HasComponent<CircleCollider2DComponent>()) 
+        {
+            auto& bc2d = ent.GetComponent<CircleCollider2DComponent>();
+
+            btCollisionShape* sphereShape = new btSphereShape(transform.Scale.x * bc2d.Radius);
+
+            if (rb2d.Type == Rigidbody2DComponent::BodyType::Dynamic)
+                sphereShape->calculateLocalInertia(rb2d.Mass, btVector3(0, 0, 0));
+
+            rBody = new btRigidBody(rb2d.Mass, myMotionState, sphereShape);
             rBody->setFriction(bc2d.Friction);
             rBody->setRestitution(bc2d.Restitution);
             rBody->setCollisionFlags(Rigidbody2DToBox2DBody(rb2d.Type));
@@ -105,7 +127,11 @@ namespace Evadne {
         else
         {
             btCollisionShape* boxShape = new btBox2dShape(btVector3(0, 0, 0));
-            rBody = new btRigidBody(1, myMotionState, boxShape);
+
+            if (rb2d.Type == Rigidbody2DComponent::BodyType::Dynamic)
+                boxShape->calculateLocalInertia(rb2d.Mass, btVector3(0, 0, 0));
+            
+            rBody = new btRigidBody(rb2d.Mass, myMotionState, boxShape);
             rBody->setCollisionFlags(Rigidbody2DToBox2DBody(rb2d.Type));
             rb2d.RuntimeBody = rBody;
             dynamicsWorld->addRigidBody(rBody);

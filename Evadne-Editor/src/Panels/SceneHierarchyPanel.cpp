@@ -31,22 +31,28 @@ namespace Evadne {
     void SceneHierarchyPanel::OnImGuiRender()
     {
         ImGui::Begin("Scene Hierarchy");
-        auto view = m_Context->m_Registry.view<entt::entity>();
-        for (const auto entityID : view) 
+        if (m_Context)
         {
-            Entity entity{ entityID, m_Context.get()};
-            DrawEntityNode(entity);
-        }
 
-        if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
-            m_SelectionContext = {};
+            auto view = m_Context->m_Registry.view<entt::entity>();
+            for (const auto entityID : view)
+            {
+                Entity entity{ entityID, m_Context.get() };
+                DrawEntityNode(entity);
+            }
+            if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+                m_SelectionContext = {};
 
-        if(ImGui::BeginPopupContextWindow(0, ImGuiPopupFlags_MouseButtonRight || ImGuiPopupFlags_NoOpenOverItems)) 
-        {
-            if (ImGui::MenuItem("Create Empty Entity"))
-                m_Context->CreateEntity("Empty Entity");
-            
-            ImGui::EndPopup();
+            if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+                m_SelectionContext = {};
+
+            if (ImGui::BeginPopupContextWindow())
+            {
+                if (ImGui::MenuItem("Create Empty Entity"))
+                    m_Context->CreateEntity("Empty Entity");
+
+                ImGui::EndPopup();
+            }
         }
 
         ImGui::End();
@@ -235,6 +241,15 @@ namespace Evadne {
                 }
             }
 
+            if (!m_SelectionContext.HasComponent<CircleRendererComponent>())
+            {
+                if (ImGui::MenuItem("Circle Renderer"))
+                {
+                    m_SelectionContext.AddComponent<CircleRendererComponent>();
+                    ImGui::CloseCurrentPopup();
+                }
+            }
+
             if (!m_SelectionContext.HasComponent<Rigidbody2DComponent>())
             {
                 if (ImGui::MenuItem("Rigidbody 2D"))
@@ -249,6 +264,15 @@ namespace Evadne {
                 if (ImGui::MenuItem("Box Collider 2D"))
                 {
                     m_SelectionContext.AddComponent<BoxCollider2DComponent>();
+                    ImGui::CloseCurrentPopup();
+                }
+            }
+
+            if (!m_SelectionContext.HasComponent<CircleCollider2DComponent>())
+            {
+                if (ImGui::MenuItem("Circle Collider 2D"))
+                {
+                    m_SelectionContext.AddComponent<CircleCollider2DComponent>();
                     ImGui::CloseCurrentPopup();
                 }
             }
@@ -349,6 +373,13 @@ namespace Evadne {
                 ImGui::DragFloat("Tiling Factor", &component.TilingFactor, 0.1f, 0.0f, 100.0f);
         });
 
+        DrawComponent<CircleRendererComponent>("Circle Renderer", entity, [](auto& component)
+        {
+            ImGui::ColorEdit4("Color", glm::value_ptr(component.Color));
+            ImGui::DragFloat("Thickness", &component.Thickness, 0.025f, 0.0f, 1.0f);
+            ImGui::DragFloat("Fade", &component.Fade, 0.00025f, 0.0f, 1.0f);
+        });
+
         DrawComponent<Rigidbody2DComponent>("Rigidbody 2D", entity, [](auto& component)
  		{
  			const char* bodyTypeStrings[] = { "Static", "Dynamic", "Kinematic"};
@@ -370,19 +401,29 @@ namespace Evadne {
  
  				ImGui::EndCombo();
  			}
- 
+            ImGui::InputFloat("Mass", &component.Mass, 0.1f, 0.5f);
  			ImGui::Checkbox("Fixed Rotation", &component.FixedRotation);
  		});
  
  		DrawComponent<BoxCollider2DComponent>("Box Collider 2D", entity, [](auto& component)
  		{
  			ImGui::DragFloat2("Offset", glm::value_ptr(component.Offset));
- 			ImGui::DragFloat2("Size", glm::value_ptr(component.Offset));
+ 			ImGui::DragFloat2("Size", glm::value_ptr(component.Size));
  			ImGui::DragFloat("Density", &component.Density, 0.01f, 0.0f, 1.0f);
  			ImGui::DragFloat("Friction", &component.Friction, 0.01f, 0.0f, 1.0f);
  			ImGui::DragFloat("Restitution", &component.Restitution, 0.01f, 0.0f, 1.0f);
  			ImGui::DragFloat("Restitution Threshold", &component.RestitutionThreshold, 0.01f, 0.0f);
  		});
+
+        DrawComponent<CircleCollider2DComponent>("Circle Collider 2D", entity, [](auto& component)
+        {
+            ImGui::DragFloat2("Offset", glm::value_ptr(component.Offset));
+            ImGui::DragFloat("Radius", &component.Radius);
+            ImGui::DragFloat("Density", &component.Density, 0.01f, 0.0f, 1.0f);
+            ImGui::DragFloat("Friction", &component.Friction, 0.01f, 0.0f, 1.0f);
+            ImGui::DragFloat("Restitution", &component.Restitution, 0.01f, 0.0f, 1.0f);
+            ImGui::DragFloat("Restitution Threshold", &component.RestitutionThreshold, 0.01f, 0.0f);
+        });
         
     }
     

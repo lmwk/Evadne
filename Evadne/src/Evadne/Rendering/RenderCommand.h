@@ -27,10 +27,20 @@ namespace Evadne {
             s_RendererAPI->Clear();
         }
 
-        inline static void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t count = 0) 
+        inline static void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexcount = 0) 
         {
-            s_RendererAPI->DrawIndexed(vertexArray, count);
+            s_RendererAPI->DrawIndexed(vertexArray, indexcount);
         }
+
+        static void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)
+ 		{
+ 			s_RendererAPI->DrawLines(vertexArray, vertexCount);
+ 		}
+ 
+ 		static void SetLineWidth(float width)
+ 		{
+ 			s_RendererAPI->SetLineWidth(width);
+ 		}
     private:
         static Scope<RendererAPI> s_RendererAPI;
     };

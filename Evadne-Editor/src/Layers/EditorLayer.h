@@ -24,15 +24,23 @@ namespace Evadne {
         bool OnKeyPressed(KeyPressedEvent& e);
         bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 
+        void OnOverlayRender();
+
         void NewScene();
         void OpenScene();
         void OpenScene(const std::filesystem::path& path);
+        void SaveScene();
         void SaveSceneAs();
+
+        void SerializeScene(Ref<Scene> scene, const std::filesystem::path& path);
 
         void UI_Toolbar();
 
         void OnScenePlay();
         void OnSceneStop();
+
+        void OnDuplicateEntity();
+
     private:
         OrthographicCameraController m_CameraController;
 
@@ -41,6 +49,8 @@ namespace Evadne {
         Ref<Framebuffer> m_Framebuffer;
 
         Ref<Scene> m_ActiveScene;
+        Ref<Scene> m_EditorScene;
+        std::filesystem::path m_EditorScenePath;
         Entity m_SquareEntity;
         Entity m_CameraEntity;
         Entity m_SecondCamera;
@@ -48,6 +58,8 @@ namespace Evadne {
         Entity m_HoveredEntity;
 
         bool m_PrimaryCamera = true;
+
+        bool m_ShowPhysicsColliders = false;
 
         EditorCamera m_EditorCamera;
 

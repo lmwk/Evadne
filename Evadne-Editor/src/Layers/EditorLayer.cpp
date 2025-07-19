@@ -44,7 +44,6 @@ namespace Evadne {
 		}
 
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
-		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
 	void EditorLayer::OnDetach()
 	{
@@ -101,6 +100,8 @@ namespace Evadne {
 			int pixelData = m_Framebuffer->ReadPixel(1, mouseX, mouseY);
 			m_HoveredEntity = pixelData == -1 ? Entity() : Entity((entt::entity)pixelData, m_ActiveScene.get());
 		}
+
+		OnOverlayRender();
 
 		m_Framebuffer->Unbind();
 	}
@@ -182,6 +183,10 @@ namespace Evadne {
 			ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 			ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
+			ImGui::End();
+
+			ImGui::Begin("Settings");
+			ImGui::Checkbox("Show physics colliders", &m_ShowPhysicsColliders);
 			ImGui::End();
 
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
@@ -300,8 +305,21 @@ namespace Evadne {
 		}
 		case Key::S:
 		{
-			if (control && shift)
-				SaveSceneAs();
+			if (control)
+			{
+				if (shift)
+					SaveSceneAs();
+				else
+					SaveScene();
+			}
+
+			break;
+		}
+
+		case Key::D: 
+		{
+			if (control)
+				OnDuplicateEntity();
 			break;
 		}
 
@@ -340,22 +358,84 @@ namespace Evadne {
 		}
 		return false;
 	}
+	void EditorLayer::OnOverlayRender()
+	{
+		if (m_SceneState == SceneState::Play)
+		{
+			Entity camera = m_ActiveScene->GerPrimaryCameraEntity();
+			Renderer2D::BeginScene(camera.GetComponent<CameraComponent>().Camera, camera.GetComponent<TransformComponent>().GetTransform());
+		}
+		else
+		{
+			Renderer2D::BeginScene(m_EditorCamera);
+		}
+
+		if (m_ShowPhysicsColliders)
+		{
+			// Box Colliders
+			{
+				auto view = m_ActiveScene->GetAllEntitiesWith<TransformComponent, BoxCollider2DComponent>();
+				for (auto entity : view)
+				{
+					auto [tc, bc2d] = view.get<TransformComponent, BoxCollider2DComponent>(entity);
+
+					glm::vec3 translation = tc.Translation + glm::vec3(bc2d.Offset, 0.001f);
+					glm::vec3 scale = tc.Scale * glm::vec3(bc2d.Size * 2.0f, 1.0f);
+
+					glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
+						* glm::rotate(glm::mat4(1.0f), tc.Rotation.z, glm::vec3(0.0f, 0.0f, 1.0f))
+						* glm::scale(glm::mat4(1.0f), scale);
+
+					Renderer2D::DrawRect(transform, glm::vec4(0, 1, 0, 1));
+				}
+			}
+
+			// Circle Colliders
+			{
+				auto view = m_ActiveScene->GetAllEntitiesWith<TransformComponent, CircleCollider2DComponent>();
+				for (auto entity : view)
+				{
+					auto [tc, cc2d] = view.get<TransformComponent, CircleCollider2DComponent>(entity);
+
+					glm::vec3 translation = tc.Translation + glm::vec3(cc2d.Offset, 0.001f);
+					glm::vec3 scale = tc.Scale * glm::vec3(cc2d.Radius * 2.0f);
+
+					glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
+						* glm::scale(glm::mat4(1.0f), scale);
+
+					Renderer2D::DrawCircle(transform, glm::vec4(0, 1, 0, 1), 0.01f);
+				}
+			}
+		}
+
+		Renderer2D::EndScene();
+	}
 	void EditorLayer::NewScene()
 	{
 		m_ActiveScene = CreateRef<Scene>();
 		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+
+		m_EditorScenePath = std::filesystem::path();
 	}
 	void EditorLayer::OpenScene()
 	{
 		std::string filepath = FileDialogs::OpenFile("Evadne Scene (*.escene)\0*.escene\0");
 		if (!filepath.empty())
 		{
+			if (m_SceneState != SceneState::Edit)
+				OnSceneStop();
+
 			OpenScene(filepath);
 		}
 	}
 	void EditorLayer::OpenScene(const std::filesystem::path& path)
 	{
+		if(m_SceneState != SceneState::Edit) 
+		{
+			OnSceneStop();
+		}
+
 		if (path.extension().string() != ".escene")
 		{
 			EV_WARN("Could not load {0} - not a scene file", path.filename().string());
@@ -366,20 +446,39 @@ namespace Evadne {
 		SceneSerializer serializer(newScene);
 		if (serializer.Deserialize(path.string()))
 		{
-			m_ActiveScene = newScene;
-			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-			m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+			m_EditorScene = newScene;
+			m_EditorScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_SceneHierarchyPanel.SetContext(m_EditorScene);
+
+			m_ActiveScene = m_EditorScene;
+			m_EditorScenePath = path;
 		}
 	}
+
+	void EditorLayer::SaveScene() 
+	{
+		if (!m_EditorScenePath.empty())
+			SerializeScene(m_ActiveScene, m_EditorScenePath);
+		else
+			SaveSceneAs();
+	}
+
 	void EditorLayer::SaveSceneAs()
 	{
 		std::string filepath = FileDialogs::SaveFile("Evadne Scene (*.escene)\0*.escene\0");
 		if (!filepath.empty())
 		{
-			SceneSerializer serializer(m_ActiveScene);
-			serializer.Serialize(filepath);
+			SerializeScene(m_ActiveScene, filepath);
+			m_EditorScenePath = filepath;
 		}
 	}
+
+	void EditorLayer::SerializeScene(Ref<Scene> scene, const std::filesystem::path& path)
+	{
+		SceneSerializer serializer(scene);
+		serializer.Serialize(path.string());
+	}
+
 	void EditorLayer::UI_Toolbar()
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 2));
@@ -410,11 +509,27 @@ namespace Evadne {
 	void EditorLayer::OnScenePlay()
 	{
 		m_SceneState = SceneState::Play;
+		m_ActiveScene = Scene::Copy(m_EditorScene);
 		m_ActiveScene->OnRuntimeStart();
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
 	void EditorLayer::OnSceneStop()
 	{
 		m_SceneState = SceneState::Edit;
+
 		m_ActiveScene->OnRuntimeStop();
+
+		m_ActiveScene = m_EditorScene;
+
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+	}
+	void EditorLayer::OnDuplicateEntity()
+	{
+		if (m_SceneState != SceneState::Edit)
+			return;
+
+		Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
+		if (selectedEntity)
+			m_EditorScene->DuplicateEntity(selectedEntity);
 	}
 }
