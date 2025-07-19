@@ -57,12 +57,13 @@ class VulkanConfiguration:
 
     @classmethod
     def CheckVulkanSDKDebugLibs(cls):
-        shadercdLib = Path(f"{cls.vulkanDirectory}/Lib/shaderc_sharedd.lib")
+        vulkanSDK = os.environ.get("VULKAN_SDK")
+        shadercdLib = Path(f"{vulkanSDK}/Lib/shaderc_sharedd.lib")
 
         if not shadercdLib.exists():
             print(f"\nNo Vulkan SDK debug libs found. (Checked {shadercdLib})")
-            print("Make sure to select Shader Tool Chain Debug Symbols when Selecting Components, delete the VulkanSDK folder and rerun setup")
-        return True
+            print("Make sure to select Shader Tool Chain Debug Symbols when Selecting Components, uninstall the Vulkan SDK and rerun setup")
+        return shadercdLib.exists()
 
 
 if __name__ == "__main__":

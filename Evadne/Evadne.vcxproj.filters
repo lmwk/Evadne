@@ -135,6 +135,9 @@
     <ClInclude Include="src\Evadne\Core\Timestep.h">
       <Filter>src\Evadne\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Evadne\Core\UUID.h">
+      <Filter>src\Evadne\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Evadne\Core\Window.h">
       <Filter>src\Evadne\Core</Filter>
     </ClInclude>
@@ -1506,7 +1509,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evadne\Core\UUID.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Evadne\Camera\Controllers\OrthographicCameraController.cpp">
@@ -1531,6 +1533,9 @@
       <Filter>src\Evadne\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\Core\Log.cpp">
+      <Filter>src\Evadne\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Evadne\Core\UUID.cpp">
       <Filter>src\Evadne\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\Core\Window.cpp">
@@ -1632,6 +1637,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Evadne\Core\UUID.cpp" />
   </ItemGroup>
 </Project>

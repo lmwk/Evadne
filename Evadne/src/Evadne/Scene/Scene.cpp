@@ -24,26 +24,43 @@ namespace Evadne {
         //delete m_Physics;
     }
 
-    template<typename Component>
+    template<typename... Component>
     static void CopyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap)
     {
-        auto view = src.view<Component>();
-        for (auto e : view)
+        ([&]()
         {
-            UUID uuid = src.get<IDComponent>(e).ID;
-            EV_CORE_ASSERT(enttMap.find(uuid) != enttMap.end());
-            entt::entity dstEnttID = enttMap.at(uuid);
+                auto view = src.view<Component>();
+                for (auto srcEntity : view)
+                {
+                    entt::entity dstEntity = enttMap.at(src.get<IDComponent>(srcEntity).ID);
 
-            auto& component = src.get<Component>(e);
-            dst.emplace_or_replace<Component>(dstEnttID, component);
-        }
+                    auto& srcComponent = src.get<Component>(srcEntity);
+                    dst.emplace_or_replace<Component>(dstEntity, srcComponent);
+                }
+
+        }(), ...);
     }
 
-    template<typename Component>
+    template<typename... Component>
+    static void CopyComponent(ComponentGroup<Component...>, entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap)
+    {
+        CopyComponent<Component...>(dst, src, enttMap);
+    }
+
+    template<typename... Component>
     static void CopyComponentIfExists(Entity dst, Entity src)
     {
-        if (src.HasComponent<Component>())
-            dst.AddOrReplaceComponent<Component>(src.GetComponent<Component>());
+        ([&]()
+        {
+                if (src.HasComponent<Component>())
+                    dst.AddOrReplaceComponent<Component>(src.GetComponent<Component>());
+        }(), ...);
+    }
+
+    template<typename... Component>
+    static void CopyComponentIfExists(ComponentGroup<Component...>, Entity dst, Entity src)
+    {
+        CopyComponentIfExists<Component...>(dst, src);
     }
 
     Ref<Scene> Scene::Copy(Ref<Scene> other)
@@ -66,14 +83,7 @@ namespace Evadne {
             enttMap[uuid] = (entt::entity)newEntity;
         }
 
-        CopyComponent<TransformComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-        CopyComponent<SpriteRendererComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-        CopyComponent<CircleRendererComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-        CopyComponent<CameraComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-        CopyComponent<NativeScriptComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-        CopyComponent<Rigidbody2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-        CopyComponent<BoxCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
-        CopyComponent<CircleCollider2DComponent>(dstSceneRegistry, srcSceneRegistry, enttMap);
+        CopyComponent(AllComponents{}, dstSceneRegistry, srcSceneRegistry, enttMap);
 
         return newScene;
     }
@@ -100,27 +110,22 @@ namespace Evadne {
 
     void Scene::OnRuntimeStart()
     {
-        m_Physics = new Physics();
-
-        auto view = m_Registry.view<Rigidbody2DComponent>();
-        for (auto e : view)
-        {
-            Entity entity = { e, this };
-            m_Physics->AddRigidBody(entity);
-        }
+        OnPhysics2DStart();
     }
 
     void Scene::OnRuntimeStop()
     {
-        delete m_Physics;
+        OnPhysics2DStop();
     }
 
     void Scene::OnSimulationStart()
     {
+        OnPhysics2DStart();
     }
 
     void Scene::OnSimulationStop()
     {
+        OnPhysics2DStop();
     }
 
     void Scene::OnUpdateRuntime(Timestep ts)
@@ -201,30 +206,29 @@ namespace Evadne {
     }
     void Scene::OnUpdateSimulation(Timestep ts, EditorCamera& camera)
     {
+        {
+            m_Physics->UpdatePhysics(ts);
+
+            auto view = m_Registry.view<Rigidbody2DComponent>();
+            for (auto e : view)
+            {
+                Entity entity = { e, this };
+                auto& transform = entity.GetComponent<TransformComponent>();
+                auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+
+                btRigidBody* body = (btRigidBody*)rb2d.RuntimeBody;
+                const auto& position = body->getWorldTransform();
+                transform.Translation.x = position.getOrigin().x();
+                transform.Translation.y = position.getOrigin().y();
+                transform.Rotation.z = position.getRotation().z();
+            }
+        }
+
+        RenderScene(camera);
     }
     void Scene::OnUpdateEditor(Timestep ts, EditorCamera& camera)
     {
-        Renderer2D::BeginScene(camera);
-
-        {
-            auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-            for (auto entity : group)
-            {
-                auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-                Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
-            }
-        }
-
-        {
-            auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
-            for (auto entity : view)
-            {
-                auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
-                Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
-            }
-        }
-
-        Renderer2D::EndScene();
+        RenderScene(camera);
     }
     void Scene::OnViewportResize(uint32_t width, uint32_t height)
     {
@@ -242,16 +246,8 @@ namespace Evadne {
 
     void Scene::DuplicateEntity(Entity entity)
     {
-        std::string name = entity.GetName();
-        Entity newEntity = CreateEntity(name);
-
-        CopyComponentIfExists<TransformComponent>(newEntity, entity);
-        CopyComponentIfExists<SpriteRendererComponent>(newEntity, entity);
-        CopyComponentIfExists<CameraComponent>(newEntity, entity);
-        CopyComponentIfExists<NativeScriptComponent>(newEntity, entity);
-        CopyComponentIfExists<Rigidbody2DComponent>(newEntity, entity);
-        CopyComponentIfExists<BoxCollider2DComponent>(newEntity, entity);
-        CopyComponentIfExists<CircleCollider2DComponent>(newEntity, entity);
+        Entity newEntity = CreateEntity(entity.GetName());
+        CopyComponentIfExists(AllComponents{}, newEntity, entity);
     }
 
     Entity Scene::GerPrimaryCameraEntity()
@@ -268,16 +264,54 @@ namespace Evadne {
 
     void Scene::OnPhysics2DStart()
     {
+        m_Physics = new Physics();
+
+        auto view = m_Registry.view<Rigidbody2DComponent>();
+        for (auto e : view)
+        {
+            Entity entity = { e, this };
+            m_Physics->AddRigidBody(entity);
+        }
     }
 
     void Scene::OnPhysics2DStop()
     {
+        delete m_Physics;
+    }
+
+    void Scene::RenderScene(EditorCamera& camera)
+    {
+        Renderer2D::BeginScene(camera);
+
+        
+        {
+            auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+            for (auto entity : group)
+            {
+                auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+
+                Renderer2D::DrawSprite(transform.GetTransform(), sprite, (int)entity);
+            }
+        }
+
+        
+        {
+            auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
+            for (auto entity : view)
+            {
+                auto [transform, circle] = view.get<TransformComponent, CircleRendererComponent>(entity);
+
+                Renderer2D::DrawCircle(transform.GetTransform(), circle.Color, circle.Thickness, circle.Fade, (int)entity);
+            }
+        }
+
+        Renderer2D::EndScene();
     }
 
     template<typename T>
     void Scene::OnComponentAdded(Entity entity, T& component)
     {
-        //static_assert(false);
+        static_assert(sizeof(T) == 0);
     }
     template<>
     void Scene::OnComponentAdded<IDComponent>(Entity entity, IDComponent& component)

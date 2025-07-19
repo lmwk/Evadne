@@ -37,6 +37,7 @@ namespace Evadne {
         void UI_Toolbar();
 
         void OnScenePlay();
+        void OnSceneSimulate();
         void OnSceneStop();
 
         void OnDuplicateEntity();
@@ -75,14 +76,14 @@ namespace Evadne {
 
         enum class SceneState 
         {
-            Edit = 0, Play = 1
+            Edit = 0, Play = 1, Simulate = 2
         };
         SceneState m_SceneState = SceneState::Edit;
 
         SceneHierarchyPanel m_SceneHierarchyPanel;
         ContentBrowserPanel m_ContentBrowserPanel;
 
-        Ref<Texture2D> m_IconPlay, m_IconStop;
+        Ref<Texture2D> m_IconPlay, m_IconSimulate, m_IconStop;
     };
 }
 

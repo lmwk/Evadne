@@ -26,6 +26,7 @@ namespace Evadne {
 		m_BackgroundTexture = Texture2D::Create("assets/textures/IMG_0467.jpg");
 		m_IconPlay = Texture2D::Create("Resources/Icons/play.png");
 		m_IconStop = Texture2D::Create("Resources/Icons/stop.png");
+		m_IconSimulate = Texture2D::Create("Resources/Icons/sim.png");
 
 		FramebufferSpecification fbSpec;
 		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
@@ -33,9 +34,11 @@ namespace Evadne {
 		fbSpec.Height = 720;
 		m_Framebuffer = Framebuffer::Create(fbSpec);
 
-		m_ActiveScene = CreateRef<Scene>();
+		m_EditorScene = CreateRef<Scene>();
+		m_ActiveScene = m_EditorScene;
 
-		auto commandLineArgs = Application::Get().GetCommandLineArgs();
+
+		auto commandLineArgs = Application::Get().GetSpecification().CommandLineArgs;
 		if (commandLineArgs.Count > 1)
 		{
 			auto sceneFilePath = commandLineArgs[1];
@@ -84,6 +87,12 @@ namespace Evadne {
 			case SceneState::Play:
 			{
 				m_ActiveScene->OnUpdateRuntime(ts);
+				break;
+			}
+			case SceneState::Simulate: 
+			{
+				m_EditorCamera.OnUpdate(ts);
+				m_ActiveScene->OnUpdateSimulation(ts, m_EditorCamera);
 				break;
 			}
 		}
@@ -158,6 +167,10 @@ namespace Evadne {
 
 					if (ImGui::MenuItem("Open", "Ctrl+O"))
 						OpenScene();
+
+					if (ImGui::MenuItem("Save", "Ctrl+S"))
+						SaveScene();
+
 					if (ImGui::MenuItem("Save As", "Ctrl+Shift+S"))
 						SaveSceneAs();
 
@@ -276,7 +289,10 @@ namespace Evadne {
 	void EditorLayer::OnEvent(Event& e)
 	{
 		m_CameraController.OnEvent(e);
-		m_EditorCamera.OnEvent(e);
+		if(m_SceneState == SceneState::Edit) 
+		{
+			m_EditorCamera.OnEvent(e);
+		}
 
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<KeyPressedEvent>(EV_BIND_EVENT_FN(EditorLayer::OnKeyPressed));
@@ -285,7 +301,7 @@ namespace Evadne {
 
 	bool EditorLayer::OnKeyPressed(KeyPressedEvent& e)
 	{
-		if (e.GetRepeatCount() > 0)
+		if (e.IsRepeat())
 			return false;
 		bool control = Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl);
 		bool shift = Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift);
@@ -363,6 +379,10 @@ namespace Evadne {
 		if (m_SceneState == SceneState::Play)
 		{
 			Entity camera = m_ActiveScene->GerPrimaryCameraEntity();
+
+			if (!camera)
+				return;
+
 			Renderer2D::BeginScene(camera.GetComponent<CameraComponent>().Camera, camera.GetComponent<TransformComponent>().GetTransform());
 		}
 		else
@@ -406,6 +426,13 @@ namespace Evadne {
 					Renderer2D::DrawCircle(transform, glm::vec4(0, 1, 0, 1), 0.01f);
 				}
 			}
+		}
+
+		if(Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity()) 
+		{
+			TransformComponent transform = selectedEntity.GetComponent<TransformComponent>();
+
+			Renderer2D::DrawRect(transform.GetTransform(), glm::vec4(1, 0, 0, 1));
 		}
 
 		Renderer2D::EndScene();
@@ -492,22 +519,50 @@ namespace Evadne {
 
 		ImGui::Begin("##toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse);
 
+		bool toolbarEnabled = (bool)m_ActiveScene;
+
+		ImVec4 tintColor = ImVec4(1, 1, 1, 1);
+		if (!toolbarEnabled)
+			tintColor.w = 0.5f;
+
 		float size = ImGui::GetWindowHeight() - 4.0f;
-		Ref<Texture2D> icon = m_SceneState == SceneState::Edit ? m_IconPlay : m_IconStop;
-		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
-		if (ImGui::ImageButton("run_button", icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1)))
+		
 		{
-			if (m_SceneState == SceneState::Edit)
-				OnScenePlay();
-			else if (m_SceneState == SceneState::Play)
-				OnSceneStop();
+			Ref<Texture2D> icon = (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate) ? m_IconPlay : m_IconStop;
+			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+			if (ImGui::ImageButton("run_button", (ImTextureID)icon->GetRendererID(), ImVec2(size, size),
+				ImVec2(0, 0), ImVec2(1, 1), ImVec4(0.0f, 0.0f, 0.0f, 0.0f), tintColor) && toolbarEnabled)
+			{
+				if (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate)
+					OnScenePlay();
+				else if (m_SceneState == SceneState::Play)
+					OnSceneStop();
+			}
 		}
+
+		ImGui::SameLine();
+
+		{
+			Ref<Texture2D> icon = (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play) ? m_IconSimulate : m_IconStop;
+			if (ImGui::ImageButton("simulate_button", (ImTextureID)icon->GetRendererID(), ImVec2(size, size),
+				ImVec2(0, 0), ImVec2(1, 1), ImVec4(0.0f, 0.0f, 0.0f, 0.0f), tintColor) && toolbarEnabled)
+			{
+				if (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play)
+					OnSceneSimulate();
+				else if (m_SceneState == SceneState::Simulate)
+					OnSceneStop();
+			}
+		}
+
 		ImGui::PopStyleVar(2);
 		ImGui::PopStyleColor(3);
 		ImGui::End();
 	}
 	void EditorLayer::OnScenePlay()
 	{
+		if (m_SceneState == SceneState::Simulate)
+			OnSceneStop();
+
 		m_SceneState = SceneState::Play;
 		m_ActiveScene = Scene::Copy(m_EditorScene);
 		m_ActiveScene->OnRuntimeStart();
@@ -515,9 +570,14 @@ namespace Evadne {
 	}
 	void EditorLayer::OnSceneStop()
 	{
-		m_SceneState = SceneState::Edit;
+		EV_CORE_ASSERT(m_SceneState == SceneState::Play || m_SceneState == SceneState::Simulate);
 
-		m_ActiveScene->OnRuntimeStop();
+		if (m_SceneState == SceneState::Play)
+			m_ActiveScene->OnRuntimeStop();
+		else if (m_SceneState == SceneState::Simulate)
+			m_ActiveScene->OnSimulationStop();
+
+		m_SceneState = SceneState::Edit;
 
 		m_ActiveScene = m_EditorScene;
 
@@ -531,5 +591,17 @@ namespace Evadne {
 		Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
 		if (selectedEntity)
 			m_EditorScene->DuplicateEntity(selectedEntity);
+	}
+	void EditorLayer::OnSceneSimulate() 
+	{
+		if (m_SceneState == SceneState::Play)
+			OnSceneStop();
+
+		m_SceneState = SceneState::Simulate;
+
+		m_ActiveScene = Scene::Copy(m_EditorScene);
+		m_ActiveScene->OnSimulationStart();
+
+		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
 }
