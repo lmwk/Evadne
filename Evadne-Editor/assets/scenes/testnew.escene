@@ -4,13 +4,13 @@ Entities:
     TagComponent:
       Tag: Circle
     TransformComponent:
-      Translation: [-2.3575592, 3, 0]
+      Translation: [-2.3575592, 5.55999994, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     CircleRendererComponent:
       Color: [1, 1, 1, 1]
       Thickness: 1
-      Fade: 0.00499999989
+      Fade: 0.0500000007
     Rigidbody2DComponent:
       BodyType: Dynamic
       Mass: 1
@@ -41,16 +41,22 @@ Entities:
       Primary: true
       FixedAspectRatio: false
     ScriptComponent:
-      ClassName: Evadne.Camera
+      ClassName: Sandbox.Camera
+      ScriptFields:
+        []
   - Entity: 4902290113153824303
     TagComponent:
       Tag: Cube
     TransformComponent:
-      Translation: [1.12814248, 5, 0]
+      Translation: [1.12814248, 0.999999881, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     ScriptComponent:
-      ClassName: Evadne.Player
+      ClassName: Sandbox.Player
+      ScriptFields:
+        - Name: Speed
+          Type: Float
+          Data: 42
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       TexturePath: assets\textures\2024_12_25_ekko-22954856.png
@@ -85,6 +91,6 @@ Entities:
       Offset: [0, 0]
       Size: [0.5, 0.5]
       Density: 1
-      Friction: 0
+      Friction: 0.5
       Restitution: 0
       RestitutionThreshold: 0.5
