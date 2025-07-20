@@ -94,6 +94,11 @@ namespace Evadne {
         MonoImage* CoreAssemblyImage = nullptr;
 
         ScriptClass EntityClass;
+
+        std::unordered_map<std::string, Ref<ScriptClass>> EntityClasses;
+        std::unordered_map<UUID, Ref<ScriptInstance>> EntityInstances;
+
+        Scene* SceneContext = nullptr;
     };
 
     static ScriptEngineData* sc_Data = nullptr;
@@ -105,11 +110,14 @@ namespace Evadne {
         InitMono();
         LoadAssembly("Resources/Scripts/Evadne-ScriptCore.dll");
 
+        LoadAssemblyClasses(sc_Data->CoreAssembly);
+
+        ScriptGlue::RegisterComponents();
         ScriptGlue::RegisterFunctions();
 
         // Retrieve and instantiate class (with constructor)
         sc_Data->EntityClass = ScriptClass("Evadne", "Entity");
-
+#if 0
         MonoObject* instance = sc_Data->EntityClass.Instantiate();
 
         // Call method
@@ -139,6 +147,7 @@ namespace Evadne {
         sc_Data->EntityClass.InvokeMethod(instance, printCustomMessageFunc, &stringParam);
 
         EV_CORE_ASSERT(false);
+#endif
     }
 
     void ScriptEngine::Shutdown()
@@ -155,6 +164,58 @@ namespace Evadne {
         
         sc_Data->CoreAssembly = Utils::LoadMonoAssembly(filepath);
         sc_Data->CoreAssemblyImage = mono_assembly_get_image(sc_Data->CoreAssembly);
+    }
+
+    void ScriptEngine::OnRuntimeStart(Scene* scene)
+    {
+        sc_Data->SceneContext = scene;
+    }
+
+    void ScriptEngine::OnRuntimeStop()
+    {
+        sc_Data->SceneContext = nullptr;
+
+        sc_Data->EntityInstances.clear();
+    }
+
+    bool ScriptEngine::EntityClassExists(const std::string& fullClassName)
+    {
+        return sc_Data->EntityClasses.find(fullClassName) != sc_Data->EntityClasses.end();
+    }
+
+    void ScriptEngine::OnCreateEntity(Entity entity)
+    {
+        const auto& sc = entity.GetComponent<ScriptComponent>();
+        if(ScriptEngine::EntityClassExists(sc.ClassName)) 
+        {
+            Ref<ScriptInstance> instance = CreateRef<ScriptInstance>(sc_Data->EntityClasses[sc.ClassName], entity);
+            sc_Data->EntityInstances[entity.GetUUID()] = instance;
+            instance->InvokeOnCreate();
+        }
+    }
+
+    void ScriptEngine::OnUpdateEntity(Entity entity, Timestep ts)
+    {
+        UUID entityUUID = entity.GetUUID();
+        EV_CORE_ASSERT(sc_Data->EntityInstances.find(entityUUID) != sc_Data->EntityInstances.end());
+
+        Ref<ScriptInstance> instance = sc_Data->EntityInstances[entityUUID];
+        instance->InvokeOnUpdate((float)ts);
+    }
+
+    Scene* ScriptEngine::GetSceneContext()
+    {
+        return sc_Data->SceneContext;
+    }
+
+    std::unordered_map<std::string, Ref<ScriptClass>> ScriptEngine::GetEntityClasses()
+    {
+        return sc_Data->EntityClasses;
+    }
+
+    MonoImage* ScriptEngine::GetCoreAssemblyImage()
+    {
+        return sc_Data->CoreAssemblyImage;
     }
 
     void ScriptEngine::InitMono()
@@ -175,12 +236,47 @@ namespace Evadne {
         sc_Data->RootDomain = nullptr;
     }
 
+    void ScriptEngine::LoadAssemblyClasses(MonoAssembly* assembly)
+    {
+        sc_Data->EntityClasses.clear();
+
+        MonoImage* image = mono_assembly_get_image(assembly);
+        const MonoTableInfo* typeDefinitionsTable = mono_image_get_table_info(image, MONO_TABLE_TYPEDEF);
+        int32_t numTypes = mono_table_info_get_rows(typeDefinitionsTable);
+        MonoClass* entityClass = mono_class_from_name(image, "Evadne", "Entity");
+
+        for (int32_t i = 0; i < numTypes; i++)
+        {
+            uint32_t cols[MONO_TYPEDEF_SIZE];
+            mono_metadata_decode_row(typeDefinitionsTable, i, cols, MONO_TYPEDEF_SIZE);
+
+            const char* nameSpace = mono_metadata_string_heap(image, cols[MONO_TYPEDEF_NAMESPACE]);
+            const char* name = mono_metadata_string_heap(image, cols[MONO_TYPEDEF_NAME]);
+            std::string fullName;
+            if (strlen(nameSpace) != 0)
+                fullName = fmt::format("{}.{}", nameSpace, name);
+            else
+                fullName = name;
+
+            MonoClass* monoClass = mono_class_from_name(image, nameSpace, name);
+
+            if (monoClass == entityClass)
+                continue;
+
+            bool isEntity = mono_class_is_subclass_of(monoClass, entityClass, false);
+            if (isEntity)
+                sc_Data->EntityClasses[fullName] = CreateRef<ScriptClass>(nameSpace, name);
+        }
+    }
+
     MonoObject* ScriptEngine::InstantiateClass(MonoClass* monoClass)
     {
         MonoObject* instance = mono_object_new(sc_Data->AppDomain, monoClass);
         mono_runtime_object_init(instance);
         return instance;
     }
+
+    
 
     
 
@@ -203,6 +299,37 @@ namespace Evadne {
     MonoObject* ScriptClass::InvokeMethod(MonoObject* instance, MonoMethod* method, void** params)
     {
         return mono_runtime_invoke(method, instance, params, nullptr);
+    }
+
+    ScriptInstance::ScriptInstance(Ref<ScriptClass> scriptClass, Entity entity)
+        : m_ScriptClass(scriptClass)
+    {
+        m_Instance = scriptClass->Instantiate();
+
+        m_Constructor = sc_Data->EntityClass.GetMethod(".ctor", 1);
+        m_OnCreateMethod = scriptClass->GetMethod("OnCreate", 0);
+        m_OnUpdateMethod = scriptClass->GetMethod("OnUpdate", 1);
+
+        {
+            UUID entityID = entity.GetUUID();
+            void* param = &entityID;
+            m_ScriptClass->InvokeMethod(m_Instance, m_Constructor, &param);
+        }
+    }
+
+    void ScriptInstance::InvokeOnCreate()
+    {
+        if (m_OnCreateMethod)
+            m_ScriptClass->InvokeMethod(m_Instance, m_OnCreateMethod);
+    }
+
+    void ScriptInstance::InvokeOnUpdate(float ts)
+    {
+        if (m_OnUpdateMethod)
+        {
+            void* param = &ts;
+            m_ScriptClass->InvokeMethod(m_Instance, m_OnUpdateMethod, &param);
+        }
     }
 
 }

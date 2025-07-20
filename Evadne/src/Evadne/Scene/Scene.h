@@ -38,6 +38,8 @@ namespace Evadne {
 
         void DuplicateEntity(Entity entity);
 
+        Entity GetEntityByUUID(UUID uuid);
+
         Entity GerPrimaryCameraEntity();
 
         template<typename... Components> 
@@ -58,6 +60,8 @@ namespace Evadne {
         uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
 
         Physics* m_Physics;
+
+        std::unordered_map<UUID, entt::entity> m_EntityMap;
 
         friend class Entity;
         friend class SceneSerializer;
