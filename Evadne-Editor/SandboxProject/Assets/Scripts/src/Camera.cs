@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Evadne
+namespace Sandbox
 {
     public class Camera : Entity
     {

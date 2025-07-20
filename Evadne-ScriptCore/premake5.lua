@@ -3,8 +3,8 @@ project "Evadne-ScriptCore"
 	language "C#"
 	dotnetframework "4.7.2"
 
-	targetdir ("%{wks.location}/Evadne-Editor/Resources/Scripts")
-	objdir ("%{wks.location}/Evadne-Editor/Resources/Scripts/Intermediates")
+	targetdir ("../Evadne-Editor/Resources/Scripts")
+	objdir ("../Evadne-Editor/Resources/Scripts/Intermediates")
 
 	files 
 	{
