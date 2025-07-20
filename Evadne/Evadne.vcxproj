@@ -150,6 +150,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Evadne\Scripting\ScriptGlue.h" />
     <ClInclude Include="src\Evadne.h" />
     <ClInclude Include="src\Evadne\Camera\Camera.h" />
     <ClInclude Include="src\Evadne\Camera\Controllers\OrthographicCameraController.h" />
@@ -627,6 +628,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Evadne\Scripting\ScriptGlue.cpp" />
     <ClCompile Include="src\Evadne\Camera\Controllers\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Evadne\Camera\EditorCamera.cpp" />
     <ClCompile Include="src\Evadne\Camera\OrthographicCamera.cpp" />
