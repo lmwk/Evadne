@@ -35,6 +35,12 @@
 .vs/
 bin/
 bin-int/
+Intermediates/
+
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user
+**.csproj
 
 *.log
 

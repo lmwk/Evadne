@@ -4,6 +4,7 @@
 #include "Evadne/Core/Log.h"
 
 #include "Evadne/Rendering/Renderer.h"
+#include "Evadne/Scripting/ScriptEngine.h"
 
 #include "Evadne/Input/Input.h"
 
@@ -28,6 +29,7 @@ namespace Evadne {
         m_Window->SetEventCallback(EV_BIND_EVENT_FN(Application::OnEvent));
 
         Renderer::Init();
+        ScriptEngine::Init();
 
         m_ImGuiLayer = new ImGuiLayer();
         PushOverlay(m_ImGuiLayer);
@@ -38,6 +40,7 @@ namespace Evadne {
     {
         EV_PROFILE_FUNCTION();
 
+        ScriptEngine::Shutdown();
         Renderer::Shutdown();
     }
 
