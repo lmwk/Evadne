@@ -24,11 +24,17 @@ Entities:
       RestitutionThreshold: 0.5
   - Entity: 4902290113153824303
     TagComponent:
-      Tag: Cube
+      Tag: Player
     TransformComponent:
-      Translation: [1.12814248, 5, 0]
+      Translation: [1.12814248, 0.999999881, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
+    ScriptComponent:
+      ClassName: Sandbox.Player
+      ScriptFields:
+        - Name: Speed
+          Type: Float
+          Data: 204
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       TexturePath: assets\textures\2024_12_25_ekko-22954856.png
@@ -53,7 +59,7 @@ Entities:
       Scale: [1, 1, 1]
     CameraComponent:
       Camera:
-        ProjectionType: 1
+        ProjectionType: 0
         PerspectiveFOV: 0.785398185
         PerspectiveNear: 0.00999999978
         PerspectiveFar: 1000
@@ -62,17 +68,23 @@ Entities:
         OrthographicFar: 1
       Primary: true
       FixedAspectRatio: false
+    ScriptComponent:
+      ClassName: Sandbox.Camera
+      ScriptFields:
+        - Name: DistanceFromPlayer
+          Type: Float
+          Data: 9
   - Entity: 18018509640195048856
     TagComponent:
       Tag: Circle
     TransformComponent:
-      Translation: [-2.3575592, 3, 0]
+      Translation: [-2.3575592, 5.55999994, 0]
       Rotation: [0, 0, 0]
       Scale: [1, 1, 1]
     CircleRendererComponent:
       Color: [1, 1, 1, 1]
       Thickness: 1
-      Fade: 0.00499999989
+      Fade: 0.0500000007
     Rigidbody2DComponent:
       BodyType: Dynamic
       Mass: 1

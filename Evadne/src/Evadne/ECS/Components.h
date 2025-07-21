@@ -145,12 +145,20 @@ namespace Evadne {
 		CircleCollider2DComponent(const CircleCollider2DComponent&) = default;
 	};
 
+	struct ScriptComponent 
+	{
+		std::string ClassName;
+
+		ScriptComponent() = default;
+		ScriptComponent(const ScriptComponent&) = default;
+	};
+
 	template<typename... Component>
 	struct ComponentGroup 
 	{
 
 	};
 
-	using AllComponents = ComponentGroup<TransformComponent, SpriteRendererComponent, CircleRendererComponent, CameraComponent, NativeScriptComponent, Rigidbody2DComponent, BoxCollider2DComponent, CircleCollider2DComponent>;
+	using AllComponents = ComponentGroup<TransformComponent, SpriteRendererComponent, CircleRendererComponent, CameraComponent, NativeScriptComponent, ScriptComponent, Rigidbody2DComponent, BoxCollider2DComponent, CircleCollider2DComponent>;
 
 }

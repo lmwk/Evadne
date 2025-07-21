@@ -32,5 +32,12 @@ group "Dependencies"
 
 group ""
 
-include "Evadne"
-include "Evadne-Editor"
+group "Core"
+	include "Evadne"
+	include "Evadne-ScriptCore"
+group ""
+
+group "Tools"
+	include "Evadne-Editor"
+group ""
+

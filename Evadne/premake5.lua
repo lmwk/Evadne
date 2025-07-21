@@ -39,10 +39,12 @@ project "Evadne"
 		"%{IncludeDir.glm}",
 		"%{IncludeDir.stb_image}",
 		"%{IncludeDir.entt}",
+		"%{IncludeDir.mono}",
 		"%{IncludeDir.yaml_cpp}",
 		"%{IncludeDir.ImGuizmo}",
 		"%{IncludeDir.VulkanSDK}",
 		"%{IncludeDir.Bullet3}",
+		"%{IncludeDir.filewatch}"
 	}
 	
 	links 
@@ -52,7 +54,8 @@ project "Evadne"
 		"ImGui",
 		"yaml-cpp",
 		"opengl32.lib",
-		"Bullet3"
+		"Bullet3",
+		"%{Library.mono}"
 	}
 	
 	filter "files:vendor/ImGuizmo/**.cpp"
@@ -61,7 +64,15 @@ project "Evadne"
 	filter "system:windows"
 		systemversion "latest"
 		buildoptions {"/utf-8"}
-
+		
+		links
+		{
+			"%{Library.WinSock}",
+			"%{Library.WinMM}",
+			"%{Library.WinVersion}",
+			"%{Library.BCrypt}",
+		}
+		
 	filter "configurations:Debug"
 		defines "EV_DEBUG"
 		runtime "Debug"

@@ -18,6 +18,7 @@ project "Evadne-Editor"
 		"%{wks.location}/Evadne/src",
 		"%{wks.location}/Evadne/vendor",
 		"%{IncludeDir.glm}",
+		"%{IncludeDir.filewatch}",
 		"%{IncludeDir.entt}",
 		"%{IncludeDir.ImGuizmo}"
 	}
