@@ -26,6 +26,13 @@ namespace Evadne
             Z = z;
         }
 
+        public Vector3(Vector2 xy, float z)
+        {
+            X = xy.X;
+            Y = xy.Y;
+            Z = z;
+        }
+
 
         public Vector2 XY
         {

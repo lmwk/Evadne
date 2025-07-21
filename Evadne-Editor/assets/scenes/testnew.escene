@@ -31,7 +31,7 @@ Entities:
       Scale: [1, 1, 1]
     CameraComponent:
       Camera:
-        ProjectionType: 1
+        ProjectionType: 0
         PerspectiveFOV: 0.785398185
         PerspectiveNear: 0.00999999978
         PerspectiveFar: 1000
@@ -43,10 +43,12 @@ Entities:
     ScriptComponent:
       ClassName: Sandbox.Camera
       ScriptFields:
-        []
+        - Name: DistanceFromPlayer
+          Type: Float
+          Data: 9
   - Entity: 4902290113153824303
     TagComponent:
-      Tag: Cube
+      Tag: Player
     TransformComponent:
       Translation: [1.12814248, 0.999999881, 0]
       Rotation: [0, 0, 0]
@@ -56,7 +58,7 @@ Entities:
       ScriptFields:
         - Name: Speed
           Type: Float
-          Data: 42
+          Data: 204
     SpriteRendererComponent:
       Color: [1, 1, 1, 1]
       TexturePath: assets\textures\2024_12_25_ekko-22954856.png

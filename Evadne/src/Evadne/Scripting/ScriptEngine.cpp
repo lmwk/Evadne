@@ -301,6 +301,12 @@ namespace Evadne {
         return sc_Data->CoreAssemblyImage;
     }
 
+    MonoObject* ScriptEngine::GetManagedInstance(UUID uuid)
+    {
+        EV_CORE_ASSERT(sc_Data->EntityInstances.find(uuid) != sc_Data->EntityInstances.end());
+        return sc_Data->EntityInstances.at(uuid)->GetManagedObject();
+    }
+
     void ScriptEngine::InitMono()
     {
         mono_set_assemblies_path("mono/lib");
