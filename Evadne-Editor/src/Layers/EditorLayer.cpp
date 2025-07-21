@@ -14,8 +14,6 @@
 
 namespace Evadne {
 
-	extern const std::filesystem::path g_AssetPath;
-
 	EditorLayer::EditorLayer()
 		: Layer("EditorLayer"), m_CameraController(1280.0f / 720.0f), m_SquareColor({ 0.2f, 0.3f, 0.8f, 1.0f })
 	{
@@ -44,8 +42,13 @@ namespace Evadne {
 		auto commandLineArgs = Application::Get().GetSpecification().CommandLineArgs;
 		if (commandLineArgs.Count > 1)
 		{
-			auto sceneFilePath = commandLineArgs[1];
-			OpenScene(sceneFilePath);
+			auto projectFilePath = commandLineArgs[1];
+			OpenProject(projectFilePath);
+		}
+		else 
+		{
+			if (!OpenProject())
+				Application::Get().Close();
 		}
 
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
@@ -165,17 +168,21 @@ namespace Evadne {
 			{
 				if (ImGui::BeginMenu("File"))
 				{
-					if (ImGui::MenuItem("New", "Ctrl+N"))
+					if (ImGui::MenuItem("Open Project...", "Ctrl+O"))
+						OpenProject();
+
+					ImGui::Separator();
+
+					if (ImGui::MenuItem("New Scene", "Ctrl+N"))
 						NewScene();
 
-					if (ImGui::MenuItem("Open", "Ctrl+O"))
-						OpenScene();
-
-					if (ImGui::MenuItem("Save", "Ctrl+S"))
+					if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
 						SaveScene();
 
-					if (ImGui::MenuItem("Save As", "Ctrl+Shift+S"))
+					if (ImGui::MenuItem("Save Scene As...", "Ctrl+Shift+S"))
 						SaveSceneAs();
+
+					ImGui::Separator();
 
 					if (ImGui::MenuItem("Exit"))
 						Application::Get().Close();
@@ -195,7 +202,7 @@ namespace Evadne {
 			}
 
 			m_SceneHierarchyPanel.OnImGuiRender();
-			m_ContentBrowserPanel.OnImGuiRender();
+			m_ContentBrowserPanel->OnImGuiRender();
 
 			ImGui::Begin("Stats");
 
@@ -239,7 +246,7 @@ namespace Evadne {
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 				{
 					const wchar_t* path = (const wchar_t*)payload->Data;
-					OpenScene(std::filesystem::path(g_AssetPath) / path);
+					OpenScene(path);
 				}
 				ImGui::EndDragDropTarget();
 			}
@@ -330,7 +337,7 @@ namespace Evadne {
 		case Key::O:
 		{
 			if (control)
-				OpenScene();
+				OpenProject();
 			break;
 		}
 		case Key::S:
@@ -456,6 +463,32 @@ namespace Evadne {
 		}
 
 		Renderer2D::EndScene();
+	}
+	void EditorLayer::NewProject()
+	{
+		Project::New();
+	}
+	bool EditorLayer::OpenProject()
+	{
+		std::string filepath = FileDialogs::OpenFile("Evadne Project (*.EVproj)\0*.EVproj\0");
+		if (filepath.empty())
+			return false;
+
+		OpenProject(filepath);
+		return true;
+	}
+	void EditorLayer::OpenProject(const std::filesystem::path& path)
+	{
+		if (Project::Load(path))
+		{
+			auto startScenePath = Project::GetAssetFileSystemPath(Project::GetActive()->GetConfig().StartScene);
+			OpenScene(startScenePath);
+			m_ContentBrowserPanel = CreateScope<ContentBrowserPanel>();
+		}
+	}
+	void EditorLayer::SaveProject()
+	{
+		// Project::SaveActive();
 	}
 	void EditorLayer::NewScene()
 	{

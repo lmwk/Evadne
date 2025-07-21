@@ -132,8 +132,11 @@ namespace Evadne {
 
         Scope<filewatch::FileWatch<std::string>> AppAssemblyFileWatcher;
         bool AssemblyReloadPending = false;
-
+#ifdef EV_DEBUG
         bool EnableDebugging = true;
+#else
+        bool EnableDebugging = false;
+#endif
 
         Scene* SceneContext = nullptr;
     };
@@ -281,7 +284,7 @@ namespace Evadne {
         }
         else
         {
-            EV_CORE_ERROR("Could not find ScriptInstance for entity {}", entityUUID);
+            EV_CORE_ERROR("Could not find ScriptInstance for entity {}", (uint64_t)entityUUID);
         }
     }
 

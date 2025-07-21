@@ -6,6 +6,8 @@
 #include "Evadne/Scripting/ScriptEngine.h"
 #include "Evadne/Core/UUID.h"
 
+#include "Evadne/Project/Project.h"
+
 #include <fstream>
 
 #include <yaml-cpp/yaml.h>
@@ -463,7 +465,11 @@ namespace Evadne {
 					auto& src = deserializedEntity.AddComponent<SpriteRendererComponent>();
 					src.Color = spriteRendererComponent["Color"].as<glm::vec4>();
 					if (spriteRendererComponent["TexturePath"])
-						src.Texture = Texture2D::Create(spriteRendererComponent["TexturePath"].as<std::string>());
+					{
+						std::string texturePath = spriteRendererComponent["TexturePath"].as<std::string>();
+						auto path = Project::GetAssetFileSystemPath(texturePath);
+						src.Texture = Texture2D::Create(path.string());
+					}
 
 					if (spriteRendererComponent["TilingFactor"])
 						src.TilingFactor = spriteRendererComponent["TilingFactor"].as<float>();
