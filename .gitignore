@@ -33,8 +33,15 @@
 
 # Output Folders
 .vs/
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user
+**.csproj
+
 bin/
 bin-int/
+Intermediates/
 
 *.log
 
@@ -50,3 +57,4 @@ Evadne/vendor/VulkanSDK
 Evadne-Editor/assets/cache
 scripts/__pycache__
 /scripts/.idea
+/Evadne.sln
