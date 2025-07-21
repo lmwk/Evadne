@@ -7,11 +7,15 @@
 #include "mono/metadata/assembly.h"
 #include "mono/metadata/object.h"
 #include "mono/metadata/tabledefs.h"
+#include "mono/metadata/mono-debug.h"
+#include "mono/metadata/threads.h"
 
 #include "FileWatch.hpp"
 
 #include "Evadne/Core/Application.h"
 #include "Evadne/Core/Timer.h"
+#include "Evadne/Utils/Buffer.h"
+#include "Evadne/Utils/FileSystem.h"
 
 namespace Evadne {
 
@@ -38,41 +42,12 @@ namespace Evadne {
 
     namespace Utils {
 
-        static char* ReadBytes(const std::filesystem::path& filepath, uint32_t* outSize)
+        static MonoAssembly* LoadMonoAssembly(const std::filesystem::path& assemblyPath, bool loadPDB = false)
         {
-            std::ifstream stream(filepath, std::ios::binary | std::ios::ate);
-
-            if (!stream)
-            {
-                // Failed to open the file
-                return nullptr;
-            }
-
-            std::streampos end = stream.tellg();
-            stream.seekg(0, std::ios::beg);
-            uint32_t size = end - stream.tellg();
-
-            if (size == 0)
-            {
-                // File is empty
-                return nullptr;
-            }
-
-            char* buffer = new char[size];
-            stream.read((char*)buffer, size);
-            stream.close();
-
-            *outSize = size;
-            return buffer;
-        }
-
-        MonoAssembly* LoadMonoAssembly(const std::filesystem::path& assemblyPath)
-        {
-            uint32_t fileSize = 0;
-            char* fileData = ReadBytes(assemblyPath, &fileSize);
+            ScopedBuffer fileData = FileSystem::ReadFileBinary(assemblyPath);
 
             MonoImageOpenStatus status;
-            MonoImage* image = mono_image_open_from_data_full(fileData, fileSize, 1, &status, 0);
+            MonoImage* image = mono_image_open_from_data_full(fileData.As<char>(), fileData.Size(), 1, &status, 0);
 
             if (status != MONO_IMAGE_OK)
             {
@@ -81,16 +56,27 @@ namespace Evadne {
                 return nullptr;
             }
 
+            if (loadPDB)
+            {
+                std::filesystem::path pdbPath = assemblyPath;
+                pdbPath.replace_extension(".pdb");
+
+                if (std::filesystem::exists(pdbPath))
+                {
+                    ScopedBuffer pdbFileData = FileSystem::ReadFileBinary(pdbPath);
+                    mono_debug_open_image_from_memory(image, pdbFileData.As<const mono_byte>(), pdbFileData.Size());
+                    EV_CORE_INFO("Loaded PDB {}", pdbPath.string());
+                }
+            }
+
             std::string pathString = assemblyPath.string();
             MonoAssembly* assembly = mono_assembly_load_from_full(image, pathString.c_str(), &status, 0);
             mono_image_close(image);
 
-            delete[] fileData;
-
             return assembly;
         }
 
-        void PrintAssemblyTypes(MonoAssembly* assembly)
+        static void PrintAssemblyTypes(MonoAssembly* assembly)
         {
             MonoImage* image = mono_assembly_get_image(assembly);
             const MonoTableInfo* typeDefinitionsTable = mono_image_get_table_info(image, MONO_TABLE_TYPEDEF);
@@ -109,7 +95,7 @@ namespace Evadne {
 
         }
 
-        ScriptFieldType MonoTypeToScriptFieldType(MonoType* monoType)
+        static ScriptFieldType MonoTypeToScriptFieldType(MonoType* monoType)
         {
             std::string typeName = mono_type_get_name(monoType);
 
@@ -146,6 +132,8 @@ namespace Evadne {
 
         Scope<filewatch::FileWatch<std::string>> AppAssemblyFileWatcher;
         bool AssemblyReloadPending = false;
+
+        bool EnableDebugging = true;
 
         Scene* SceneContext = nullptr;
     };
@@ -226,14 +214,14 @@ namespace Evadne {
         mono_domain_set(sc_Data->AppDomain, true);
 
         sc_Data->CoreAssemblyFilepath = filepath;
-        sc_Data->CoreAssembly = Utils::LoadMonoAssembly(filepath);
+        sc_Data->CoreAssembly = Utils::LoadMonoAssembly(filepath, sc_Data->EnableDebugging);
         sc_Data->CoreAssemblyImage = mono_assembly_get_image(sc_Data->CoreAssembly);
     }
 
     void ScriptEngine::LoadAppAssembly(const std::filesystem::path& filepath)
     {
         sc_Data->AppAssemblyFilepath = filepath;
-        sc_Data->AppAssembly = Utils::LoadMonoAssembly(filepath);
+        sc_Data->AppAssembly = Utils::LoadMonoAssembly(filepath, sc_Data->EnableDebugging);
         auto assemb = sc_Data->AppAssembly;
         sc_Data->AppAssemblyImage = mono_assembly_get_image(sc_Data->AppAssembly);
         auto assembi = sc_Data->AppAssemblyImage;
@@ -355,11 +343,26 @@ namespace Evadne {
     {
         mono_set_assemblies_path("mono/lib");
 
+        if (sc_Data->EnableDebugging)
+        {
+            const char* argv[2] = {
+                "--debugger-agent=transport=dt_socket,address=127.0.0.1:2550,server=y,suspend=n,loglevel=3,logfile=MonoDebugger.log",
+                "--soft-breakpoints"
+            };
+
+            mono_jit_parse_options(2, (char**)argv);
+            mono_debug_init(MONO_DEBUG_FORMAT_MONO);
+        }
+
         MonoDomain* rootDomain = mono_jit_init("EvadneJITRuntime");
         EV_CORE_ASSERT(rootDomain);
 
         sc_Data->RootDomain = rootDomain;
 
+        if (sc_Data->EnableDebugging)
+            mono_debug_domain_create(sc_Data->RootDomain);
+
+        mono_thread_set_main(mono_thread_current());
     }
 
     void ScriptEngine::ShutdownMono()
@@ -457,7 +460,8 @@ namespace Evadne {
 
     MonoObject* ScriptClass::InvokeMethod(MonoObject* instance, MonoMethod* method, void** params)
     {
-        return mono_runtime_invoke(method, instance, params, nullptr);
+        MonoObject* exception = nullptr;
+        return mono_runtime_invoke(method, instance, params, &exception);
     }
 
     ScriptInstance::ScriptInstance(Ref<ScriptClass> scriptClass, Entity entity)

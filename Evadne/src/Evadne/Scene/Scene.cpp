@@ -152,45 +152,51 @@ namespace Evadne {
 
     void Scene::OnUpdateRuntime(Timestep ts)
     {
+        if (!m_IsPaused || m_StepFrames-- > 0)
         {
-            auto view = m_Registry.view<ScriptComponent>();
-            for (auto e : view)
-            {
-                Entity entity = { e, this };
-                ScriptEngine::OnUpdateEntity(entity, ts);
-            }
 
-            m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
+            {
+                auto view = m_Registry.view<ScriptComponent>();
+                for (auto e : view)
                 {
-                    if (!nsc.Instance)
+                    Entity entity = { e, this };
+                    ScriptEngine::OnUpdateEntity(entity, ts);
+                }
+
+                m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
                     {
-                        nsc.Instance = nsc.InstantiateScript();
-                        nsc.Instance->m_Entity = Entity{ entity, this };
-                        nsc.Instance->OnCreate();
-                    }
-                    nsc.Instance->OnUpdate(ts);
+                        if (!nsc.Instance)
+                        {
+                            nsc.Instance = nsc.InstantiateScript();
+                            nsc.Instance->m_Entity = Entity{ entity, this };
+                            nsc.Instance->OnCreate();
+                        }
+                        nsc.Instance->OnUpdate(ts);
 
 
-                });
-        }
-
-        {
-            m_Physics->UpdatePhysics(ts);
-
-            auto view = m_Registry.view<Rigidbody2DComponent>();
-            for (auto e : view)
-            {
-                Entity entity = { e, this };
-                auto& transform = entity.GetComponent<TransformComponent>();
-                auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
-
-                btRigidBody* body = (btRigidBody*)rb2d.RuntimeBody;
-                btTransform position;
-                body->getMotionState()->getWorldTransform(position);
-                transform.Translation.x = position.getOrigin().x();
-                transform.Translation.y = position.getOrigin().y();
-                transform.Rotation.z = position.getRotation().z();
+                    });
             }
+
+            {
+                m_Physics->UpdatePhysics(ts);
+
+                auto view = m_Registry.view<Rigidbody2DComponent>();
+                for (auto e : view)
+                {
+                    Entity entity = { e, this };
+                    auto& transform = entity.GetComponent<TransformComponent>();
+                    auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+
+                    btRigidBody* body = (btRigidBody*)rb2d.RuntimeBody;
+                    btTransform position;
+                    body->getMotionState()->getWorldTransform(position);
+                    transform.Translation.x = position.getOrigin().x();
+                    transform.Translation.y = position.getOrigin().y();
+                    transform.Rotation.z = position.getRotation().z();
+                }
+            }
+
+            
         }
 
         Camera* mainCamera = nullptr;
@@ -233,24 +239,28 @@ namespace Evadne {
 
             Renderer2D::EndScene();
         }
+        
     }
     void Scene::OnUpdateSimulation(Timestep ts, EditorCamera& camera)
     {
+        if (!m_IsPaused || m_StepFrames-- > 0)
         {
-            m_Physics->UpdatePhysics(ts);
-
-            auto view = m_Registry.view<Rigidbody2DComponent>();
-            for (auto e : view)
             {
-                Entity entity = { e, this };
-                auto& transform = entity.GetComponent<TransformComponent>();
-                auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+                m_Physics->UpdatePhysics(ts);
 
-                btRigidBody* body = (btRigidBody*)rb2d.RuntimeBody;
-                const auto& position = body->getWorldTransform();
-                transform.Translation.x = position.getOrigin().x();
-                transform.Translation.y = position.getOrigin().y();
-                transform.Rotation.z = position.getRotation().z();
+                auto view = m_Registry.view<Rigidbody2DComponent>();
+                for (auto e : view)
+                {
+                    Entity entity = { e, this };
+                    auto& transform = entity.GetComponent<TransformComponent>();
+                    auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+
+                    btRigidBody* body = (btRigidBody*)rb2d.RuntimeBody;
+                    const auto& position = body->getWorldTransform();
+                    transform.Translation.x = position.getOrigin().x();
+                    transform.Translation.y = position.getOrigin().y();
+                    transform.Rotation.z = position.getRotation().z();
+                }
             }
         }
 
@@ -313,6 +323,11 @@ namespace Evadne {
                 return Entity{ entity, this };
         }
         return {};
+    }
+
+    void Scene::Step(int frames)
+    {
+        m_StepFrames = frames;
     }
 
     void Scene::OnPhysics2DStart()

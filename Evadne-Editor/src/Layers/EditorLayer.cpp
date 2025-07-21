@@ -28,6 +28,8 @@ namespace Evadne {
 		m_IconPlay = Texture2D::Create("Resources/Icons/play.png");
 		m_IconStop = Texture2D::Create("Resources/Icons/stop.png");
 		m_IconSimulate = Texture2D::Create("Resources/Icons/sim.png");
+		m_IconPause = Texture2D::Create("Resources/Icons/pause.png");
+		m_IconStep = Texture2D::Create("Resources/Icons/skipforward.png");
 
 		FramebufferSpecification fbSpec;
 		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
@@ -545,6 +547,13 @@ namespace Evadne {
 
 		float size = ImGui::GetWindowHeight() - 4.0f;
 		
+		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+
+		bool hasPlayButton = m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play;
+		bool hasSimulateButton = m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate;
+		bool hasPauseButton = m_SceneState != SceneState::Edit;
+
+		if(hasPlayButton)
 		{
 			Ref<Texture2D> icon = (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate) ? m_IconPlay : m_IconStop;
 			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
@@ -558,9 +567,11 @@ namespace Evadne {
 			}
 		}
 
-		ImGui::SameLine();
-
+		if (hasSimulateButton)
 		{
+			if(hasPlayButton)
+				ImGui::SameLine();
+
 			Ref<Texture2D> icon = (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play) ? m_IconSimulate : m_IconStop;
 			if (ImGui::ImageButton("simulate_button", (ImTextureID)icon->GetRendererID(), ImVec2(size, size),
 				ImVec2(0, 0), ImVec2(1, 1), ImVec4(0.0f, 0.0f, 0.0f, 0.0f), tintColor) && toolbarEnabled)
@@ -569,6 +580,35 @@ namespace Evadne {
 					OnSceneSimulate();
 				else if (m_SceneState == SceneState::Simulate)
 					OnSceneStop();
+			}
+		}
+
+		if (hasPauseButton)
+		{
+			bool isPaused = m_ActiveScene->IsPaused();
+			ImGui::SameLine();
+
+			{
+				Ref<Texture2D> icon = m_IconPause;
+				if (ImGui::ImageButton("pause_button", (ImTextureID)icon->GetRendererID(), ImVec2(size, size),
+					ImVec2(0, 0), ImVec2(1, 1), ImVec4(0.0f, 0.0f, 0.0f, 0.0f), tintColor) && toolbarEnabled)
+				{
+					m_ActiveScene->SetPaused(!isPaused);
+				}
+			}
+
+			if(isPaused) 
+			{
+				ImGui::SameLine();
+				{
+					Ref<Texture2D> icon = m_IconStep;
+					bool isPaused = m_ActiveScene->IsPaused();
+					if (ImGui::ImageButton("step_button", (ImTextureID)icon->GetRendererID(), ImVec2(size, size),
+						ImVec2(0, 0), ImVec2(1, 1), ImVec4(0.0f, 0.0f, 0.0f, 0.0f), tintColor) && toolbarEnabled) 
+					{
+						m_ActiveScene->Step();
+					}
+				}
 			}
 		}
 
@@ -600,6 +640,13 @@ namespace Evadne {
 		m_ActiveScene = m_EditorScene;
 
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+	}
+	void EditorLayer::OnScenePause()
+	{
+		if (m_SceneState == SceneState::Edit)
+			return;
+
+		m_ActiveScene->SetPaused(true);
 	}
 	void EditorLayer::OnDuplicateEntity()
 	{
