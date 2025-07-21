@@ -1,14 +1,15 @@
 #include "evpch.h"
 #include "ContentBrowserPanel.h"
 
+#include "Evadne/Project/Project.h"
+
 #include <imgui/imgui.h>
 
 namespace Evadne {
 
-    extern const std::filesystem::path g_AssetPath = "assets";
-
     ContentBrowserPanel::ContentBrowserPanel()
-        : m_CurrentDirectory(g_AssetPath)
+        : m_BaseDirectory(Project::GetAssetDirectory()),
+		m_CurrentDirectory(m_BaseDirectory)
     {
 		m_FolderIcon = Texture2D::Create("Resources/Icons/ContentBrowser/folder_open.png");
 		m_FileIcon = Texture2D::Create("Resources/Icons/ContentBrowser/file.png");
@@ -17,7 +18,7 @@ namespace Evadne {
     void ContentBrowserPanel::OnImGuiRender()
     {
 		ImGui::Begin("Content Browser");
-		if (m_CurrentDirectory != std::filesystem::path(g_AssetPath))
+		if (m_CurrentDirectory != std::filesystem::path(m_BaseDirectory))
 		{
 			if (ImGui::Button("<-"))
 			{
@@ -49,7 +50,7 @@ namespace Evadne {
 
 			if (ImGui::BeginDragDropSource())
 			{
-				auto relativePath = std::filesystem::relative(path, g_AssetPath);
+				std::filesystem::path relativePath(path);
 				const wchar_t* itemPath = relativePath.c_str();
 				ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath, (wcslen(itemPath) + 1) * sizeof(wchar_t));
 				ImGui::EndDragDropSource();

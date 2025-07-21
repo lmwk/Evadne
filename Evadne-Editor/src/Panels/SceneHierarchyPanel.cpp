@@ -1,11 +1,14 @@
 #include "SceneHierarchyPanel.h"
+#include "Evadne/ECS/Components.h"
+
+#include "Evadne/Scripting/ScriptEngine.h"
+#include "Evadne/UI/UI.h"
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
 
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Evadne/ECS/Components.h"
 #include <cstring>
 
 #ifdef _MSVC_LANG
@@ -13,8 +16,6 @@
 #endif
 
 namespace Evadne {
-
-    extern const std::filesystem::path g_AssetPath;
 
     SceneHierarchyPanel::SceneHierarchyPanel(const Ref<Scene>& context)
     {
@@ -206,7 +207,7 @@ namespace Evadne {
 
             char buffer[256];
             memset(buffer, 0, sizeof(buffer));
-            strncpy_s(buffer, sizeof(buffer), tag.c_str(), _TRUNCATE);
+            strncpy_s(buffer, sizeof(buffer), tag.c_str(), sizeof(buffer));
             if(ImGui::InputText("##Tag", buffer, sizeof(buffer))) 
             {
                 tag = std::string(buffer);
@@ -221,6 +222,7 @@ namespace Evadne {
         if (ImGui::BeginPopup("AddComponent"))
         {
             DisplayAddComponentEntry<CameraComponent>("Camera");
+            DisplayAddComponentEntry<ScriptComponent>("Script");
             DisplayAddComponentEntry<SpriteRendererComponent>("Sprite Renderer");
             DisplayAddComponentEntry<CircleRendererComponent>("Circle Renderer");
             DisplayAddComponentEntry<Rigidbody2DComponent>("Rigidbody 2D");
@@ -301,7 +303,83 @@ namespace Evadne {
                 }
             
         });
+        DrawComponent<ScriptComponent>("Script", entity, [entity, scene = m_Context](auto& component) mutable
+        {
+                bool scriptClassExists = ScriptEngine::EntityClassExists(component.ClassName);
 
+                static char buffer[64];
+                strcpy_s(buffer, sizeof(buffer), component.ClassName.c_str());
+
+                UI::ScopedStyleColor textColor(ImGuiCol_Text, ImVec4(0.9f, 0.2f, 0.3f, 1.0f), !scriptClassExists);
+
+                if (ImGui::InputText("Class", buffer, sizeof(buffer)))
+                {
+                    component.ClassName = buffer;
+                    return;
+                }
+
+                bool sceneRunning = scene->IsRunning();
+                if (sceneRunning)
+                {
+                    Ref<ScriptInstance> scriptInstance = ScriptEngine::GetEntityScriptInstance(entity.GetUUID());
+                    if (scriptInstance)
+                    {
+                        const auto& fields = scriptInstance->GetScriptClass()->GetFields();
+
+                        for (const auto& [name, field] : fields)
+                        {
+                            if (field.Type == ScriptFieldType::Float)
+                            {
+                                float data = scriptInstance->GetFieldValue<float>(name);
+                                if (ImGui::DragFloat(name.c_str(), &data))
+                                {
+                                    scriptInstance->SetFieldValue(name, data);
+                                }
+                            }
+                        }
+                    }
+                }
+                else 
+                {
+                    if (scriptClassExists)
+                    {
+                        Ref<ScriptClass> entityClass = ScriptEngine::GetEntityClass(component.ClassName);
+                        const auto& fields = entityClass->GetFields();
+
+                        auto& entityFields = ScriptEngine::GetScriptFieldMap(entity);
+                        for (const auto& [name, field] : fields)
+                        {
+                            // Field has been set in editor
+                            if (entityFields.find(name) != entityFields.end())
+                            {
+                                ScriptFieldInstance& scriptField = entityFields.at(name);
+
+                                // Display control to set it maybe
+                                if (field.Type == ScriptFieldType::Float)
+                                {
+                                    float data = scriptField.GetValue<float>();
+                                    if (ImGui::DragFloat(name.c_str(), &data))
+                                        scriptField.SetValue(data);
+                                }
+                            }
+                            else
+                            {
+                                // Display control to set it maybe
+                                if (field.Type == ScriptFieldType::Float)
+                                {
+                                    float data = 0.0f;
+                                    if (ImGui::DragFloat(name.c_str(), &data))
+                                    {
+                                        ScriptFieldInstance& fieldInstance = entityFields[name];
+                                        fieldInstance.Field = field;
+                                        fieldInstance.SetValue(data);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+        });
         DrawComponent<SpriteRendererComponent>("Sprite Renderer", entity, [](auto& component)
         {
                 ImGui::ColorEdit4("Color", glm::value_ptr(component.Color));
@@ -311,7 +389,7 @@ namespace Evadne {
                     if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
                     {
                         const wchar_t* path = (const wchar_t*)payload->Data;
-                        std::filesystem::path texturePath = std::filesystem::path(g_AssetPath) / path;
+                        std::filesystem::path texturePath(path);
                         Ref<Texture2D> texture = Texture2D::Create(texturePath.string());
                         if (texture->IsLoaded())
                             component.Texture = texture;

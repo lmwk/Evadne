@@ -55,6 +55,9 @@
     <Filter Include="src\Evadne\Scene">
       <UniqueIdentifier>{EC217075-D81A-8FC7-014D-744CEDA46ED3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Evadne\Scripting">
+      <UniqueIdentifier>{51F95AF1-3D88-E4BA-E6A6-F8B5D214F560}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Evadne\Utils">
       <UniqueIdentifier>{2FB69D75-1BAF-BCC7-44E1-A14C30399CD3}</UniqueIdentifier>
     </Filter>
@@ -248,6 +251,12 @@
     </ClInclude>
     <ClInclude Include="src\Evadne\Scene\SceneSerializer.h">
       <Filter>src\Evadne\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Scripting\ScriptEngine.h">
+      <Filter>src\Evadne\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Scripting\ScriptGlue.h">
+      <Filter>src\Evadne\Scripting</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Utils\PlatformUtils.h">
       <Filter>src\Evadne\Utils</Filter>
@@ -1509,6 +1518,11 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
+    <ClInclude Include="src\Evadne\Utils\FileSystem.h" />
+    <ClInclude Include="src\Evadne\Utils\Buffer.h" />
+    <ClInclude Include="src\Evadne\Project\Project.h" />
+    <ClInclude Include="src\Evadne\Project\ProjectSerializer.h" />
+    <ClInclude Include="src\Evadne\UI\UI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Evadne\Camera\Controllers\OrthographicCameraController.cpp">
@@ -1628,6 +1642,12 @@
     <ClCompile Include="src\Evadne\Scene\SceneSerializer.cpp">
       <Filter>src\Evadne\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\Evadne\Scripting\ScriptEngine.cpp">
+      <Filter>src\Evadne\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Evadne\Scripting\ScriptGlue.cpp">
+      <Filter>src\Evadne\Scripting</Filter>
+    </ClCompile>
     <ClCompile Include="src\evpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -1637,5 +1657,8 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
+    <ClCompile Include="src\Evadne\Utils\FileSystem.cpp" />
+    <ClCompile Include="src\Evadne\Project\Project.cpp" />
+    <ClCompile Include="src\Evadne\Project\ProjectSerializer.cpp" />
   </ItemGroup>
 </Project>

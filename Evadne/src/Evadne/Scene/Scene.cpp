@@ -3,6 +3,7 @@
 
 #include "Evadne/ECS/Components.h"
 #include "Evadne/ECS/ScriptableEntity.h"
+#include "Evadne/Scripting/ScriptEngine.h"
 #include "Evadne/Rendering/2D/Renderer2D.h"
 
 #include <glm/glm.hpp>
@@ -100,22 +101,43 @@ namespace Evadne {
         entity.AddComponent<TransformComponent>();
         auto& tag = entity.AddComponent<TagComponent>();
         tag.Tag = name.empty() ? "Entity" : name;
+
+        m_EntityMap[uuid] = entity;
+
         return entity;
     }
 
     void Scene::DestroyEntity(Entity entity)
     {
         m_Registry.destroy(entity);
+        m_EntityMap.erase(entity.GetUUID());
     }
 
     void Scene::OnRuntimeStart()
     {
+        m_IsRunning = true;
+
         OnPhysics2DStart();
+
+        {
+            ScriptEngine::OnRuntimeStart(this);
+
+            auto view = m_Registry.view<ScriptComponent>();
+            for (auto e : view)
+            {
+                Entity entity = { e, this };
+                ScriptEngine::OnCreateEntity(entity);
+            }
+        }
     }
 
     void Scene::OnRuntimeStop()
     {
+        m_IsRunning = false;
+
         OnPhysics2DStop();
+
+        ScriptEngine::OnRuntimeStop();
     }
 
     void Scene::OnSimulationStart()
@@ -130,37 +152,51 @@ namespace Evadne {
 
     void Scene::OnUpdateRuntime(Timestep ts)
     {
+        if (!m_IsPaused || m_StepFrames-- > 0)
         {
-            m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
-                {
-                    if (!nsc.Instance)
-                    {
-                        nsc.Instance = nsc.InstantiateScript();
-                        nsc.Instance->m_Entity = Entity{ entity, this };
-                        nsc.Instance->OnCreate();
-                    }
-                    nsc.Instance->OnUpdate(ts);
 
-
-                });
-        }
-
-        {
-            m_Physics->UpdatePhysics(ts);
-
-            auto view = m_Registry.view<Rigidbody2DComponent>();
-            for (auto e : view)
             {
-                Entity entity = { e, this };
-                auto& transform = entity.GetComponent<TransformComponent>();
-                auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+                auto view = m_Registry.view<ScriptComponent>();
+                for (auto e : view)
+                {
+                    Entity entity = { e, this };
+                    ScriptEngine::OnUpdateEntity(entity, ts);
+                }
 
-                btRigidBody* body = (btRigidBody*)rb2d.RuntimeBody;
-                const auto& position = body->getWorldTransform();
-                transform.Translation.x = position.getOrigin().x();
-                transform.Translation.y = position.getOrigin().y();
-                transform.Rotation.z = position.getRotation().z();
+                m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
+                    {
+                        if (!nsc.Instance)
+                        {
+                            nsc.Instance = nsc.InstantiateScript();
+                            nsc.Instance->m_Entity = Entity{ entity, this };
+                            nsc.Instance->OnCreate();
+                        }
+                        nsc.Instance->OnUpdate(ts);
+
+
+                    });
             }
+
+            {
+                m_Physics->UpdatePhysics(ts);
+
+                auto view = m_Registry.view<Rigidbody2DComponent>();
+                for (auto e : view)
+                {
+                    Entity entity = { e, this };
+                    auto& transform = entity.GetComponent<TransformComponent>();
+                    auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+
+                    btRigidBody* body = (btRigidBody*)rb2d.RuntimeBody;
+                    btTransform position;
+                    body->getMotionState()->getWorldTransform(position);
+                    transform.Translation.x = position.getOrigin().x();
+                    transform.Translation.y = position.getOrigin().y();
+                    transform.Rotation.z = position.getRotation().z();
+                }
+            }
+
+            
         }
 
         Camera* mainCamera = nullptr;
@@ -203,24 +239,28 @@ namespace Evadne {
 
             Renderer2D::EndScene();
         }
+        
     }
     void Scene::OnUpdateSimulation(Timestep ts, EditorCamera& camera)
     {
+        if (!m_IsPaused || m_StepFrames-- > 0)
         {
-            m_Physics->UpdatePhysics(ts);
-
-            auto view = m_Registry.view<Rigidbody2DComponent>();
-            for (auto e : view)
             {
-                Entity entity = { e, this };
-                auto& transform = entity.GetComponent<TransformComponent>();
-                auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+                m_Physics->UpdatePhysics(ts);
 
-                btRigidBody* body = (btRigidBody*)rb2d.RuntimeBody;
-                const auto& position = body->getWorldTransform();
-                transform.Translation.x = position.getOrigin().x();
-                transform.Translation.y = position.getOrigin().y();
-                transform.Rotation.z = position.getRotation().z();
+                auto view = m_Registry.view<Rigidbody2DComponent>();
+                for (auto e : view)
+                {
+                    Entity entity = { e, this };
+                    auto& transform = entity.GetComponent<TransformComponent>();
+                    auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+
+                    btRigidBody* body = (btRigidBody*)rb2d.RuntimeBody;
+                    const auto& position = body->getWorldTransform();
+                    transform.Translation.x = position.getOrigin().x();
+                    transform.Translation.y = position.getOrigin().y();
+                    transform.Rotation.z = position.getRotation().z();
+                }
             }
         }
 
@@ -232,6 +272,9 @@ namespace Evadne {
     }
     void Scene::OnViewportResize(uint32_t width, uint32_t height)
     {
+        if (m_ViewportWidth == width && m_ViewportHeight == height)
+            return;
+
         m_ViewportHeight = width;
         m_ViewportHeight = height;
 
@@ -250,6 +293,26 @@ namespace Evadne {
         CopyComponentIfExists(AllComponents{}, newEntity, entity);
     }
 
+    Entity Scene::FindEntityByName(std::string_view name)
+    {
+        auto view = m_Registry.view<TagComponent>();
+        for (auto entity : view)
+        {
+            const TagComponent& tc = view.get<TagComponent>(entity);
+            if (tc.Tag == name)
+                return Entity{ entity, this };
+        }
+        return {};
+    }
+
+    Entity Scene::GetEntityByUUID(UUID uuid)
+    {
+        if (m_EntityMap.find(uuid) != m_EntityMap.end())
+            return { m_EntityMap.at(uuid), this };
+
+        return {};
+    }
+
     Entity Scene::GerPrimaryCameraEntity()
     {
         auto view = m_Registry.view<CameraComponent>();
@@ -260,6 +323,11 @@ namespace Evadne {
                 return Entity{ entity, this };
         }
         return {};
+    }
+
+    void Scene::Step(int frames)
+    {
+        m_StepFrames = frames;
     }
 
     void Scene::OnPhysics2DStart()
@@ -326,6 +394,10 @@ namespace Evadne {
     {
         if (m_ViewportWidth > 0 && m_ViewportHeight > 0)
             component.Camera.SetViewportSize(m_ViewportWidth, m_ViewportHeight);
+    }
+    template<>
+    void Scene::OnComponentAdded<ScriptComponent>(Entity entity, ScriptComponent& component)
+    {
     }
     template<>
     void Scene::OnComponentAdded<SpriteRendererComponent>(Entity entity, SpriteRendererComponent& component)

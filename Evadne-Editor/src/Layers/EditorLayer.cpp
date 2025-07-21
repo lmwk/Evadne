@@ -10,10 +10,9 @@
 #include "ImGuizmo.h"
 
 #include "Evadne/Math/Math.h"
+#include "Evadne/Scripting/ScriptEngine.h"
 
 namespace Evadne {
-
-	extern const std::filesystem::path g_AssetPath;
 
 	EditorLayer::EditorLayer()
 		: Layer("EditorLayer"), m_CameraController(1280.0f / 720.0f), m_SquareColor({ 0.2f, 0.3f, 0.8f, 1.0f })
@@ -27,6 +26,8 @@ namespace Evadne {
 		m_IconPlay = Texture2D::Create("Resources/Icons/play.png");
 		m_IconStop = Texture2D::Create("Resources/Icons/stop.png");
 		m_IconSimulate = Texture2D::Create("Resources/Icons/sim.png");
+		m_IconPause = Texture2D::Create("Resources/Icons/pause.png");
+		m_IconStep = Texture2D::Create("Resources/Icons/skipforward.png");
 
 		FramebufferSpecification fbSpec;
 		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
@@ -41,9 +42,13 @@ namespace Evadne {
 		auto commandLineArgs = Application::Get().GetSpecification().CommandLineArgs;
 		if (commandLineArgs.Count > 1)
 		{
-			auto sceneFilePath = commandLineArgs[1];
-			SceneSerializer serializer(m_ActiveScene);
-			serializer.Deserialize(sceneFilePath);
+			auto projectFilePath = commandLineArgs[1];
+			OpenProject(projectFilePath);
+		}
+		else 
+		{
+			if (!OpenProject())
+				Application::Get().Close();
 		}
 
 		m_EditorCamera = EditorCamera(30.0f, 1.778f, 0.1f, 1000.0f);
@@ -56,13 +61,14 @@ namespace Evadne {
 	{
 		EV_PROFILE_FUNCTION();
 
+		m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+
 		if(FramebufferSpecification spec = m_Framebuffer->GetSpecification(); 
 		m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && (spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
 		{
 			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
 			m_EditorCamera.SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
-			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
 
 		Renderer2D::ResetStats();
@@ -162,26 +168,41 @@ namespace Evadne {
 			{
 				if (ImGui::BeginMenu("File"))
 				{
-					if (ImGui::MenuItem("New", "Ctrl+N"))
+					if (ImGui::MenuItem("Open Project...", "Ctrl+O"))
+						OpenProject();
+
+					ImGui::Separator();
+
+					if (ImGui::MenuItem("New Scene", "Ctrl+N"))
 						NewScene();
 
-					if (ImGui::MenuItem("Open", "Ctrl+O"))
-						OpenScene();
-
-					if (ImGui::MenuItem("Save", "Ctrl+S"))
+					if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
 						SaveScene();
 
-					if (ImGui::MenuItem("Save As", "Ctrl+Shift+S"))
+					if (ImGui::MenuItem("Save Scene As...", "Ctrl+Shift+S"))
 						SaveSceneAs();
+
+					ImGui::Separator();
 
 					if (ImGui::MenuItem("Exit"))
 						Application::Get().Close();
+
 					ImGui::EndMenu();
 				}
+
+				if(ImGui::BeginMenu("Script")) 
+				{
+					if (ImGui::MenuItem("Reload assembly", "Ctrl+R"))
+						ScriptEngine::ReloadAssembly();
+
+					ImGui::EndMenu();
+				}
+
 				ImGui::EndMenuBar();
 			}
+
 			m_SceneHierarchyPanel.OnImGuiRender();
-			m_ContentBrowserPanel.OnImGuiRender();
+			m_ContentBrowserPanel->OnImGuiRender();
 
 			ImGui::Begin("Stats");
 
@@ -212,7 +233,7 @@ namespace Evadne {
 
 			m_ViewportFocused = ImGui::IsWindowFocused();
 			m_ViewportHovered = ImGui::IsWindowHovered();
-			Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportFocused && !m_ViewportHovered);
+			Application::Get().GetImGuiLayer()->BlockEvents(!m_ViewportHovered);
 
 			ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
 			m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
@@ -225,7 +246,7 @@ namespace Evadne {
 				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 				{
 					const wchar_t* path = (const wchar_t*)payload->Data;
-					OpenScene(std::filesystem::path(g_AssetPath) / path);
+					OpenScene(path);
 				}
 				ImGui::EndDragDropTarget();
 			}
@@ -316,7 +337,7 @@ namespace Evadne {
 		case Key::O:
 		{
 			if (control)
-				OpenScene();
+				OpenProject();
 			break;
 		}
 		case Key::S:
@@ -359,9 +380,15 @@ namespace Evadne {
 		}
 		case Key::R:
 		{
-			if(!ImGuizmo::IsUsing())
-				m_GizmoType = ImGuizmo::OPERATION::SCALE;
-			break;
+			if(control) 
+			{
+				ScriptEngine::ReloadAssembly();
+			}
+			else 
+			{
+				if (!ImGuizmo::IsUsing())
+					m_GizmoType = ImGuizmo::OPERATION::SCALE;
+			}
 		}
 		}
 	}
@@ -436,6 +463,32 @@ namespace Evadne {
 		}
 
 		Renderer2D::EndScene();
+	}
+	void EditorLayer::NewProject()
+	{
+		Project::New();
+	}
+	bool EditorLayer::OpenProject()
+	{
+		std::string filepath = FileDialogs::OpenFile("Evadne Project (*.EVproj)\0*.EVproj\0");
+		if (filepath.empty())
+			return false;
+
+		OpenProject(filepath);
+		return true;
+	}
+	void EditorLayer::OpenProject(const std::filesystem::path& path)
+	{
+		if (Project::Load(path))
+		{
+			auto startScenePath = Project::GetAssetFileSystemPath(Project::GetActive()->GetConfig().StartScene);
+			OpenScene(startScenePath);
+			m_ContentBrowserPanel = CreateScope<ContentBrowserPanel>();
+		}
+	}
+	void EditorLayer::SaveProject()
+	{
+		// Project::SaveActive();
 	}
 	void EditorLayer::NewScene()
 	{
@@ -527,6 +580,13 @@ namespace Evadne {
 
 		float size = ImGui::GetWindowHeight() - 4.0f;
 		
+		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+
+		bool hasPlayButton = m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play;
+		bool hasSimulateButton = m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate;
+		bool hasPauseButton = m_SceneState != SceneState::Edit;
+
+		if(hasPlayButton)
 		{
 			Ref<Texture2D> icon = (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate) ? m_IconPlay : m_IconStop;
 			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
@@ -540,9 +600,11 @@ namespace Evadne {
 			}
 		}
 
-		ImGui::SameLine();
-
+		if (hasSimulateButton)
 		{
+			if(hasPlayButton)
+				ImGui::SameLine();
+
 			Ref<Texture2D> icon = (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play) ? m_IconSimulate : m_IconStop;
 			if (ImGui::ImageButton("simulate_button", (ImTextureID)icon->GetRendererID(), ImVec2(size, size),
 				ImVec2(0, 0), ImVec2(1, 1), ImVec4(0.0f, 0.0f, 0.0f, 0.0f), tintColor) && toolbarEnabled)
@@ -551,6 +613,35 @@ namespace Evadne {
 					OnSceneSimulate();
 				else if (m_SceneState == SceneState::Simulate)
 					OnSceneStop();
+			}
+		}
+
+		if (hasPauseButton)
+		{
+			bool isPaused = m_ActiveScene->IsPaused();
+			ImGui::SameLine();
+
+			{
+				Ref<Texture2D> icon = m_IconPause;
+				if (ImGui::ImageButton("pause_button", (ImTextureID)icon->GetRendererID(), ImVec2(size, size),
+					ImVec2(0, 0), ImVec2(1, 1), ImVec4(0.0f, 0.0f, 0.0f, 0.0f), tintColor) && toolbarEnabled)
+				{
+					m_ActiveScene->SetPaused(!isPaused);
+				}
+			}
+
+			if(isPaused) 
+			{
+				ImGui::SameLine();
+				{
+					Ref<Texture2D> icon = m_IconStep;
+					bool isPaused = m_ActiveScene->IsPaused();
+					if (ImGui::ImageButton("step_button", (ImTextureID)icon->GetRendererID(), ImVec2(size, size),
+						ImVec2(0, 0), ImVec2(1, 1), ImVec4(0.0f, 0.0f, 0.0f, 0.0f), tintColor) && toolbarEnabled) 
+					{
+						m_ActiveScene->Step();
+					}
+				}
 			}
 		}
 
@@ -582,6 +673,13 @@ namespace Evadne {
 		m_ActiveScene = m_EditorScene;
 
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
+	}
+	void EditorLayer::OnScenePause()
+	{
+		if (m_SceneState == SceneState::Edit)
+			return;
+
+		m_ActiveScene->SetPaused(true);
 	}
 	void EditorLayer::OnDuplicateEntity()
 	{

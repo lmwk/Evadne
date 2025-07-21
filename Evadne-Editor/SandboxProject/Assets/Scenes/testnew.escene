@@ -1,0 +1,98 @@
+Scene: Untitled
+Entities:
+  - Entity: 18018509640195048856
+    TagComponent:
+      Tag: Circle
+    TransformComponent:
+      Translation: [-2.3575592, 5.55999994, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CircleRendererComponent:
+      Color: [1, 1, 1, 1]
+      Thickness: 1
+      Fade: 0.0500000007
+    Rigidbody2DComponent:
+      BodyType: Dynamic
+      Mass: 1
+      FixedRotation: false
+    CircleCollider2DComponent:
+      Offset: [0, 0]
+      Radius: 0.5
+      Density: 1
+      Friction: 0.5
+      Restitution: 0
+      RestitutionThreshold: 0.5
+  - Entity: 2693317196072668800
+    TagComponent:
+      Tag: Camera
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      Camera:
+        ProjectionType: 0
+        PerspectiveFOV: 0.785398185
+        PerspectiveNear: 0.00999999978
+        PerspectiveFar: 1000
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+      Primary: true
+      FixedAspectRatio: false
+    ScriptComponent:
+      ClassName: Sandbox.Camera
+      ScriptFields:
+        - Name: DistanceFromPlayer
+          Type: Float
+          Data: 9
+  - Entity: 4902290113153824303
+    TagComponent:
+      Tag: Player
+    TransformComponent:
+      Translation: [1.12814248, 0.999999881, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    ScriptComponent:
+      ClassName: Sandbox.Player
+      ScriptFields:
+        - Name: Speed
+          Type: Float
+          Data: 204
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      TexturePath: D:\Cppprojs\Evadne\Evadne-Editor\SandboxProject\Assets\Textures\2024_12_25_ekko-22954856.png
+      TilingFactor: 1
+    Rigidbody2DComponent:
+      BodyType: Dynamic
+      Mass: 1
+      FixedRotation: false
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 1
+      Friction: 0.5
+      Restitution: 0
+      RestitutionThreshold: 0.5
+  - Entity: 11957212731657961296
+    TagComponent:
+      Tag: Platform
+    TransformComponent:
+      Translation: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [7, 1, 1]
+    SpriteRendererComponent:
+      Color: [1, 1, 1, 1]
+      TexturePath: D:\Cppprojs\Evadne\Evadne-Editor\SandboxProject\Assets\Textures\pexels-pixabay-260922.jpg
+      TilingFactor: 1
+    Rigidbody2DComponent:
+      BodyType: Static
+      Mass: 0
+      FixedRotation: true
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      Size: [0.5, 0.5]
+      Density: 1
+      Friction: 0.5
+      Restitution: 0
+      RestitutionThreshold: 0.5
