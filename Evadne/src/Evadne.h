@@ -1,6 +1,7 @@
 #pragma once
 
 
+
 #include "Evadne/Core/Application.h"
 #include "Evadne/Core/Layer.h"
 #include "Evadne/Core/Log.h"
@@ -19,6 +20,8 @@
 #include "Evadne/ECS/Entity.h"
 #include "Evadne/ECS/ScriptableEntity.h"
 #include "Evadne/ECS/Components.h"
+
+#include "Evadne/Project/Project.h"
 
 #include "Evadne/Rendering/Renderer.h"
 #include "Evadne/Rendering/2D/Renderer2D.h"

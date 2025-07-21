@@ -150,6 +150,9 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Evadne\Project\ProjectSerializer.h" />
+    <ClInclude Include="src\Evadne\Project\Project.h" />
+    <ClInclude Include="src\Evadne\UI\UI.h" />
     <ClInclude Include="src\Evadne\Utils\Buffer.h" />
     <ClInclude Include="src\Evadne\Utils\FileSystem.h" />
     <ClInclude Include="src\Evadne.h" />
@@ -630,6 +633,8 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Evadne\Project\ProjectSerializer.cpp" />
+    <ClCompile Include="src\Evadne\Project\Project.cpp" />
     <ClCompile Include="src\Evadne\Utils\FileSystem.cpp" />
     <ClCompile Include="src\Evadne\Camera\Controllers\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Evadne\Camera\EditorCamera.cpp" />

@@ -1520,6 +1520,9 @@
     </ClInclude>
     <ClInclude Include="src\Evadne\Utils\FileSystem.h" />
     <ClInclude Include="src\Evadne\Utils\Buffer.h" />
+    <ClInclude Include="src\Evadne\Project\Project.h" />
+    <ClInclude Include="src\Evadne\Project\ProjectSerializer.h" />
+    <ClInclude Include="src\Evadne\UI\UI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Evadne\Camera\Controllers\OrthographicCameraController.cpp">
@@ -1655,5 +1658,7 @@
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\Utils\FileSystem.cpp" />
+    <ClCompile Include="src\Evadne\Project\Project.cpp" />
+    <ClCompile Include="src\Evadne\Project\ProjectSerializer.cpp" />
   </ItemGroup>
 </Project>
