@@ -160,46 +160,25 @@ namespace Evadne {
 
         InitMono();
         ScriptGlue::RegisterFunctions();
-        LoadAssembly("Resources/Scripts/Evadne-ScriptCore.dll");
+        bool status = LoadAssembly("Resources/Scripts/Evadne-ScriptCore.dll");
+        if(!status) 
+        {
+            EV_CORE_ERROR("[ScriptEngine] Could not load Evadne-ScriptCore assembly");
+            return;
+        }
 
-        LoadAppAssembly("SandboxProject/Assets/Scripts/Binaries/Sandbox.dll");
+        status = LoadAppAssembly("SandboxProject/Assets/Scripts/Binaries/Sandbox.dll");
+        if(!status) 
+        {
+            EV_CORE_ERROR("[ScriptEngine] Could not load app assembly.");
+            return;
+        }
         LoadAssemblyClasses();
 
         ScriptGlue::RegisterComponents();
 
         // Retrieve and instantiate class (with constructor)
         sc_Data->EntityClass = ScriptClass("Evadne", "Entity", true);
-#if 0
-        MonoObject* instance = sc_Data->EntityClass.Instantiate();
-
-        // Call method
-        MonoMethod* printMessageFunc = sc_Data->EntityClass.GetMethod("PrintMessage", 0);
-        sc_Data->EntityClass.InvokeMethod(instance, printMessageFunc);
-
-        // Call method with param
-        MonoMethod* printIntFunc = sc_Data->EntityClass.GetMethod("PrintInt", 1);
-
-        int value = 5;
-        void* param = &value;
-
-        sc_Data->EntityClass.InvokeMethod(instance, printIntFunc, &param);
-
-        MonoMethod* printIntsFunc = sc_Data->EntityClass.GetMethod("PrintInts", 2);
-        int value2 = 508;
-        void* params[2] =
-        {
-            &value,
-            &value2
-        };
-        sc_Data->EntityClass.InvokeMethod(instance, printIntsFunc, params);
-
-        MonoString* monoString = mono_string_new(sc_Data->AppDomain, "Hello World from C++!");
-        MonoMethod* printCustomMessageFunc = sc_Data->EntityClass.GetMethod("PrintCustomMessage", 1);
-        void* stringParam = monoString;
-        sc_Data->EntityClass.InvokeMethod(instance, printCustomMessageFunc, &stringParam);
-
-        EV_CORE_ASSERT(false);
-#endif
     }
 
     void ScriptEngine::Shutdown()
@@ -208,26 +187,34 @@ namespace Evadne {
         delete sc_Data;
     }
 
-    void ScriptEngine::LoadAssembly(const std::filesystem::path& filepath)
+    bool ScriptEngine::LoadAssembly(const std::filesystem::path& filepath)
     {
         sc_Data->AppDomain = mono_domain_create_appdomain("EvadneScriptRuntime", nullptr);
         mono_domain_set(sc_Data->AppDomain, true);
 
         sc_Data->CoreAssemblyFilepath = filepath;
         sc_Data->CoreAssembly = Utils::LoadMonoAssembly(filepath, sc_Data->EnableDebugging);
+
+        if (sc_Data->CoreAssembly == nullptr)
+            return false;
+
         sc_Data->CoreAssemblyImage = mono_assembly_get_image(sc_Data->CoreAssembly);
+        return true;
     }
 
-    void ScriptEngine::LoadAppAssembly(const std::filesystem::path& filepath)
+    bool ScriptEngine::LoadAppAssembly(const std::filesystem::path& filepath)
     {
         sc_Data->AppAssemblyFilepath = filepath;
         sc_Data->AppAssembly = Utils::LoadMonoAssembly(filepath, sc_Data->EnableDebugging);
-        auto assemb = sc_Data->AppAssembly;
+
+        if (sc_Data->AppAssembly == nullptr)
+            return false;
+
         sc_Data->AppAssemblyImage = mono_assembly_get_image(sc_Data->AppAssembly);
-        auto assembi = sc_Data->AppAssemblyImage;
 
         sc_Data->AppAssemblyFileWatcher = CreateScope<filewatch::FileWatch<std::string>>(filepath.string(), OnAppAssemblyFileSystemEvent);
         sc_Data->AssemblyReloadPending = false;
+        return true;
 
     }
 
@@ -287,10 +274,15 @@ namespace Evadne {
     void ScriptEngine::OnUpdateEntity(Entity entity, Timestep ts)
     {
         UUID entityUUID = entity.GetUUID();
-        EV_CORE_ASSERT(sc_Data->EntityInstances.find(entityUUID) != sc_Data->EntityInstances.end());
-
-        Ref<ScriptInstance> instance = sc_Data->EntityInstances[entityUUID];
-        instance->InvokeOnUpdate((float)ts);
+        if (sc_Data->EntityInstances.find(entityUUID) != sc_Data->EntityInstances.end())
+        {
+            Ref<ScriptInstance> instance = sc_Data->EntityInstances[entityUUID];
+            instance->InvokeOnUpdate((float)ts);
+        }
+        else
+        {
+            EV_CORE_ERROR("Could not find ScriptInstance for entity {}", entityUUID);
+        }
     }
 
     Scene* ScriptEngine::GetSceneContext()
