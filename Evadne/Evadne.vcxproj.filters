@@ -255,6 +255,9 @@
     <ClInclude Include="src\Evadne\Scripting\ScriptEngine.h">
       <Filter>src\Evadne\Scripting</Filter>
     </ClInclude>
+    <ClInclude Include="src\Evadne\Scripting\ScriptGlue.h">
+      <Filter>src\Evadne\Scripting</Filter>
+    </ClInclude>
     <ClInclude Include="src\Evadne\Utils\PlatformUtils.h">
       <Filter>src\Evadne\Utils</Filter>
     </ClInclude>
@@ -1515,7 +1518,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evadne\Scripting\ScriptGlue.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Evadne\Camera\Controllers\OrthographicCameraController.cpp">
@@ -1638,6 +1640,9 @@
     <ClCompile Include="src\Evadne\Scripting\ScriptEngine.cpp">
       <Filter>src\Evadne\Scripting</Filter>
     </ClCompile>
+    <ClCompile Include="src\Evadne\Scripting\ScriptGlue.cpp">
+      <Filter>src\Evadne\Scripting</Filter>
+    </ClCompile>
     <ClCompile Include="src\evpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -1647,6 +1652,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Evadne\Scripting\ScriptGlue.cpp" />
   </ItemGroup>
 </Project>

@@ -44,6 +44,7 @@ project "Evadne"
 		"%{IncludeDir.ImGuizmo}",
 		"%{IncludeDir.VulkanSDK}",
 		"%{IncludeDir.Bullet3}",
+		"%{IncludeDir.filewatch}"
 	}
 	
 	links 

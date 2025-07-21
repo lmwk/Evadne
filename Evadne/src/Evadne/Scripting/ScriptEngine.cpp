@@ -8,6 +8,11 @@
 #include "mono/metadata/object.h"
 #include "mono/metadata/tabledefs.h"
 
+#include "FileWatch.hpp"
+
+#include "Evadne/Core/Application.h"
+#include "Evadne/Core/Timer.h"
+
 namespace Evadne {
 
     static std::unordered_map<std::string, ScriptFieldType> s_ScriptFieldTypeMap =
@@ -131,29 +136,48 @@ namespace Evadne {
         MonoAssembly* AppAssembly = nullptr;
         MonoImage* AppAssemblyImage = nullptr;
 
+        std::filesystem::path CoreAssemblyFilepath;
+        std::filesystem::path AppAssemblyFilepath;
         ScriptClass EntityClass;
 
         std::unordered_map<std::string, Ref<ScriptClass>> EntityClasses;
         std::unordered_map<UUID, Ref<ScriptInstance>> EntityInstances;
         std::unordered_map<UUID, ScriptFieldMap> EntityScriptFields;
 
+        Scope<filewatch::FileWatch<std::string>> AppAssemblyFileWatcher;
+        bool AssemblyReloadPending = false;
+
         Scene* SceneContext = nullptr;
     };
 
     static ScriptEngineData* sc_Data = nullptr;
+
+    static void OnAppAssemblyFileSystemEvent(const std::string& path, const filewatch::Event change_type) 
+    {
+        if(sc_Data->AssemblyReloadPending && change_type == filewatch::Event::modified) 
+        {
+            sc_Data->AssemblyReloadPending = true;
+
+            Application::Get().SubmitToMainThread([]()
+            {
+                    sc_Data->AppAssemblyFileWatcher.reset();
+                    ScriptEngine::ReloadAssembly();
+            });
+        }
+    }
 
     void ScriptEngine::Init()
     {
         sc_Data = new ScriptEngineData();
 
         InitMono();
+        ScriptGlue::RegisterFunctions();
         LoadAssembly("Resources/Scripts/Evadne-ScriptCore.dll");
 
         LoadAppAssembly("SandboxProject/Assets/Scripts/Binaries/Sandbox.dll");
         LoadAssemblyClasses();
 
         ScriptGlue::RegisterComponents();
-        ScriptGlue::RegisterFunctions();
 
         // Retrieve and instantiate class (with constructor)
         sc_Data->EntityClass = ScriptClass("Evadne", "Entity", true);
@@ -201,18 +225,38 @@ namespace Evadne {
         sc_Data->AppDomain = mono_domain_create_appdomain("EvadneScriptRuntime", nullptr);
         mono_domain_set(sc_Data->AppDomain, true);
 
-        
+        sc_Data->CoreAssemblyFilepath = filepath;
         sc_Data->CoreAssembly = Utils::LoadMonoAssembly(filepath);
         sc_Data->CoreAssemblyImage = mono_assembly_get_image(sc_Data->CoreAssembly);
     }
 
     void ScriptEngine::LoadAppAssembly(const std::filesystem::path& filepath)
     {
+        sc_Data->AppAssemblyFilepath = filepath;
         sc_Data->AppAssembly = Utils::LoadMonoAssembly(filepath);
         auto assemb = sc_Data->AppAssembly;
         sc_Data->AppAssemblyImage = mono_assembly_get_image(sc_Data->AppAssembly);
         auto assembi = sc_Data->AppAssemblyImage;
 
+        sc_Data->AppAssemblyFileWatcher = CreateScope<filewatch::FileWatch<std::string>>(filepath.string(), OnAppAssemblyFileSystemEvent);
+        sc_Data->AssemblyReloadPending = false;
+
+    }
+
+    void ScriptEngine::ReloadAssembly()
+    {
+        mono_domain_set(mono_get_root_domain(), false);
+
+        mono_domain_unload(sc_Data->AppDomain);
+
+        LoadAssembly(sc_Data->CoreAssemblyFilepath);
+        LoadAppAssembly(sc_Data->AppAssemblyFilepath);
+        LoadAssemblyClasses();
+
+        ScriptGlue::RegisterComponents();
+
+        // Retrieve and instantiate class
+        sc_Data->EntityClass = ScriptClass("Evadne", "Entity", true);
     }
 
     void ScriptEngine::OnRuntimeStart(Scene* scene)
@@ -320,8 +364,12 @@ namespace Evadne {
 
     void ScriptEngine::ShutdownMono()
     {
+        mono_domain_set(mono_get_root_domain(), false);
+        mono_domain_unload(sc_Data->AppDomain);
+
         sc_Data->AppDomain = nullptr;
 
+        mono_jit_cleanup(sc_Data->RootDomain);
         sc_Data->RootDomain = nullptr;
     }
 

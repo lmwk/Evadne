@@ -12,6 +12,7 @@ IncludeDir["mono"] = "%{wks.location}/Evadne/vendor/mono/include"
 IncludeDir["shaderc"] = "%{wks.location}/Evadne/vendor/shaderc/include"
 IncludeDir["SPIRV_Cross"] = "%{wks.location}/Evadne/vendor/SPIRV-Cross"
 IncludeDir["Bullet3"] = "%{wks.location}/Evadne/vendor/Bullet3/src"
+IncludeDir["filewatch"] = "%{wks.location}/Evadne/vendor/filewatch"
 IncludeDir["VulkanSDK"] = "%{VULKAN_SDK}/Include"
 
 LibraryDir = {}

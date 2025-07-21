@@ -28,6 +28,15 @@
     <Filter Include="..\Evadne-Editor">
       <UniqueIdentifier>{97E2B3AB-83DB-D2FD-AC0D-B8829865B209}</UniqueIdentifier>
     </Filter>
+    <Filter Include="..\Evadne-Editor\SandboxProject">
+      <UniqueIdentifier>{CC3CE836-3820-F776-4123-25B3AD85BDC7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Evadne-Editor\SandboxProject\Assets">
+      <UniqueIdentifier>{2EA634D6-1AF8-0BC6-0317-49D6EF0725AF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Evadne-Editor\SandboxProject\Assets\Scripts">
+      <UniqueIdentifier>{65DB47AE-5159-9847-3A51-56DF266EDA6F}</UniqueIdentifier>
+    </Filter>
     <Filter Include="..\Evadne-ScriptCore">
       <UniqueIdentifier>{CEB2C817-BA41-52E1-6360-66DC4FCE6287}</UniqueIdentifier>
     </Filter>
@@ -36,6 +45,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\Evadne-Editor\SandboxProject\Assets\Scripts\premake5.lua">
+      <Filter>..\Evadne-Editor\SandboxProject\Assets\Scripts</Filter>
+    </None>
     <None Include="..\..\Evadne-Editor\premake5.lua">
       <Filter>..\Evadne-Editor</Filter>
     </None>

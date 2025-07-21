@@ -10,6 +10,7 @@
 #include "ImGuizmo.h"
 
 #include "Evadne/Math/Math.h"
+#include "Evadne/Scripting/ScriptEngine.h"
 
 namespace Evadne {
 
@@ -176,10 +177,21 @@ namespace Evadne {
 
 					if (ImGui::MenuItem("Exit"))
 						Application::Get().Close();
+
 					ImGui::EndMenu();
 				}
+
+				if(ImGui::BeginMenu("Script")) 
+				{
+					if (ImGui::MenuItem("Reload assembly", "Ctrl+R"))
+						ScriptEngine::ReloadAssembly();
+
+					ImGui::EndMenu();
+				}
+
 				ImGui::EndMenuBar();
 			}
+
 			m_SceneHierarchyPanel.OnImGuiRender();
 			m_ContentBrowserPanel.OnImGuiRender();
 
@@ -359,9 +371,15 @@ namespace Evadne {
 		}
 		case Key::R:
 		{
-			if(!ImGuizmo::IsUsing())
-				m_GizmoType = ImGuizmo::OPERATION::SCALE;
-			break;
+			if(control) 
+			{
+				ScriptEngine::ReloadAssembly();
+			}
+			else 
+			{
+				if (!ImGuizmo::IsUsing())
+					m_GizmoType = ImGuizmo::OPERATION::SCALE;
+			}
 		}
 		}
 	}

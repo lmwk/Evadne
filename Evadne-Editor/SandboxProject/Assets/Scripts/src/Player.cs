@@ -48,9 +48,9 @@ namespace Sandbox
                 Camera camera = cameraEntity.As<Camera>();
 
                 if (Input.IsKeyDown(KeyCode.Q))
-                    camera.DistanceFromPlayer += speed * 2.0f * ts;
+                    camera.DistanceFromPlayer += speed * 1.0f * ts;
                 else if (Input.IsKeyDown(KeyCode.E))
-                    camera.DistanceFromPlayer -= speed * 2.0f * ts;
+                    camera.DistanceFromPlayer -= speed * 1.0f * ts;
             }
 
             velocity *= speed * ts;
