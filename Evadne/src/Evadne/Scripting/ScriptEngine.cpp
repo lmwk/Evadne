@@ -17,6 +17,8 @@
 #include "Evadne/Utils/Buffer.h"
 #include "Evadne/Utils/FileSystem.h"
 
+#include "Evadne/Project/Project.h"
+
 namespace Evadne {
 
     static std::unordered_map<std::string, ScriptFieldType> s_ScriptFieldTypeMap =
@@ -170,7 +172,8 @@ namespace Evadne {
             return;
         }
 
-        status = LoadAppAssembly("SandboxProject/Assets/Scripts/Binaries/Sandbox.dll");
+        auto scriptModulePath = Project::GetAssetDirectory() / Project::GetActive()->GetConfig().ScriptModulePath;
+        status = LoadAppAssembly(scriptModulePath);
         if(!status) 
         {
             EV_CORE_ERROR("[ScriptEngine] Could not load app assembly.");

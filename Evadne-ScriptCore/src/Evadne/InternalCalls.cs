@@ -31,6 +31,15 @@ namespace Evadne
         internal extern static void Rigidbody2DComponent_ApplyLinearImpulse(ulong entityID, ref Vector2 impulse, ref Vector2 point);
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void Rigidbody2DComponent_GetLinearVelocity(ulong entityID, out Vector2 linearVelocity);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static Rigidbody2DComponent.BodyType Rigidbody2DComponent_GetType(ulong entityID);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        internal extern static void Rigidbody2DComponent_SetType(ulong entityID, Rigidbody2DComponent.BodyType type);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
         internal extern static bool Input_IsKeyDown(KeyCode keycode);
     }
 }

@@ -109,8 +109,8 @@ namespace Evadne {
 
     void Scene::DestroyEntity(Entity entity)
     {
-        m_Registry.destroy(entity);
         m_EntityMap.erase(entity.GetUUID());
+        m_Registry.destroy(entity);
     }
 
     void Scene::OnRuntimeStart()
@@ -287,10 +287,12 @@ namespace Evadne {
         }
     }
 
-    void Scene::DuplicateEntity(Entity entity)
+    Entity Scene::DuplicateEntity(Entity entity)
     {
-        Entity newEntity = CreateEntity(entity.GetName());
+        std::string name = entity.GetName();
+        Entity newEntity = CreateEntity(name);
         CopyComponentIfExists(AllComponents{}, newEntity, entity);
+        return newEntity;
     }
 
     Entity Scene::FindEntityByName(std::string_view name)

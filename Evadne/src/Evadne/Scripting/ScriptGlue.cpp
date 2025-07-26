@@ -9,6 +9,8 @@
 #include "Evadne/Scene/Scene.h"
 #include "Evadne/ECS/Entity.h"
 
+#include "Evadne/Physics/Physics2D.h"
+
 #include "mono/metadata/object.h"
 #include "mono/metadata/reflection.h"
 
@@ -123,6 +125,43 @@ namespace Evadne {
 		body->activate(true);
 	}
 
+	static void Rigidbody2DComponent_GetLinearVelocity(UUID entityID, glm::vec2* outLinearVelocity)
+	{
+		Scene* scene = ScriptEngine::GetSceneContext();
+		EV_CORE_ASSERT(scene);
+		Entity entity = scene->GetEntityByUUID(entityID);
+		EV_CORE_ASSERT(entity);
+
+		auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+		btRigidBody* body = (btRigidBody*)rb2d.RuntimeBody;
+		const btVector3& linearVelocity = body->getLinearVelocity();
+		*outLinearVelocity = glm::vec2(linearVelocity.x(), linearVelocity.y());
+	}
+
+	static Rigidbody2DComponent::BodyType Rigidbody2DComponent_GetType(UUID entityID) 
+	{
+		Scene* scene = ScriptEngine::GetSceneContext();
+		EV_CORE_ASSERT(scene);
+		Entity entity = scene->GetEntityByUUID(entityID);
+		EV_CORE_ASSERT(entity);
+
+		auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+		btRigidBody* body = (btRigidBody*)rb2d.RuntimeBody;
+		return Utils::Rigidbody2DFromBullet2DBody(Utils::GetCollisionFlag(body->getCollisionFlags()));
+	}
+
+	static void Rigidbody2DComponent_SetType(UUID entityID, Rigidbody2DComponent::BodyType bodyType)
+	{
+		Scene* scene = ScriptEngine::GetSceneContext();
+		EV_CORE_ASSERT(scene);
+		Entity entity = scene->GetEntityByUUID(entityID);
+		EV_CORE_ASSERT(entity);
+
+		auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+		btRigidBody* body = (btRigidBody*)rb2d.RuntimeBody;
+		body->setCollisionFlags(Utils::Rigidbody2DToBullet2DBody(bodyType));
+	}
+
 	static bool Input_IsKeyDown(KeyCode keycode)
 	{
 		return Input::IsKeyPressed(keycode);
@@ -174,6 +213,9 @@ namespace Evadne {
 
 		EV_ADD_INTERNAL_CALL(Rigidbody2DComponent_ApplyLinearImpulse);
 		EV_ADD_INTERNAL_CALL(Rigidbody2DComponent_ApplyLinearImpulseToCenter);
+		EV_ADD_INTERNAL_CALL(Rigidbody2DComponent_GetLinearVelocity);
+		EV_ADD_INTERNAL_CALL(Rigidbody2DComponent_GetType);
+		EV_ADD_INTERNAL_CALL(Rigidbody2DComponent_SetType);
 
 		EV_ADD_INTERNAL_CALL(Input_IsKeyDown);
 	}

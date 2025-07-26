@@ -25,6 +25,7 @@ group "Dependencies"
 
 	include "Evadne/vendor/GLFW"
 	include "Evadne/vendor/Glad"
+	include "Evadne/vendor/evadne-msdf-atlas-gen"
 	include "Evadne/vendor/imgui"
 	include "vendor/premake"
 	include "Evadne/vendor/yaml-cpp"

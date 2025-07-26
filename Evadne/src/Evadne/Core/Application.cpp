@@ -29,7 +29,6 @@ namespace Evadne {
         m_Window->SetEventCallback(EV_BIND_EVENT_FN(Application::OnEvent));
 
         Renderer::Init();
-        ScriptEngine::Init();
 
         m_ImGuiLayer = new ImGuiLayer();
         PushOverlay(m_ImGuiLayer);

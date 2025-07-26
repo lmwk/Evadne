@@ -19,6 +19,12 @@
     <Filter Include="..\Evadne\vendor\Glad">
       <UniqueIdentifier>{274428F4-93B0-E3EE-5CA4-7B4CC8CF0557}</UniqueIdentifier>
     </Filter>
+    <Filter Include="..\Evadne\vendor\evadne-msdf-atlas-gen">
+      <UniqueIdentifier>{823EBD75-6E90-9465-57AF-D17543A0AD4E}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Evadne\vendor\evadne-msdf-atlas-gen\msdfgen">
+      <UniqueIdentifier>{F5187B67-E196-CB00-CA8E-8998B6AB0D29}</UniqueIdentifier>
+    </Filter>
     <Filter Include="..\Evadne\vendor\imgui">
       <UniqueIdentifier>{AAB2987B-96AC-C1CD-7F19-58DE6BB2273A}</UniqueIdentifier>
     </Filter>
@@ -65,6 +71,12 @@
     </None>
     <None Include="..\..\Evadne\vendor\Glad\premake5.lua">
       <Filter>..\Evadne\vendor\Glad</Filter>
+    </None>
+    <None Include="..\..\Evadne\vendor\evadne-msdf-atlas-gen\msdfgen\premake5.lua">
+      <Filter>..\Evadne\vendor\evadne-msdf-atlas-gen\msdfgen</Filter>
+    </None>
+    <None Include="..\..\Evadne\vendor\evadne-msdf-atlas-gen\premake5.lua">
+      <Filter>..\Evadne\vendor\evadne-msdf-atlas-gen</Filter>
     </None>
     <None Include="..\..\Evadne\vendor\imgui\premake5.lua">
       <Filter>..\Evadne\vendor\imgui</Filter>

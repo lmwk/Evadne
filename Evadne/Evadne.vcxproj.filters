@@ -46,17 +46,26 @@
     <Filter Include="src\Evadne\Platforms\Windows">
       <UniqueIdentifier>{D02B9C93-BCE6-8B3F-659E-048A5138D6CF}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Evadne\Project">
+      <UniqueIdentifier>{D5C8C1CE-C1AC-8224-2A0D-7D7716106DA6}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Evadne\Rendering">
       <UniqueIdentifier>{9C4D0715-88DC-90DE-31FB-A4D91D69A184}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Evadne\Rendering\2D">
       <UniqueIdentifier>{C18636F6-2DBE-7E8D-36C8-E2B0A27EA586}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Evadne\Rendering\Font">
+      <UniqueIdentifier>{22F8FE5D-8EBA-32E8-D76A-C174436C0BC6}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Evadne\Scene">
       <UniqueIdentifier>{EC217075-D81A-8FC7-014D-744CEDA46ED3}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Evadne\Scripting">
       <UniqueIdentifier>{51F95AF1-3D88-E4BA-E6A6-F8B5D214F560}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Evadne\UI">
+      <UniqueIdentifier>{5C22CD99-C8E2-48D0-911D-924DFD9C8DAC}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Evadne\Utils">
       <UniqueIdentifier>{2FB69D75-1BAF-BCC7-44E1-A14C30399CD3}</UniqueIdentifier>
@@ -186,6 +195,9 @@
     <ClInclude Include="src\Evadne\Physics\Physics.h">
       <Filter>src\Evadne\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Evadne\Physics\Physics2D.h">
+      <Filter>src\Evadne\Physics</Filter>
+    </ClInclude>
     <ClInclude Include="src\Evadne\Platforms\OpenGL\OpenGLBuffer.h">
       <Filter>src\Evadne\Platforms\OpenGL</Filter>
     </ClInclude>
@@ -213,11 +225,20 @@
     <ClInclude Include="src\Evadne\Platforms\Windows\WindowsWindow.h">
       <Filter>src\Evadne\Platforms\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="src\Evadne\Project\Project.h">
+      <Filter>src\Evadne\Project</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Project\ProjectSerializer.h">
+      <Filter>src\Evadne\Project</Filter>
+    </ClInclude>
     <ClInclude Include="src\Evadne\Rendering\2D\Renderer2D.h">
       <Filter>src\Evadne\Rendering\2D</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Rendering\Buffer.h">
       <Filter>src\Evadne\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Rendering\Font\Font.h">
+      <Filter>src\Evadne\Rendering\Font</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Rendering\Framebuffer.h">
       <Filter>src\Evadne\Rendering</Filter>
@@ -257,6 +278,15 @@
     </ClInclude>
     <ClInclude Include="src\Evadne\Scripting\ScriptGlue.h">
       <Filter>src\Evadne\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\UI\UI.h">
+      <Filter>src\Evadne\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Utils\Buffer.h">
+      <Filter>src\Evadne\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Evadne\Utils\FileSystem.h">
+      <Filter>src\Evadne\Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\Evadne\Utils\PlatformUtils.h">
       <Filter>src\Evadne\Utils</Filter>
@@ -1518,11 +1548,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Evadne\Utils\FileSystem.h" />
-    <ClInclude Include="src\Evadne\Utils\Buffer.h" />
-    <ClInclude Include="src\Evadne\Project\Project.h" />
-    <ClInclude Include="src\Evadne\Project\ProjectSerializer.h" />
-    <ClInclude Include="src\Evadne\UI\UI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Evadne\Camera\Controllers\OrthographicCameraController.cpp">
@@ -1603,11 +1628,20 @@
     <ClCompile Include="src\Evadne\Platforms\Windows\WindowsWindow.cpp">
       <Filter>src\Evadne\Platforms\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="src\Evadne\Project\Project.cpp">
+      <Filter>src\Evadne\Project</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Evadne\Project\ProjectSerializer.cpp">
+      <Filter>src\Evadne\Project</Filter>
+    </ClCompile>
     <ClCompile Include="src\Evadne\Rendering\2D\Renderer2D.cpp">
       <Filter>src\Evadne\Rendering\2D</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\Rendering\Buffer.cpp">
       <Filter>src\Evadne\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Evadne\Rendering\Font\Font.cpp">
+      <Filter>src\Evadne\Rendering\Font</Filter>
     </ClCompile>
     <ClCompile Include="src\Evadne\Rendering\Framebuffer.cpp">
       <Filter>src\Evadne\Rendering</Filter>
@@ -1648,6 +1682,9 @@
     <ClCompile Include="src\Evadne\Scripting\ScriptGlue.cpp">
       <Filter>src\Evadne\Scripting</Filter>
     </ClCompile>
+    <ClCompile Include="src\Evadne\Utils\FileSystem.cpp">
+      <Filter>src\Evadne\Utils</Filter>
+    </ClCompile>
     <ClCompile Include="src\evpch.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -1657,8 +1694,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Evadne\Utils\FileSystem.cpp" />
-    <ClCompile Include="src\Evadne\Project\Project.cpp" />
-    <ClCompile Include="src\Evadne\Project\ProjectSerializer.cpp" />
   </ItemGroup>
 </Project>

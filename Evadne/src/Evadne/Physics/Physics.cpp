@@ -1,5 +1,6 @@
 #include "evpch.h"
 #include "Physics.h"
+#include "Physics2D.h"
 
 namespace Evadne {
     Physics* Physics::instance = nullptr;
@@ -16,19 +17,6 @@ namespace Evadne {
     Physics::~Physics()
     {
         DeletePhysics();
-    }
-
-    btCollisionObject::CollisionFlags Physics::Rigidbody2DToBox2DBody(Rigidbody2DComponent::BodyType bodyType)
-    {
-        switch (bodyType)
-        {
-        case Rigidbody2DComponent::BodyType::Static: return btCollisionObject::CollisionFlags::CF_STATIC_OBJECT;
-        case Rigidbody2DComponent::BodyType::Dynamic: return btCollisionObject::CollisionFlags::CF_DYNAMIC_OBJECT;
-        case Rigidbody2DComponent::BodyType::Kinematic: return btCollisionObject::CollisionFlags::CF_KINEMATIC_OBJECT;
-        }
-
-        EV_CORE_ASSERT(false, "Unknown body type");
-        return btCollisionObject::CollisionFlags::CF_STATIC_OBJECT;
     }
 
     void Physics::PhysicsInit(bool is3d)
@@ -104,7 +92,7 @@ namespace Evadne {
             rBody = new btRigidBody(rb2d.Mass, myMotionState, boxShape);
             rBody->setFriction(bc2d.Friction);
             rBody->setRestitution(bc2d.Restitution);
-            rBody->setCollisionFlags(Rigidbody2DToBox2DBody(rb2d.Type));
+            rBody->setCollisionFlags(Evadne::Utils::Rigidbody2DToBullet2DBody(rb2d.Type));
             rb2d.RuntimeBody = rBody;
             dynamicsWorld->addRigidBody(rBody);
         }
@@ -120,7 +108,7 @@ namespace Evadne {
             rBody = new btRigidBody(rb2d.Mass, myMotionState, sphereShape);
             rBody->setFriction(bc2d.Friction);
             rBody->setRestitution(bc2d.Restitution);
-            rBody->setCollisionFlags(Rigidbody2DToBox2DBody(rb2d.Type));
+            rBody->setCollisionFlags(Evadne::Utils::Rigidbody2DToBullet2DBody(rb2d.Type));
             rb2d.RuntimeBody = rBody;
             dynamicsWorld->addRigidBody(rBody);
         }
@@ -132,7 +120,7 @@ namespace Evadne {
                 boxShape->calculateLocalInertia(rb2d.Mass, btVector3(0, 0, 0));
             
             rBody = new btRigidBody(rb2d.Mass, myMotionState, boxShape);
-            rBody->setCollisionFlags(Rigidbody2DToBox2DBody(rb2d.Type));
+            rBody->setCollisionFlags(Evadne::Utils::Rigidbody2DToBullet2DBody(rb2d.Type));
             rb2d.RuntimeBody = rBody;
             dynamicsWorld->addRigidBody(rBody);
         }

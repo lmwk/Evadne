@@ -14,6 +14,8 @@ IncludeDir["SPIRV_Cross"] = "%{wks.location}/Evadne/vendor/SPIRV-Cross"
 IncludeDir["Bullet3"] = "%{wks.location}/Evadne/vendor/Bullet3/src"
 IncludeDir["filewatch"] = "%{wks.location}/Evadne/vendor/filewatch"
 IncludeDir["VulkanSDK"] = "%{VULKAN_SDK}/Include"
+IncludeDir["msdfgen"] = "%{wks.location}/Evadne/vendor/evadne-msdf-atlas-gen/msdfgen"
+IncludeDir["msdf_atlas_gen"] = "%{wks.location}/Evadne/vendor/evadne-msdf-atlas-gen/msdf-atlas-gen"
 
 LibraryDir = {}
 LibraryDir["VulkanSDK"] = "%{VULKAN_SDK}/Lib"

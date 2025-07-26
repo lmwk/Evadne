@@ -35,7 +35,7 @@ namespace Evadne {
         Physics(const glm::vec3& gravity = glm::vec3(0, -9.81, 0), bool is3d = false);
         ~Physics();
         static Physics* instance;
-        btCollisionObject::CollisionFlags Rigidbody2DToBox2DBody(Rigidbody2DComponent::BodyType bodyType);
+        btCollisionObject::CollisionFlags Rigidbody2DToBullet2DBody(Rigidbody2DComponent::BodyType bodyType);
         void PhysicsInit(bool is3d);
         void DeletePhysics();
         void SetGlobalGravity(const glm::vec3 gravity);

@@ -11,12 +11,16 @@
 
 #include "Evadne/Math/Math.h"
 #include "Evadne/Scripting/ScriptEngine.h"
+#include "Evadne/Rendering/Font/Font.h"
 
 namespace Evadne {
+
+	static Font* s_Font;
 
 	EditorLayer::EditorLayer()
 		: Layer("EditorLayer"), m_CameraController(1280.0f / 720.0f), m_SquareColor({ 0.2f, 0.3f, 0.8f, 1.0f })
 	{
+		s_Font = new Font("assets/fonts/ibmplexserif/IBMPlexSerif-Bold.ttf");
 	}
 	void EditorLayer::OnAttach()
 	{
@@ -206,10 +210,6 @@ namespace Evadne {
 
 			ImGui::Begin("Stats");
 
-			std::string name = "None";
-			if (m_HoveredEntity)
-				name = m_HoveredEntity.GetComponent<TagComponent>().Tag;
-			ImGui::Text("Hovered Entity: %s", name.c_str());
 			auto stats = Renderer2D::GetStats();
 			ImGui::Text("Renderer2D Stats:");
 			ImGui::Text("Draw Calls: %d", stats.DrawCalls);
@@ -221,6 +221,9 @@ namespace Evadne {
 
 			ImGui::Begin("Settings");
 			ImGui::Checkbox("Show physics colliders", &m_ShowPhysicsColliders);
+
+			ImGui::Image(s_Font->GetAtlasTexture()->GetRendererID(), { 512, 512 }, { 0, 1 }, { 1, 0 });
+
 			ImGui::End();
 
 			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2{ 0, 0 });
@@ -390,6 +393,19 @@ namespace Evadne {
 					m_GizmoType = ImGuizmo::OPERATION::SCALE;
 			}
 		}
+		case Key::Delete: 
+		{
+			if (Application::Get().GetImGuiLayer()->GetActiveWidgetID() == 0)
+			{
+				Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
+				if (selectedEntity)
+				{
+					m_SceneHierarchyPanel.SetSelectedEntity({});
+					m_ActiveScene->DestroyEntity(selectedEntity);
+				}
+			}
+			break;
+		}
 		}
 	}
 	bool EditorLayer::OnMouseButtonPressed(MouseButtonPressedEvent& e)
@@ -481,6 +497,8 @@ namespace Evadne {
 	{
 		if (Project::Load(path))
 		{
+			ScriptEngine::Init();
+
 			auto startScenePath = Project::GetAssetFileSystemPath(Project::GetActive()->GetConfig().StartScene);
 			OpenScene(startScenePath);
 			m_ContentBrowserPanel = CreateScope<ContentBrowserPanel>();
@@ -688,7 +706,10 @@ namespace Evadne {
 
 		Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
 		if (selectedEntity)
-			m_EditorScene->DuplicateEntity(selectedEntity);
+		{
+			Entity newEntity = m_EditorScene->DuplicateEntity(selectedEntity);
+			m_SceneHierarchyPanel.SetSelectedEntity(newEntity);
+		}
 	}
 	void EditorLayer::OnSceneSimulate() 
 	{

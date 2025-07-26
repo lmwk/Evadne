@@ -5,13 +5,42 @@
 
 namespace Evadne {
 
-    OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height)
-        : m_Width(width), m_Height(height)
+    namespace Utils {
+    
+        static GLenum EvadneImageFormatToGLDataFormat(ImageFormat format) 
+        {
+            switch (format) 
+            {
+            case ImageFormat::RGB8: return GL_RGB;
+            case ImageFormat::RGBA8: return GL_RGBA;
+            }
+
+            EV_CORE_ASSERT(false);
+            return 0;
+        }
+
+        static GLenum EvadneImageFormatToGLInternalFormat(ImageFormat format) 
+        {
+            switch(format) 
+            {
+            case ImageFormat::RGB8: return GL_RGB8;
+            case ImageFormat::RGBA8: return GL_RGBA8;
+            }
+
+            EV_CORE_ASSERT(false);
+            return 0;
+        }
+
+    }
+    OpenGLTexture2D::OpenGLTexture2D(const TextureSpecification& specification)
+        : m_Specification(specification), m_Width(specification.Width), m_Height(m_Specification.Height)
     {
         EV_PROFILE_FUNCTION();
 
-        m_InternalFormat = GL_RGBA8;
-        m_DataFormat = GL_RGBA;
+        m_InternalFormat = Utils::EvadneImageFormatToGLInternalFormat(m_Specification.Format);
+        m_DataFormat = Utils::EvadneImageFormatToGLDataFormat(m_Specification.Format);
+
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
         glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
         glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);

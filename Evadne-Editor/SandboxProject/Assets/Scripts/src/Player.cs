@@ -22,6 +22,8 @@ namespace Sandbox
 
             m_Transform = GetComponent<TransformComponent>();
             m_Rigidbody = GetComponent<Rigidbody2DComponent>();
+
+            Console.WriteLine(m_Rigidbody.Type.ToString());
         }
 
         void OnUpdate(float ts)

@@ -19,3 +19,6 @@
 [submodule "Evande/vendor/Bullet3"]
 	path = Evande/vendor/Bullet3
 	url = https://github.com/lmwk/bullet3-evadne/
+[submodule "Evadne/vendor/evadne-msdf-atlas-gen"]
+	path = Evadne/vendor/evadne-msdf-atlas-gen
+	url = https://github.com/lmwk/evadne-msdf-atlas-gen
