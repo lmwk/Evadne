@@ -202,6 +202,7 @@ namespace Evadne {
 		const bool optimize = false;
 		if (optimize)
 			options.SetOptimizationLevel(shaderc_optimization_level_performance);
+		options.SetGenerateDebugInfo();
 
 		std::filesystem::path cacheDirectory = Utils::GetCacheDirectory();
 

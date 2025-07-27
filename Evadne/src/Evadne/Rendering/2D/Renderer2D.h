@@ -6,6 +6,7 @@
 
 #include "Evadne/Camera/Camera.h"
 #include "Evadne/Camera/EditorCamera.h"
+#include "Evadne/Rendering/Font/Font.h"
 
 #include "Evadne/ECS/Components.h"
 
@@ -42,6 +43,8 @@ namespace Evadne {
 
 
         static void DrawSprite(const glm::mat4& transform, SpriteRendererComponent& src, int entityID);
+
+        static void DrawString(const std::string& string, Ref<Font> font, const glm::mat4& transform, const glm::vec4& color);
 
         static float GetLineWidth();
         static void SetLineWidth(float width);

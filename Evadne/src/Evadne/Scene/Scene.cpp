@@ -375,6 +375,9 @@ namespace Evadne {
             }
         }
 
+        Renderer2D::DrawString("Evadne", Font::GetDefault(), glm::mat4(1.0f), glm::vec4(1.0f));
+        
+
         Renderer2D::EndScene();
     }
 

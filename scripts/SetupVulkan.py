@@ -8,7 +8,7 @@ from urllib.request import urlopen
 
 
 class VulkanConfiguration:
-    requiredVulkanVersion = "1.4.304.0"
+    requiredVulkanVersion = "1.4.321.1"
     vulkanDirectory = "./Evadne/vendor/VulkanSDK"
 
     @classmethod
@@ -46,7 +46,7 @@ class VulkanConfiguration:
             if reply == 'n':
                 return
             permissionGranted = (reply == 'y')
-        vulkanInstallURL = f"https://sdk.lunarg.com/sdk/download/{cls.requiredVulkanVersion}/windows/VulkanSDK-{cls.requiredVulkanVersion}-Installer.exe"
+        vulkanInstallURL = f"https://sdk.lunarg.com/sdk/download/{cls.requiredVulkanVersion}/windows/vulkansdk-windows-X64-{cls.requiredVulkanVersion}.exe"
         vulkanPath = f"{cls.vulkanDirectory}/VulkanSDK-{cls.requiredVulkanVersion}-Installer.exe"
         print("Downloading {0:s} to {1:s}".format(vulkanInstallURL, vulkanPath))
         Utils.DownloadFile(vulkanInstallURL, vulkanPath)

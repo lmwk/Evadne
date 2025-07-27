@@ -15,12 +15,12 @@
 
 namespace Evadne {
 
-	static Font* s_Font;
+	static Ref<Font> s_Font;
 
 	EditorLayer::EditorLayer()
 		: Layer("EditorLayer"), m_CameraController(1280.0f / 720.0f), m_SquareColor({ 0.2f, 0.3f, 0.8f, 1.0f })
 	{
-		s_Font = new Font("assets/fonts/ibmplexserif/IBMPlexSerif-Bold.ttf");
+		s_Font = Font::GetDefault();
 	}
 	void EditorLayer::OnAttach()
 	{

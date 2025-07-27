@@ -240,6 +240,9 @@
     <ClInclude Include="src\Evadne\Rendering\Font\Font.h">
       <Filter>src\Evadne\Rendering\Font</Filter>
     </ClInclude>
+    <ClInclude Include="src\Evadne\Rendering\Font\MSDFData.h">
+      <Filter>src\Evadne\Rendering\Font</Filter>
+    </ClInclude>
     <ClInclude Include="src\Evadne\Rendering\Framebuffer.h">
       <Filter>src\Evadne\Rendering</Filter>
     </ClInclude>
