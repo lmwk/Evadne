@@ -3,6 +3,7 @@
 #include "Evadne/Camera/SceneCamera.h"
 #include "Evadne/Core/UUID.h"
 #include "Evadne/Rendering/Texture.h"
+#include "Evadne/Rendering/Font/Font.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -153,12 +154,21 @@ namespace Evadne {
 		ScriptComponent(const ScriptComponent&) = default;
 	};
 
+	struct TextComponent 
+	{
+		std::string TextString;
+		Ref<Font> FontAsset = Font::GetDefault();
+		glm::vec4 Color{ 1.0f };
+		float Kerning = 0.0f;
+		float LineSpacing = 0.0f;
+	};
+
 	template<typename... Component>
 	struct ComponentGroup 
 	{
 
 	};
 
-	using AllComponents = ComponentGroup<TransformComponent, SpriteRendererComponent, CircleRendererComponent, CameraComponent, NativeScriptComponent, ScriptComponent, Rigidbody2DComponent, BoxCollider2DComponent, CircleCollider2DComponent>;
+	using AllComponents = ComponentGroup<TransformComponent, SpriteRendererComponent, CircleRendererComponent, CameraComponent, NativeScriptComponent, ScriptComponent, Rigidbody2DComponent, BoxCollider2DComponent, CircleCollider2DComponent, TextComponent>;
 
 }
